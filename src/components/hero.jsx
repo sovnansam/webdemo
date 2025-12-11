@@ -210,8 +210,7 @@ const HeroSlideshow = ({ currentLanguage = 'en' }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const isTablet = useMediaQuery(theme.breakpoints.down("lg"));
-  const API_URL = "/API/hero/hero_web.php";
-
+const API_URL = "/api/proxy";
   const { hero1 } = heroImages;  
 
   // Fallback slides
@@ -271,49 +270,51 @@ const HeroSlideshow = ({ currentLanguage = 'en' }) => {
 
   // Fetch slides from API
   useEffect(() => {
-    const fetchSlides = async () => {
-      try { 
-        const response = await fetch(API_URL);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        
-        const result = await response.json();
-        
-        if (result.success && Array.isArray(result.data) && result.data.length > 0) {
-          const formattedSlides = result.data.map((slide, index) => ({
-            id: slide.id,
-            title: {
-              en: slide.title_en || "Default Title",
-              km: slide.title || "ចំណងជើងលំនាំដើម"
-            },
-            description: {
-              en: slide.description_en || "Default description text.",
-              km: slide.description || "អត្ថបទពិពណ៌នាលំនាំដើម។"
-            },
-            image: getFullImageUrl(slide.image_path),
-            link: slide.link || "",
-            gradient: getGradientByIndex(index),
-            badge: {
-              en: "Featured",
-              km: "ពិសេស"
-            },
-            transition: getTransitionByIndex(index),
-          }));
-          setSlides(formattedSlides);
-        } else {
-          setSlides(fallbackSlides);
-          setError("No slides data available from API. Showing default slides.");
-        } 
-      } catch (err) {
-        console.error("Failed to fetch slides:", err);
+  const fetchSlides = async () => {
+    try {
+      const response = await fetch("/api/proxy");  // FIXED HERE (use HTTPS proxy)
+
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+      const result = await response.json();
+
+      if (result.success && Array.isArray(result.data) && result.data.length > 0) {
+        const formattedSlides = result.data.map((slide, index) => ({
+          id: slide.id,
+          title: {
+            en: slide.title_en || "Default Title",
+            km: slide.title || "ចំណងជើងលំនាំដើម",
+          },
+          description: {
+            en: slide.description_en || "Default description text.",
+            km: slide.description || "អត្ថបទពិពណ៌នាលំនាំដើម។",
+          },
+          image: getFullImageUrl(slide.image_path),
+          link: slide.link || "",
+          gradient: getGradientByIndex(index),
+          badge: {
+            en: "Featured",
+            km: "ពិសេស",
+          },
+          transition: getTransitionByIndex(index),
+        }));
+        setSlides(formattedSlides);
+      } else {
         setSlides(fallbackSlides);
-        setError("Failed to load slides from API. Showing default slides.");
-      } finally {
-        setLoading(false);
+        setError("No slides data available from API. Showing default slides.");
       }
-    };
-    
-    fetchSlides();
-  }, []);
+    } catch (err) {
+      console.error("Failed to fetch slides:", err);
+      setSlides(fallbackSlides);
+      setError("Failed to load slides from API. Showing default slides.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchSlides();
+}, []);
+
 
   // Auto slide functionality
   useEffect(() => {
