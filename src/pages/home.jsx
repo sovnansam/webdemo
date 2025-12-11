@@ -8,6 +8,7 @@ import Announcement from "../components/announcement";
 import ContactForm from "../components/contact_form";
 import { useInView } from "react-intersection-observer";
 import TelegramQR from "../images/Telegram.png";
+import { API_BASE } from "../config";
 
 const Home = () => {
   const [currentLanguage, setCurrentLanguage] = useState("km");
