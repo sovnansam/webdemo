@@ -1,5 +1,5 @@
 // src/pages/Home.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { motion } from "framer-motion";
 import HeroSlideshow from "../components/hero";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +8,7 @@ import Announcement from "../components/announcement";
 import ContactForm from "../components/contact_form";
 import { useInView } from "react-intersection-observer";
 import TelegramQR from "../images/Telegram.png";
-import { API_BASE } from "../config";
+
 
 const Home = () => {
   const [currentLanguage, setCurrentLanguage] = useState("km");
