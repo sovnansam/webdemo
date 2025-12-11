@@ -7,15 +7,11 @@ export default defineConfig({
   server: {
     proxy: {
       '/API': {
-        target: 'http://203.189.137.34:1265/',
-        //target: 'http://192.168.10.10:9592/', 
-        
+        target: 'http://203.189.137.34:1265/ksfh_backend',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/API/, '/ksfh_backend/API/')
+        rewrite: (path) => path.replace(/^\/API/, '')
       }
     }
-  },
-  
-  
+  }
 })
 
