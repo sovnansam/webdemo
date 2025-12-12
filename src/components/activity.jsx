@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import API_BASE from '../config';
+import React, { useState, useEffect, useRef,useCallback } from 'react';
 
+const API_BASE_URL = "API/activities/";
 const API_URLS = {
   rcp: "activity_RCP.php",
   grandvisit: "activity_GrandVisit.php",
@@ -13,21 +13,16 @@ const ActivityRCP = ({ currentLanguage = "km" }) => {
     grandvisit: null,
     activity: null
   });
-
   const [loading, setLoading] = useState({
     rcp: true,
     grandvisit: true,
     activity: true
   });
-
   const [errors, setErrors] = useState({
     rcp: null,
     grandvisit: null,
     activity: null
   });
-
- 
-
   const [fullImage, setFullImage] = useState(null);
   const [showFullImage, setShowFullImage] = useState(false);
   const [expandedCard, setExpandedCard] = useState(null);
@@ -36,49 +31,46 @@ const ActivityRCP = ({ currentLanguage = "km" }) => {
   const cardRefs = useRef([]);
 
   useEffect(() => {
-  fetchAllActivities();
-}, []);
+    fetchAllActivities();
+  }, []);
 
-const fetchAllActivities = async () => {
-  const types = ['rcp', 'grandvisit', 'activity'];
-
-  types.forEach(async (type) => {
-    try {
-      setLoading(prev => ({ ...prev, [type]: true }));
-      setErrors(prev => ({ ...prev, [type]: null }));
-
-      // ✅ FIXED — correct backend path for local + vercel
-      const response = await fetch(`${API_BASE}/activities/${API_URLS[type]}`);
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+  const fetchAllActivities = async () => {
+    const types = ['rcp', 'grandvisit', 'activity'];
+    
+    types.forEach(async (type) => {
+      try {
+        setLoading(prev => ({ ...prev, [type]: true }));
+        setErrors(prev => ({ ...prev, [type]: null }));
+        
+        const response = await fetch(`${API_BASE_URL}${API_URLS[type]}`);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        // Handle the response format
+        let activityData = null;
+        
+        if (data.success && data.data) {
+          activityData = data.data;
+        } else if (data.success && data.data === null) {
+          activityData = null;
+        } else {
+          throw new Error(data.message || `Failed to fetch ${type} activity`);
+        }
+        
+    
+        setActivities(prev => ({ ...prev, [type]: activityData }));
+      } catch (err) {
+        console.error(`Error fetching ${type} activity:`, err);
+        setErrors(prev => ({ ...prev, [type]: err.message || `Failed to load ${type} activity` }));
+      } finally {
+        setLoading(prev => ({ ...prev, [type]: false }));
       }
-
-      const data = await response.json();
-
-      let activityData = null;
-
-      if (data.success && data.data) {
-        activityData = data.data;
-      } else if (data.success && data.data === null) {
-        activityData = null;
-      } else {
-        throw new Error(data.message || `Failed to fetch ${type} activity`);
-      }
-
-      setActivities(prev => ({ ...prev, [type]: activityData }));
-
-    } catch (err) {
-      console.error(`Error fetching ${type} activity:`, err);
-      setErrors(prev => ({ 
-        ...prev, 
-        [type]: err.message || `Failed to load ${type} activity` 
-      }));
-    } finally {
-      setLoading(prev => ({ ...prev, [type]: false }));
-    }
-  });
-};
+    });
+  };
 
   // Function to show full image on click
   const handleImageClick = (imageUrl, activity) => {
