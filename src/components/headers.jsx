@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useLanguage } from '../contexts/LanguageContext'
 import LanguageSwitch from './LanguageSwitch/LanguageSwitch'
+import KSFH_logo from '../images/Logo.png'
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -256,7 +257,7 @@ const Header = () => {
                 className="cursor-pointer"
               >
                 <img 
-                  src='src/images/Logo.png' 
+                  src={KSFH_logo} 
                   alt='Logo' 
                   className="w-32 md:w-36 lg:w-40 h-auto"
                 />

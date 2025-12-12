@@ -8,6 +8,7 @@ import Announcement from "../components/announcement";
 import ContactForm from "../components/contact_form";
 import { useInView } from "react-intersection-observer";
 import TelegramQR from "../images/Telegram.png";
+import ksfhImage from '../images/KSFH.jpg'
 
 
 const Home = () => {
@@ -535,7 +536,7 @@ const Home = () => {
               <div className="relative w-full max-w-2xl">
                 <div className="aspect-square rounded-4xl shadow-2xl overflow-hidden bg-gradient-to-br from-blue-500 to-teal-400 border-8 border-white">
                   <img
-                    src="src/images/KSFH.jpg"
+                    src={ksfhImage}
                     alt="Khmer-Soviet Friendship Hospital"
                     className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
                   />
