@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef,useCallback } from 'react';
 
 const API_BASE_URL = "API/activities/";
 const API_URLS = {
-  rcp: "activity_RCP.php",
-  grandvisit: "activity_GrandVisit.php",
-  activity: "activity_Activity.php"
+  rcp: "API/activities/activity_RCP.php",
+  grandvisit: "API/activities/activity_GrandVisit.php",
+  activity: "API/activities/activity_Activity.php"
 };
 
 const ActivityRCP = ({ currentLanguage = "km" }) => {
@@ -42,7 +42,7 @@ const ActivityRCP = ({ currentLanguage = "km" }) => {
         setLoading(prev => ({ ...prev, [type]: true }));
         setErrors(prev => ({ ...prev, [type]: null }));
         
-        const response = await fetch(`${API_BASE_URL}${API_URLS[type]}`);
+        const response = await fetch(`${API_URLS[type]}`);
         
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
