@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    },
+    {
       "source": "/API/:path*",
       "destination": "http://203.189.137.34:1265/ksfh_backend/API/:path*"
     }
