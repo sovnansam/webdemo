@@ -304,17 +304,19 @@ const formatDate = useCallback(
     <>
       <section className="py-8 bg-gradient-to-br from-slate-50 to-blue-50/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Header */}
-          <div className="text-center mb-12">
-            <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-600 to-emerald-600 bg-clip-text text-transparent p-5">
-              {currentLanguage === "en" ? "Latest Activities" : "សកម្មភាពថ្មីៗ"}
+ {/* Header */}
+        <div className="max-w-7xl mx-auto mb-12">
+          <div className="mb-4">
+            <h2
+              className={`text-xl md:text-2xl font-extrabold tracking-tight text-gray-700`}
+            >
+              {currentLanguage === "en"
+                ? "Latest Activities & Insights"
+                : "សកម្មភាពថ្មីៗ​ និង ព័ត៌មាន"}
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              {currentLanguage === "en" 
-                ? "Discover our latest RCP initiatives, Grand Visits, and Activities"
-                : "ស្វែងយល់ពីគំរោង RCP ទស្សនកិច្ចក្រុម និងសកម្មភាពថ្មីៗរបស់យើង"}
-            </p>
           </div>
+          <div className="h-1 w-full bg-blue-600 rounded-full mb-6"></div>
+        </div>
 
           {/* Three Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-8">

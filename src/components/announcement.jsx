@@ -451,11 +451,20 @@ const Announcement = ({ currentLanguage = "km" }) => { // Add language prop
     }}>
       <section className="py-16 md:py-20 bg-gradient-to-br from-slate-50 to-blue-50/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-1xl -mt-10 text-blue-600 text-shadow-lg md:text-3xl font-extrabold mb-2 text-blue-600">
+          
+           {/* Header */}
+        <div className="max-w-7xl mx-auto mb-12">
+          <div className="mb-4">
+            <h2
+              className={`text-xl md:text-2xl text-gray-600 text-shadow-lg font-extrabold mb-2 text-left`}
+            >
               {currentLanguage === "en" ? "Announcements" : "សេចក្តីជូនដំណឹង"}
             </h2>
+                 <div className="h-1 w-full bg-blue-600 rounded-full mb-6"></div>
           </div>
+          
+         
+        </div>
 
           {announcements.length === 0 ? (
             <div className="text-center py-16 bg-white rounded-2xl shadow-xl border border-gray-100">

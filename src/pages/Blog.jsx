@@ -499,18 +499,18 @@ const Blog = () => {
 
   // Normal grid view
   return (
-    <section className={`mt-20 min-h-screen bg-gray-50/50 py-12 text-gray-900 ${fontClass}`}>
+    <section className={`mt-10 md:mt-15 min-h-screen bg-gray-50/50 py-12 text-gray-900 ${fontClass}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
         <div className="max-w-7xl mx-auto mb-12">
           <div className="mb-4">
-            <h2 className={`text-2xl md:text-3xl font-extrabold tracking-tight text-gray-700 ${fontClass}`}>
-              {currentLanguage === "en" ? "Latest Insights" : "ព័ត៌មាននិងចំណេះដឹង"}
+            <h2 className={`text-2xl md:text-3xl font-extrabold tracking-tight text-gray-700  ${fontClass}`}>
+              {currentLanguage === "en" ? "Latest Insights" : "ព័ត៌មាន និង ចំណេះដឹង"}
             </h2>
           </div>
-          <div className="h-1 w-60 bg-blue-600 rounded-full mb-6"></div>
-          <p className={`text-lg text-gray-500 font-light ${fontClass}`}>
+         <div className="h-1 w-full md:w-65 bg-gradient-to-r from-blue-600 to-emerald-600 rounded-full mb-6 animate-pulse [animation-duration:2s]"></div>
+          <p className={`text-sm md:text-lg text-gray-500 font-light ${fontClass}`}>
             {currentLanguage === "en" 
               ? "Discover the latest news, updates, and stories from our team." 
               : "ស្វែងយល់ពីព័ត៌មានថ្មីៗ និងអត្ថបទសំខាន់ៗពីក្រុមការងាររបស់យើង។"}

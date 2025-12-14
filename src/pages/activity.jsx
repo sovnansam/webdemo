@@ -1160,7 +1160,7 @@ const Activity = () => {
 
   return (
     <section
-      className={`mt-20 min-h-screen bg-gray-50/50 py-12 text-gray-900 ${fontClass}`}
+      className={`mt-10 md:mt-15 min-h-screen bg-gray-50/50 py-12 text-gray-900 ${fontClass}`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
@@ -1174,11 +1174,11 @@ const Activity = () => {
                 : "សកម្មភាពថ្មីៗ​ និង ព័ត៌មាន"}
             </h2>
           </div>
-          <div className="h-1 w-60 bg-blue-600 rounded-full mb-6"></div>
-          <p className={`text-lg text-gray-500 font-light ${fontClass}`}>
+          <div className="h-1 w-full md:w-75 bg-gradient-to-r from-blue-600 to-emerald-600 rounded-full mb-6 animate-pulse [animation-duration:2s]"></div>
+          <p className={`text-sm md:text-lg text-gray-500 font-light ${fontClass}`}>
             {currentLanguage === "en"
               ? "Discover the latest news, updates, and stories from our team."
-              : "ស្វែងយល់ពីព័ត៌មានថ្មីៗ និងអត្ថបទសំខាន់ៗពីំមន្ទីរពេទ្យយើង។"}
+              : "សូមស្វែងយល់ពីព័ត៌មានថ្មីៗ អាប់ដេត និងរឿងរ៉ាវពីក្រុមការងាររបស់យើង។"}
           </p>
         </div>
 

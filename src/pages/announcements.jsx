@@ -375,7 +375,7 @@ const Announcements = () => {
               <div className="w-4 h-4 bg-blue-200 rounded-full animate-pulse"></div>
               {currentLanguage === "en" ? "Loading..." : "កំពុងផ្ទុក..."}
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6">
               {currentLanguage === "en" ? "Announcements" : "សេចក្តីជូនដំណឹង"}
             </h2>
           </div>
@@ -447,14 +447,21 @@ const Announcements = () => {
   }
 
   return (
-    <div className="min-h-screen mt-10 -mb-10 lg:mt-15 bg-slate-50" style={{ fontFamily: "'Battambang', 'Khmer OS', system-ui, sans-serif" }}>
-      <section className="py-16 md:py-20 bg-gradient-to-br from-slate-50 to-blue-50/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-1xl -mt-10 text-blue-600 text-shadow-lg md:text-3xl font-extrabold mb-2 text-blue-600">
+    <div className="min-h-screen mt-10 md:mt-15 bg-slate-50" style={{ fontFamily: "'Battambang', 'Khmer OS', system-ui, sans-serif" }}>
+      <section className="mt-10 md:mt-15 min-h-screen bg-gray-50/50 py-12 text-gray-900">
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div className="max-w-7xl mx-auto mb-12">
+          <div className="mb-4">
+            <h2
+              className={`text-xl md:text-3xl text-gray-600 text-shadow-lg font-extrabold mb-2 text-left`}
+            >
               {currentLanguage === "en" ? "Announcements" : "សេចក្តីជូនដំណឹង"}
             </h2>
+                <div className="h-1 w-full md:w-50 bg-gradient-to-r from-blue-600 to-emerald-600 rounded-full mb-6 animate-pulse [animation-duration:2s]"></div>
           </div>
+          
+         
+        </div>
 
           {announcements.length === 0 ? (
             <div className="text-center py-16 bg-white rounded-2xl shadow-xl border border-gray-100">

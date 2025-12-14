@@ -6,6 +6,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import hero1 from "../images/hero/hero4.jpg";
 import hero2 from "../images/hero/hero2.jpg";
 import hero3 from "../images/hero/hero3.jpg";
+import  Hospital  from "../images/Banner_about.png";
 
 const About = () => {
   const [showAll, setShowAll] = useState(false);
@@ -345,7 +346,7 @@ const doctors = [
               <div className="relative w-full max-w-2xl">
                 <div className="aspect-square rounded-4xl shadow-2xl overflow-hidden bg-gradient-to-br from-blue-500 to-teal-400 border-8 border-white">
                   <img
-                    src="src/images/KSFH.jpg"
+                    src={Hospital}
                     alt="Khmer-Soviet Friendship Hospital"
                     className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
                   />
