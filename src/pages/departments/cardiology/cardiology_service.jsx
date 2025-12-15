@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 
+// The API endpoint for fetching cardiology services
 const API_URL = "API/departments/cardiology/cardiology_service.php";
 
 // ==========================================
-// 1. UTILITIES
+// 1. UTILITIES - IMPROVED FONT STACK
 // ==========================================
 
 const getImageUrl = (imagePath) => {
   if (!imagePath || imagePath === "null" || imagePath === "undefined") {
+    // Default fallback image
     return "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";
   }
   if (imagePath.startsWith("http")) return imagePath;
@@ -15,95 +17,128 @@ const getImageUrl = (imagePath) => {
   return `API/departments/cardiology/${imagePath}`;
 };
 
+// Use a more modern and readable font stack for English (font-sans)
 const getFontClass = (language) => {
-  return language === 'km' 
-    ? 'font-battambang khmer-font'
-    : 'font-battambang english-font';
+  return language === "km"
+    ? "font-battambang khmer-font" // Custom Khmer font (from original code)
+    : "font-sans english-font"; // Modern English font stack
 };
 
+// Data for the Hero Section stats
+const STATS_DATA = [
+  {
+    key: "procedures",
+    value: "1000+",
+    color: "text-red-600",
+    icon: (
+      <svg
+        className="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+        />
+      </svg>
+    ),
+  },
+  {
+    key: "successRate",
+    value: "98.5%",
+    color: "text-green-600",
+    icon: (
+      <svg
+        className="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+    ),
+  },
+  {
+    key: "specialists",
+    value: "25+",
+    color: "text-blue-600",
+    icon: (
+      <svg
+        className="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20v-2c0-.656-.126-1.283-.356-1.857M9 20H4v-2a3 3 0 015-2.236M9 20v-2a3 3 0 00-5.356-1.857M12 11a5 5 0 110-10 5 5 0 010 10zm0 11a7 7 0 100-14 7 7 0 000 14z"
+        />
+      </svg>
+    ),
+  },
+  {
+    key: "technology",
+    value: "Robotics",
+    color: "text-purple-600",
+    icon: (
+      <svg
+        className="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.568.35.792.428 1.065-2.572z"
+        />
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+        />
+      </svg>
+    ),
+  },
+];
+
 // ==========================================
-// 2. LOADING SKELETON COMPONENT
+// 2. LOADING SKELETON COMPONENT (Unchanged)
 // ==========================================
 
 const LoadingSkeleton = ({ currentLanguage }) => {
   const fontClass = getFontClass(currentLanguage);
-  
+
   return (
-    <div className="py-8 md:py-16 bg-gradient-to-b from-gray-50 to-white">
-      <div className="container mx-auto px-4">
+    <div className="min-h-screen bg-white py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Skeleton */}
-        <div className="text-center max-w-4xl mx-auto mb-12 md:mb-16">
-          <div className="inline-block mb-6">
-            <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-gray-200 to-gray-300 rounded-2xl animate-pulse mx-auto"></div>
-          </div>
-          
-          <div className="h-10 md:h-12 bg-gray-200 rounded-lg w-3/4 md:w-1/2 mx-auto mb-4 animate-pulse"></div>
-          <div className="h-6 bg-gray-200 rounded-lg w-full md:w-3/4 mx-auto mb-8 animate-pulse"></div>
-          
-          {/* Stats Skeleton */}
-          <div className="flex justify-center gap-6 md:gap-8 mb-8">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="text-center">
-                <div className="h-8 md:h-10 bg-gray-200 rounded-lg w-16 mb-2 animate-pulse"></div>
-                <div className="h-4 bg-gray-200 rounded-lg w-20 animate-pulse"></div>
-              </div>
-            ))}
-          </div>
+        <div className="text-center mb-16">
+          <div className="h-10 bg-gradient-to-r from-gray-200 to-gray-300 rounded-full w-48 mx-auto mb-6 animate-pulse"></div>
+          <div className="h-16 bg-gradient-to-r from-gray-200 to-gray-300 rounded-xl w-3/4 mx-auto mb-4 animate-pulse"></div>
+          <div className="h-6 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg w-2/3 mx-auto animate-pulse"></div>
         </div>
 
-        {/* Category Filter Skeleton */}
-        <div className="flex flex-wrap justify-center gap-3 mb-12 md:mb-16">
-          {[1, 2, 3, 4, 5].map((i) => (
-            <div 
-              key={i} 
-              className="h-12 w-24 md:w-32 bg-gray-200 rounded-full animate-pulse"
-            ></div>
-          ))}
-        </div>
-
-        {/* Service Cards Skeleton */}
-        <div className="space-y-8 md:space-y-12">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="bg-white rounded-2xl shadow-lg overflow-hidden">
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 p-4 md:p-6">
-                {/* Content Side */}
-                <div className="lg:col-span-7">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 md:w-12 md:h-12 bg-gray-200 rounded-full animate-pulse"></div>
-                    <div className="h-8 bg-gray-200 rounded-full w-32 animate-pulse"></div>
-                  </div>
-                  
-                  <div className="h-8 bg-gray-200 rounded-lg w-3/4 mb-4 animate-pulse"></div>
-                  <div className="space-y-3 mb-6">
-                    <div className="h-4 bg-gray-200 rounded-lg animate-pulse"></div>
-                    <div className="h-4 bg-gray-200 rounded-lg w-5/6 animate-pulse"></div>
-                    <div className="h-4 bg-gray-200 rounded-lg w-4/6 animate-pulse"></div>
-                  </div>
-                  
-                  {/* Quick Info Skeleton */}
-                  <div className="flex items-center gap-4 md:gap-6 mb-6 md:mb-8">
-                    <div className="flex items-center gap-2">
-                      <div className="w-5 h-5 bg-gray-200 rounded animate-pulse"></div>
-                      <div className="h-4 bg-gray-200 rounded w-24 animate-pulse"></div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-5 h-5 bg-gray-200 rounded animate-pulse"></div>
-                      <div className="h-4 bg-gray-200 rounded w-20 animate-pulse"></div>
-                    </div>
-                  </div>
-                  
-                  {/* Buttons Skeleton */}
-                  <div className="flex gap-3 md:gap-4">
-                    <div className="h-12 bg-gray-200 rounded-lg w-32 animate-pulse"></div>
-                    <div className="h-12 bg-gray-200 rounded-lg w-36 animate-pulse"></div>
-                  </div>
-                </div>
-                
-                {/* Image Side */}
-                <div className="lg:col-span-5 relative">
-                  <div className="h-48 md:h-64 lg:h-full bg-gray-200 rounded-xl animate-pulse"></div>
-                </div>
-              </div>
+        {/* Services Grid Skeleton */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="relative">
+              <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl animate-pulse mb-6"></div>
+              <div className="h-8 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg w-3/4 mb-4 animate-pulse"></div>
+              <div className="h-4 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg w-full mb-2 animate-pulse"></div>
+              <div className="h-4 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg w-5/6 animate-pulse"></div>
             </div>
           ))}
         </div>
@@ -113,360 +148,268 @@ const LoadingSkeleton = ({ currentLanguage }) => {
 };
 
 // ==========================================
-// 3. SERVICE DETAIL MODAL COMPONENT (Responsive)
+// 3. SERVICE COMPONENT (All Descriptions Shown)
 // ==========================================
-
-const ServiceModal = ({ service, isOpen, onClose, currentLanguage }) => {
+// ==========================================
+// 3. SERVICE COMPONENT (MODIFIED FOR 3 COL LAYOUT)
+// ==========================================
+const ServiceItem = ({ service, onClick, currentLanguage, index }) => {
   const fontClass = getFontClass(currentLanguage);
-  
-  if (!isOpen || !service) return null;
+  const [isHovered, setIsHovered] = useState(false);
 
-  const content = {
-    en: {
-      close: "Close",
-      serviceDetails: "Service Details",
-      equipment: "Equipment Used",
-      duration: "Duration",
-      recovery: "Recovery Time",
-      specialists: "Cardiology Specialists",
-      contact: "Contact Us",
-      bookNow: "Book Appointment",
-      description: "Description"
-    },
-    km: {
-      close: "បិទ",
-      serviceDetails: "ព័ត៌មានលម្អិតសេវាកម្ម",
-      equipment: "ឧបករណ៍ប្រើប្រាស់",
-      duration: "រយៈពេល",
-      recovery: "ពេលវេលាស្បែកឡើងវិញ",
-      specialists: "អ្នកជំនាញខាងបេះដូង",
-      contact: "ទំនាក់ទំនង",
-      bookNow: "កក់ទុកណាត់",
-      description: "ការពិពណ៌នា"
-    }
-  };
-
-  const langContent = content[currentLanguage] || content.en;
-
-  return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
-      {/* Modal Overlay */}
-      <div 
-        className="fixed inset-0 bg-black/75 backdrop-blur-sm transition-opacity"
-        onClick={onClose}
-        aria-hidden="true"
-      />
-      
-      {/* Modal Container */}
-      <div className="min-h-screen px-4 py-4 md:px-6 text-center">
-        <div className="inline-block w-full max-w-6xl my-8 text-left align-middle transition-all transform">
-          {/* Modal Content */}
-          <div className="relative bg-white shadow-2xl rounded-2xl md:rounded-3xl overflow-hidden">
-            {/* Modal Header */}
-            <div className="relative p-4 md:p-6 bg-gradient-to-r from-red-600 to-red-700 text-white">
-              <div className="flex items-center justify-between">
-                <h3 className={`text-xl md:text-2xl lg:text-3xl font-bold pr-10 ${fontClass}`}>
-                  {service[currentLanguage === 'en' ? 'title_en' : 'title'] || service.title || langContent.serviceDetails}
-                </h3>
-                <button
-                  onClick={onClose}
-                  className="absolute top-4 right-4 w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors active:scale-95"
-                  aria-label={langContent.close}
-                >
-                  <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            {/* Modal Body */}
-            <div className="p-4 md:p-6 lg:p-8">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
-                {/* Left Column - Details */}
-                <div className="space-y-4 md:space-y-6">
-                  <h4 className={`text-lg md:text-xl font-bold text-gray-800 ${fontClass}`}>
-                    {langContent.serviceDetails}
-                  </h4>
-                  
-                  <div className="space-y-4">
-                    <div>
-                      <h5 className={`font-semibold text-gray-700 mb-2 ${fontClass}`}>
-                        {langContent.description}
-                      </h5>
-                      <p className={`text-gray-600 leading-relaxed ${fontClass}`}>
-                        {service[currentLanguage === 'en' ? 'description_en' : 'description'] || 
-                         service.description || 
-                         "Detailed description of the cardiology service will appear here."}
-                      </p>
-                    </div>
-
-                    {service.equipment && (
-                      <div>
-                        <h5 className={`font-semibold text-gray-700 mb-2 ${fontClass}`}>
-                          {langContent.equipment}
-                        </h5>
-                        <p className={`text-gray-600 ${fontClass}`}>
-                          {service.equipment}
-                        </p>
-                      </div>
-                    )}
-
-                    {service.specialists && (
-                      <div>
-                        <h5 className={`font-semibold text-gray-700 mb-2 ${fontClass}`}>
-                          {langContent.specialists}
-                        </h5>
-                        <p className={`text-gray-600 ${fontClass}`}>
-                          {service.specialists}
-                        </p>
-                      </div>
-                    )}
-
-                    {/* Quick Info Cards - Responsive Grid */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-2 gap-3 md:gap-4 pt-4">
-                      <div className="bg-red-50 p-3 md:p-4 rounded-lg border border-red-100">
-                        <div className="text-xs md:text-sm text-red-600 font-semibold mb-1">{langContent.duration}</div>
-                        <div className={`text-base md:text-lg font-bold ${fontClass}`}>
-                          {service.duration || "30-60 mins"}
-                        </div>
-                      </div>
-                      <div className="bg-red-50 p-3 md:p-4 rounded-lg border border-red-100">
-                        <div className="text-xs md:text-sm text-red-600 font-semibold mb-1">{langContent.recovery}</div>
-                        <div className={`text-base md:text-lg font-bold ${fontClass}`}>
-                          {service.recovery_time || "Immediate"}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Action Buttons - Responsive Stack */}
-                    <div className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-6">
-                      <button className={`flex-1 px-4 md:px-6 py-3 md:py-3 bg-gradient-to-r from-red-600 to-red-700 text-white font-semibold rounded-lg hover:from-red-700 hover:to-red-800 active:scale-95 transition-all ${fontClass}`}>
-                        {langContent.bookNow}
-                      </button>
-                      <button className={`px-4 md:px-6 py-3 md:py-3 border-2 border-red-600 text-red-600 font-semibold rounded-lg hover:bg-red-50 active:scale-95 transition-all ${fontClass}`}>
-                        {langContent.contact}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Right Column - Image */}
-                <div className="relative">
-                  <div className="rounded-xl overflow-hidden shadow-lg h-64 md:h-80 lg:h-full">
-                    <img
-                      src={getImageUrl(service.image_path)}
-                      alt={service[currentLanguage === 'en' ? 'title_en' : 'title'] || service.title}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
-                  </div>
-                  {/* Decorative Elements */}
-                  <div className="absolute -top-3 -right-3 md:-top-4 md:-right-4 w-12 h-12 md:w-16 md:h-16 bg-white rounded-full shadow-xl flex items-center justify-center">
-                    <svg className="w-6 h-6 md:w-8 md:h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// ==========================================
-// 4. SERVICE CARD COMPONENT (Fully Responsive)
-// ==========================================
-
-const ServiceCard = ({ service, onClick, currentLanguage, index }) => {
-  const fontClass = getFontClass(currentLanguage);
-  const [imageLoaded, setImageLoaded] = useState(false);
-  
-  const title = service[currentLanguage === 'en' ? 'title_en' : 'title'] || service.title;
-  const description = service[currentLanguage === 'en' ? 'description_en' : 'description'] || service.subTitle;
+  // ... (Title, SubTitle, Paragraph variables remain the same) ...
+  const title =
+    service[currentLanguage === "en" ? "title_en" : "title"] || service.title;
+  const subTitle =
+    service[currentLanguage === "en" ? "subTitle_en" : "subTitle"] ||
+    service.subTitle;
+  const paragraph =
+    service[currentLanguage === "en" ? "paragraph_en" : "paragraph"] ||
+    service.paragraph;
+  const paragraph1 =
+    service[currentLanguage === "en" ? "paragraph1_en" : "paragraph1"] ||
+    service.paragraph1;
+  const paragraph2 =
+    service[currentLanguage === "en" ? "paragraph2_en" : "paragraph2"] ||
+    service.paragraph2;
+  const paragraph3 =
+    service[currentLanguage === "en" ? "paragraph3_en" : "paragraph3"] ||
+    service.paragraph3;
+  const paragraph4 =
+    service[currentLanguage === "en" ? "paragraph4_en" : "paragraph4"] ||
+    service.paragraph4;
+  const paragraph5 =
+    service[currentLanguage === "en" ? "paragraph5_en" : "paragraph5"] ||
+    service.paragraph5;
+  const paragraph6 =
+    service[currentLanguage === "en" ? "paragraph6_en" : "paragraph6"] ||
+    service.paragraph6;
   const imageUrl = getImageUrl(service.image_path);
 
   const content = {
     en: {
-      readMore: "Learn More",
-      duration: "Duration:",
-      contactSpecialist: "Contact Specialist"
+      viewDetails: "Learn More",
+      duration: "Duration",
+      specialists: "Specialists",
     },
     km: {
-      readMore: "ស្វែងយល់បន្ថែម",
-      duration: "រយៈពេល:",
-      contactSpecialist: "ទំនាក់ទំនងអ្នកជំនាញ"
-    }
+      viewDetails: "ស្វែងយល់បន្ថែម",
+      duration: "រយៈពេល",
+      specialists: "អ្នកជំនាញ",
+    },
   };
 
   const langContent = content[currentLanguage] || content.en;
 
+  // Alternating layout logic
+  const isEven = index % 2 === 0;
+
+  // Compile all available descriptions into a list, filtering out null/empty strings
+  const detailedDescriptions = [
+    paragraph,
+    paragraph1,
+    paragraph2,
+    paragraph3,
+    paragraph4,
+    paragraph5,
+    paragraph6,
+  ].filter((desc) => desc && desc.trim().length > 0);
+
   return (
-    <div className="group relative bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden hover:-translate-y-1">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 p-4 md:p-6">
-        {/* Left Side - Content */}
-        <div className="lg:col-span-7 flex flex-col justify-center">
-          <div className="flex flex-wrap items-center gap-3 mb-4">
-            {/* Index Badge - Responsive */}
-            <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center text-white font-bold shadow-lg text-sm md:text-base">
-              {index + 1}
-            </div>
-            
-            {/* Category */}
-            {service.category && (
-              <span className="px-3 py-1.5 bg-red-100 text-red-600 text-xs md:text-sm font-semibold rounded-full">
-                {service.category}
-              </span>
-            )}
-          </div>
-
-          {/* Title - Responsive Typography */}
-          <h3 className={`text-lg md:text-xl lg:text-2xl font-bold text-gray-900 mb-3 md:mb-4 ${fontClass}`}>
-            {title}
-          </h3>
-          
-          {/* Description with Read More for Mobile */}
-          <div className="relative mb-4 md:mb-6">
-            <p className={`text-sm md:text-base text-gray-600 leading-relaxed ${fontClass} line-clamp-3 md:line-clamp-none`}>
-              {description || "Comprehensive cardiology service description will appear here."}
-            </p>
-          </div>
-
-          {/* Quick Info - Responsive Layout */}
-          <div className="flex flex-wrap items-center gap-4 md:gap-6 mb-6 md:mb-8">
-            <div className="flex items-center gap-2">
-              <svg className="w-4 h-4 md:w-5 md:h-5 text-red-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span className={`text-xs md:text-sm font-medium ${fontClass}`}>
-                {langContent.duration} {service.duration || "30-60 mins"}
-              </span>
-            </div>
-            
-            {service.specialists && (
-              <div className="flex items-center gap-2">
-                <svg className="w-4 h-4 md:w-5 md:h-5 text-red-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-                <span className={`text-xs md:text-sm font-medium truncate max-w-[150px] md:max-w-none ${fontClass}`}>
-                  {service.specialists.split(',')[0]}
-                </span>
-              </div>
-            )}
-          </div>
-
-          {/* Action Buttons - Responsive Layout */}
-          <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
-            <button
-              onClick={() => onClick(service)}
-              className={`px-4 md:px-6 py-2.5 md:py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 active:scale-95 text-white font-semibold rounded-lg transition-all flex items-center justify-center gap-2 text-sm md:text-base ${fontClass}`}
-            >
-              {langContent.readMore}
-              <svg className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </button>
-            
-            <button className={`px-4 md:px-6 py-2.5 md:py-3 border-2 border-red-600 text-red-600 font-semibold rounded-lg hover:bg-red-50 active:scale-95 transition-all text-sm md:text-base ${fontClass}`}>
-              {langContent.contactSpecialist}
-            </button>
-          </div>
-        </div>
-
-        {/* Right Side - Image */}
-        <div className="lg:col-span-5 relative order-first lg:order-last">
-          <div className="rounded-xl overflow-hidden shadow-lg h-48 md:h-64 lg:h-full aspect-video lg:aspect-auto">
-            {!imageLoaded && (
-              <div className="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 animate-pulse"></div>
-            )}
+    <div
+      className={`relative group mb-32 last:mb-0`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div
+        // KEY CHANGE: Use grid-cols-2 on lg screens for equal width columns
+        className={`grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center ${
+          isEven ? "" : "lg:grid-flow-dense"
+        }`}
+      >
+        {/* Image Column - Now spans 1 column (equal to text) */}
+        <div
+          className={`relative overflow-hidden rounded-3xl shadow-2xl transition-shadow duration-500 ${
+            isHovered ? "shadow-red-300/50" : ""
+          } aspect-video lg:aspect-auto lg:h-[300px] ${
+            // KEY CHANGE: Always col-span-1 for equal width
+            isEven ? "" : "lg:col-start-2"
+          }`}
+        >
+          <div className="relative w-full h-full">
             <img
               src={imageUrl}
               alt={title}
-              className={`w-full h-full object-cover transition-opacity duration-300 ${
-                imageLoaded ? 'opacity-100' : 'opacity-0'
+              className={`w-full h-full object-cover transition-transform duration-1000 ease-in-out ${
+                isHovered ? "scale-[1.05]" : "scale-100"
               }`}
-              onLoad={() => setImageLoaded(true)}
               loading="lazy"
             />
-            <div className="absolute inset-0 bg-gradient-to-l from-red-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+            <div
+              className={`absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent transition-opacity duration-700 ${
+                isHovered ? "opacity-100" : "opacity-80"
+              }`}
+            />
+
+            <div
+              className={`absolute top-6 ${
+                isEven ? "right-6" : "left-6"
+              } w-14 h-14 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center transition-all duration-700 ${
+                isHovered
+                  ? "scale-110 rotate-3 shadow-2xl shadow-blue-400/50"
+                  : "shadow-lg"
+              }`}
+            >
+              <svg
+                className="w-7 h-7 text-blue-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.8}
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                />
+              </svg>
+            </div>
           </div>
-          
-          {/* Floating Icon - Responsive Positioning */}
-          <div className="absolute -top-3 -right-3 md:-top-4 md:-right-4 w-10 h-10 md:w-12 md:h-12 lg:w-16 lg:h-16 bg-white rounded-full shadow-xl flex items-center justify-center">
-            <svg className="w-5 h-5 md:w-6 md:h-6 lg:w-8 lg:h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-            </svg>
+        </div>
+
+        {/* Content Column - Also spans 1 column (equal to image) */}
+        <div
+          className={`${isEven ? "" : "lg:col-start-1 lg:row-start-1"} ${
+            // Optional: Add some top padding on mobile for better spacing
+            isEven ? "lg:pl-0" : "lg:pr-0"
+          }`}
+        >
+          {/* Category Tag */}
+          {service.category && (
+            <div className="inline-block mb-4">
+              <span
+                className={`px-3 py-1 text-xs font-semibold text-blue-700 bg-blue-100 rounded-full uppercase tracking-wider ${fontClass}`}
+              >
+                {service.category}
+              </span>
+            </div>
+          )}
+
+        {/* Title with Circle Badge */}
+<div className="flex items-center gap-4 mb-6">
+  <div className="flex-shrink-0">
+    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-white font-bold text-sm transition-all duration-500 ${
+      isHovered 
+        ? "bg-gradient-to-br from-red-600 to-red-800 scale-110" 
+        : "bg-gradient-to-br from-gray-800 to-gray-900"
+    }`}>
+      {String(index + 1).padStart(2,)}
+    </div>
+  </div>
+  <h3 className={`text-xl md:text-2xl lg:text-2xl font-extrabold text-gray-900 leading-tight ${fontClass}`}>
+    <span
+      className={`bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent transition-all duration-500 ${
+        isHovered ? "from-red-600 to-red-500" : ""
+      }`}
+    >
+      {title || service.title_en}
+    </span>
+  </h3>
+</div>
+
+          {/* Subtitle/Short Description */}
+          <div className="mb-6">
+            <p
+              className={`text-gray-700 leading-relaxed text-lg font-semibold ${fontClass} transition-colors duration-300`}
+            >
+              {subTitle || service.subTitle_en}
+            </p>
           </div>
+
+          {/* Detailed Descriptions LIST */}
+          {detailedDescriptions.length > 0 && (
+            <ul className="space-y-3 mb-8 pl-5 list-none">
+              {detailedDescriptions.map((desc, i) => (
+                <li key={i} className="flex items-start text-gray-600 text-lg">
+                  <span className="w-2 h-2 mr-3 mt-2 bg-red-500 rounded-full flex-shrink-0"></span>
+                  <p className={`leading-relaxed ${fontClass}`}>{desc}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {/* Decorative Line */}
+          <div
+            className={`mt-10 h-0.5 bg-gradient-to-r from-transparent ${
+              isEven ? "via-red-200" : "via-blue-200"
+            } to-transparent transition-all duration-1000 ${
+              isHovered ? "via-red-400" : ""
+            }`}
+          />
         </div>
       </div>
     </div>
   );
 };
 
-// ==========================================
-// 5. MAIN CARDIOLOGY SERVICES COMPONENT
-// ==========================================
-
-const CardiologyService = ({ currentLanguage, onLanguageChange }) => {
+const CardiologyService = ({ currentLanguage }) => {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedService, setSelectedService] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [filter, setFilter] = useState("all");
 
   const fontClass = getFontClass(currentLanguage);
 
   const content = {
     en: {
-      title: "Cardiology Services & Treatments",
-      subtitle: "Comprehensive heart care with advanced diagnostics, interventional procedures, and preventive cardiology",
-      all: "All Services",
-      diagnosis: "Diagnostics",
-      treatment: "Treatments",
-      surgery: "Cardiac Surgery",
-      prevention: "Prevention",
-      procedures: "Procedures",
-      noServices: "No cardiology services available",
-      error: "Failed to load cardiology services",
-      retry: "Try Again",
-      servicesFound: "cardiology services found",
-      loading: "Loading cardiology services...",
-      ctaTitle: "Expert Cardiac Care",
-      ctaDescription: "Our team of cardiologists and cardiac surgeons provide comprehensive heart care with state-of-the-art technology",
-      ctaButton: "Schedule Heart Consultation",
-      totalServices: "Total Services",
-      specialties: "Specialties",
-      servicesFoundCount: "Services Found"
+      title: "Cardiology Services",
+      subtitle:
+        "Comprehensive heart care with advanced diagnostics and treatments",
+      tagline: "Expert Cardiac Care",
+      stats: {
+        procedures: "Procedures",
+        successRate: "Success Rate",
+        specialists: "Specialists",
+        technology: "Technology",
+      },
+      cta: {
+        title: "Your Heart Deserves The Best",
+        description: "Schedule a consultation with our expert cardiology team",
+        paragraph: "Schedule a consultation with our expert cardiology team",
+        button: "Book Appointment",
+      },
+      error: {
+        title: "Unable to load services",
+        message: "Please check your connection and try again",
+        retry: "Retry",
+      },
     },
     km: {
-      title: "សេវាកម្ម និងការព្យាបាលខាងបេះដូង",
-      subtitle: "ការថែទាំបេះដូងទូលំទូលាយជាមួយការធ្វើរោគវិនិច្ឆ័យទាន់សម័យ វិធីសាស្រ្តអន្តរាគមន៍ និងវិទ្យាសាស្ត្របេះដូងការពារ",
-      all: "សេវាកម្មទាំងអស់",
-      diagnosis: "រោគវិនិច្ឆ័យ",
-      treatment: "ការព្យាបាល",
-      surgery: "វះកាត់បេះដូង",
-      prevention: "ការពារ",
-      procedures: "វិធីសាស្រ្ត",
-      noServices: "គ្មានសេវាកម្មបេះដូងទេ",
-      error: "មិនអាចទាញយកសេវាកម្មបេះដូងបាន",
-      retry: "ព្យាយាមម្តងទៀត",
-      servicesFound: "សេវាកម្មបេះដូងត្រូវបានរកឃើញ",
-      loading: "កំពុងទាញយកសេវាកម្មបេះដូង...",
-      ctaTitle: "ការថែទាំបេះដូងដោយអ្នកជំនាញ",
-      ctaDescription: "ក្រុមអ្នកឯកទេសបេះដូង និងវេជ្ជបណ្ឌិតវះកាត់បេះដូងរបស់យើងផ្តល់ការថែទាំបេះដូងទូលំទូលាយជាមួយបច្ចេកវិទ្យាទំនើបបំផុត",
-      ctaButton: "កក់ណាត់ពិគ្រោះយោបល់បេះដូង",
-      totalServices: "សេវាកម្មសរុប",
-      specialties: "ឯកទេស",
-      servicesFoundCount: "បានរកឃើញ"
-    }
+      title: "សេវាកម្មបេះដូង",
+      subtitle:
+        "ការថែទាំបេះដូងទូលំទូលាយជាមួយការធ្វើរោគវិនិច្ឆ័យ និងការព្យាបាលឆ្នើម",
+      tagline: "ការថែទាំបេះដូងដោយអ្នកជំនាញ",
+      stats: {
+        procedures: "និន្នាការ",
+        successRate: "អត្រាជោគជ័យ",
+        specialists: "អ្នកជំនាញ",
+        technology: "បច្ចេកវិទ្យា",
+      },
+      cta: {
+        title: "បេះដូងរបស់អ្នកសមនឹងទទួលបានល្អបំផុត",
+        description: "កក់ណាត់ពិគ្រោះជាមួយក្រុមអ្នកជំនាญបេះដូងរបស់យើង",
+        paragraph: "កក់ណាត់ពិគ្រោះជាមួយក្រុមអ្នកជំនាញបេះដូងរបស់យើង",
+        button: "កក់ណាត់",
+      },
+      error: {
+        title: "មិនអាចទាញយកសេវាកម្មបាន",
+        message: "សូមពិនិត្យការតភ្ជាប់របស់អ្នក ហើយព្យាយាមម្តងទៀត",
+        retry: "ព្យាយាមម្តងទៀត",
+      },
+    },
   };
 
   const langContent = content[currentLanguage] || content.en;
-
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -475,7 +418,11 @@ const CardiologyService = ({ currentLanguage, onLanguageChange }) => {
         const response = await fetch(API_URL);
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
-        const servicesData = Array.isArray(data.data) ? data.data : (Array.isArray(data) ? data : []);
+        const servicesData = Array.isArray(data.data)
+          ? data.data
+          : Array.isArray(data)
+          ? data
+          : [];
         setServices(servicesData);
         setError(null);
       } catch (err) {
@@ -489,22 +436,16 @@ const CardiologyService = ({ currentLanguage, onLanguageChange }) => {
     fetchServices();
   }, []);
 
-  const filteredServices = filter === "all" 
-    ? services 
-    : services.filter(service => service.category === filter);
-
   const handleServiceClick = (service) => {
     setSelectedService(service);
     setIsModalOpen(true);
-    // Prevent body scroll when modal is open
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedService(null);
-    // Restore body scroll
-    document.body.style.overflow = 'auto';
+    document.body.style.overflow = "auto";
   };
 
   if (loading) {
@@ -513,24 +454,40 @@ const CardiologyService = ({ currentLanguage, onLanguageChange }) => {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-50 to-white p-4">
-        <div className="text-center bg-white p-6 md:p-8 rounded-2xl shadow-lg max-w-md w-full">
-          <div className="w-16 h-16 mx-auto mb-6 bg-red-100 rounded-full flex items-center justify-center">
-            <svg className="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
+      <div className="min-h-screen flex items-center justify-center bg-white px-4">
+        <div className="max-w-md w-full text-center">
+          <div className="w-24 h-24 mx-auto mb-8">
+            <div className="relative w-full h-full">
+              <div className="absolute inset-0 bg-gradient-to-br from-red-100 to-red-50 rounded-full animate-pulse"></div>
+              <div className="absolute inset-6 bg-white rounded-full"></div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <svg
+                  className="w-12 h-12 text-red-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
+            </div>
           </div>
-          <h3 className={`text-xl font-bold text-gray-800 mb-2 ${fontClass}`}>
-            {langContent.error}
+          <h3 className={`text-2xl font-bold text-gray-900 mb-4 ${fontClass}`}>
+            {langContent.error.title}
           </h3>
-          <p className={`text-gray-600 mb-6 ${fontClass}`}>
-            Unable to load cardiology services. Please check your connection.
+          <p className={`text-gray-600 mb-8 ${fontClass}`}>
+            {langContent.error.message}
           </p>
           <button
             onClick={() => window.location.reload()}
-            className={`px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 active:scale-95 text-white font-semibold rounded-lg transition-all ${fontClass}`}
+            className={`px-8 py-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-300 ${fontClass}`}
           >
-            {langContent.retry}
+            {langContent.error.retry}
           </button>
         </div>
       </div>
@@ -538,93 +495,64 @@ const CardiologyService = ({ currentLanguage, onLanguageChange }) => {
   }
 
   return (
-    <div className="py-8 md:py-16 bg-gradient-to-b from-gray-50 to-white">
-      <div className="container mx-auto px-4">
-        {/* Header Section - Responsive */}
-        <div className="text-center max-w-4xl mx-auto mb-12 md:mb-16">
-          <div className="inline-block mb-4 md:mb-6">
-            <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-red-100 to-red-200 rounded-2xl flex items-center justify-center shadow-lg mx-auto">
-              <svg className="w-8 h-8 md:w-10 md:h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
-            </div>
-          </div>
-          
-          {/* Responsive Typography */}
-          <h1 className={`text-4xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 mb-3 md:mb-4 ${fontClass}`}>
-            <span className="bg-gradient-to-r from-red-600 to-red-700 bg-clip-text text-transparent">
-              {langContent.title}
-            </span>
-          </h1>
-          <p className={`text-sm md:text-base lg:text-lg xl:text-xl text-gray-600 mb-6 md:mb-8 px-4 ${fontClass}`}>
-            {langContent.subTitle}
-          </p>
-          
-       
-        </div>
-
-  
-        {/* Services List - Responsive Grid */}
-        <div className="space-y-6 md:space-y-8 lg:space-y-12">
-          {filteredServices.length > 0 ? (
-            filteredServices.map((service, index) => (
-              <ServiceCard
-                key={service.id || index}
-                service={service}
-                onClick={handleServiceClick}
-                currentLanguage={currentLanguage}
-                index={index}
-              />
-            ))
-          ) : (
-            <div className="text-center py-12">
-              <div className="w-20 h-20 md:w-24 md:h-24 mx-auto mb-6 bg-red-100 rounded-full flex items-center justify-center">
-                <svg className="w-10 h-10 md:w-12 md:h-12 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                </svg>
-              </div>
-              <h3 className={`text-lg md:text-xl font-bold text-gray-800 mb-2 ${fontClass}`}>
-                {langContent.noServices}
-              </h3>
-              <p className={`text-gray-600 text-sm md:text-base ${fontClass}`}>
-                {filter === "all" 
-                  ? "Cardiology services will be available soon." 
-                  : `No ${filter} services found.`}
+    <div className="bg-white min-h-screen -mt-10">
+      {/* Services Section */}
+      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-16 md:py-28">
+        {/* Section Header */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {" "}
+          {/* Ensure padding/max-width is here or in the parent */}
+          {/* Section Header - Left Aligned within the container */}   {" "}
+          <div className="mb-16 md:mb-20 max-w-6xl">
+                   {" "}
+            <div className="inline-block mb-3">
+              {/* Tagline/Category */}
+              <p
+                className={`text-sm font-semibold uppercase tracking-widest text-red-600 ${fontClass}`}
+              >
+                {currentLanguage === "en" ? "Our Expertise" : "ជំនាញរបស់យើង"}
               </p>
             </div>
-          )}
-        </div>
-
-        {/* CTA Section - Responsive */}
-        {services.length > 0 && (
-          <div className="mt-12 md:mt-16 lg:mt-20">
-            <div className="bg-gradient-to-r from-red-50 via-white to-red-50 rounded-xl md:rounded-2xl p-6 md:p-8 lg:p-12 border border-red-100 shadow-lg">
-              <div className="inline-block w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center mb-6 md:mb-8 shadow-xl">
-                <svg className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                </svg>
-              </div>
-              <h3 className={`text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 mb-3 md:mb-4 ${fontClass}`}>
-                {langContent.ctaTitle}
-              </h3>
-              <p className={`text-gray-600 mb-6 md:mb-8 text-sm md:text-base lg:text-lg max-w-2xl mx-auto ${fontClass}`}>
-                {langContent.ctaDescription}
-              </p>
-              <button className={`px-6 md:px-8 lg:px-10 py-3 md:py-4 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 active:scale-95 text-white font-bold rounded-full shadow-lg hover:shadow-xl transition-all text-sm md:text-base ${fontClass}`}>
-                {langContent.ctaButton}
-              </button>
-            </div>
+                   {" "}
+            <h2
+              className={`text-xl md:text-3xl font-extrabold text-gray-900 mb-6 leading-tight ${fontClass} `}
+            >
+                       {" "}
+              {currentLanguage === "en"
+                ? "Specialized Services"
+                : "សេវ៉ាកម្មឯកទេស"}
+                     {" "}
+            </h2>
+            {/* Subtitle/Description - Max width set for readability */}       {" "}
+            <p
+              className={`text-sm md:text-lg text-gray-700 leading-relaxed ${fontClass}`}
+            >
+                       {" "}
+              {currentLanguage === "en"
+                ? "The Cardiovascular and Geriatric Center located in Khmer-Soviet Friendship Hospital, provide a wide range of service for heart diseases and geriatric patient, from early diagnosis and preventive treatments to comprehensive cardiovascular care, including interventional cardiology, electrophysiology, advanced heart failure management, and cardiovascular surgery. The cardiac care and services we offer include:."
+                : "មជ្ឈមណ្ឌលជំងឺបេះដូង និងសរសៃឈាម មានទីតាំងនៅក្នុងមន្ទីរពេទ្យមិត្តភាពខ្មែរ-សូវៀត ផ្តល់សេវាកម្មយ៉ាងទូលំទូលាយសម្រាប់ជំងឺបេះដូង និងអ្នកជំងឺវ័យចំណាស់ តាំងពីការធ្វើរោគវិនិច្ឆ័យ និងការព្យាបាលបង្ការមុន ដល់ការថែទាំសរសៃឈាមបេះដូងដ៏ទូលំទូលាយ រួមទាំងការវះកាត់បេះដូង អេឡិចត្រូសរីរវិទ្យា ការគ្រប់គ្រងជំងឺខ្សោយបេះដូងកម្រិតខ្ពស់ និងការវះកាត់សរសៃឈាមបេះដូង។ សេវាថែទាំបេះដូង និងសេវាកម្មដែលយើងផ្តល់ជូនរួមមាន:"}
+                     {" "}
+            </p>
+                    {/* Accent line - Now left-aligned */}       {" "}
+            <div className="h-1 w-50 bg-gradient-to-r from-red-500 to-red-700 mt-6 rounded-full"></div>
+               {" "}
           </div>
-        )}
+        </div>
+        {/* Services List */}
+        <div className="space-y-32">
+          {" "}
+          {/* Increased spacing */}
+          {services.map((service, index) => (
+            <ServiceItem
+              key={service.id || index}
+              service={service}
+              onClick={handleServiceClick}
+              currentLanguage={currentLanguage}
+              index={index}
+            />
+          ))}
+        </div>
       </div>
-
-      {/* Service Detail Modal */}
-      <ServiceModal
-        service={selectedService}
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        currentLanguage={currentLanguage}
-      />
     </div>
   );
 };

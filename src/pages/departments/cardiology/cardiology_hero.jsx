@@ -354,7 +354,7 @@ const OperatingHours = ({ currentLanguage }) => {
         },
         ipd: { label: "IPD", days: "24h / 7 Days" },
         emergency: { label: "Emergency", days: "24h / 7 Days" },
-        contact: { label: "Contact:", number: " +(855) 76 800 5808" },
+        contact: { label: "Contact:", number: " +(855) 95 998 953" },
       },
 
     },
@@ -368,7 +368,7 @@ const OperatingHours = ({ currentLanguage }) => {
         },
         ipd: { label: "IPD", days: "២៤ម៉ោង / ៧ថ្ងៃ" },
         emergency: { label: "សេវាអាសន្ន", days: "២៤ម៉ោង / ៧ថ្ងៃ" },
-        contact: { label: "ទំនាក់ទំនង៖", number: " +(៨៥៥) ៧៦ ៨០០ ៥៨០៨" },
+        contact: { label: "ទំនាក់ទំនង៖", number: " +(៨៥៥) ៩៥​ ៩៩៨ ៩៥៣" },
       },
 
     },
