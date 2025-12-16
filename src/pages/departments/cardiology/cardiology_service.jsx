@@ -331,7 +331,7 @@ const ServiceItem = ({ service, onClick, currentLanguage, index }) => {
           {detailedDescriptions.length > 0 && (
             <ul className="space-y-3 mb-8 pl-5 list-none">
               {detailedDescriptions.map((desc, i) => (
-                <li key={i} className="flex items-start text-gray-600 text-lg">
+                <li key={i} className="flex items-start text-gray-600 text-md">
                   <span className="w-2 h-2 mr-3 mt-2 bg-red-500 rounded-full flex-shrink-0"></span>
                   <p className={`leading-relaxed ${fontClass}`}>{desc}</p>
                 </li>
@@ -525,7 +525,7 @@ const CardiologyService = ({ currentLanguage }) => {
             </h2>
             {/* Subtitle/Description - Max width set for readability */}       {" "}
             <p
-              className={`text-sm md:text-lg text-gray-700 leading-relaxed ${fontClass}`}
+              className={`text-md md:text-lg text-gray-700 leading-relaxed ${fontClass}`}
             >
                        {" "}
               {currentLanguage === "en"

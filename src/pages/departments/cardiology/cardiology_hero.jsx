@@ -546,7 +546,7 @@ const CardiologyHero = ({ currentLanguage, onLanguageChange }) => {
   <div className="relative">
     <span className="absolute left-3">•</span>
     <p
-      className={`text-sm lg:text-lg md:text-lg text-gray-700 leading-relaxed ${fontClass} pl-8`}
+      className={`text-md lg:text-lg md:text-lg text-gray-700 leading-relaxed ${fontClass} pl-8`}
     >
       {langContent.description}
     </p>
@@ -555,7 +555,7 @@ const CardiologyHero = ({ currentLanguage, onLanguageChange }) => {
   <div className="relative -mt-5">
     <span className="absolute left-3">•</span>
     <p
-      className={`text-sm lg:text-lg md:text-lg text-gray-700 leading-relaxed ${fontClass} pl-8`}
+      className={`text-md lg:text-lg md:text-lg text-gray-700 leading-relaxed ${fontClass} pl-8`}
     >
       {langContent.description2}
     </p>
@@ -564,7 +564,7 @@ const CardiologyHero = ({ currentLanguage, onLanguageChange }) => {
   <div className="relative -mt-5">
     <span className="absolute left-3">•</span>
     <p
-      className={`text-sm lg:text-lg md:text-lg text-gray-700 leading-relaxed ${fontClass} pl-8`}
+      className={`text-md lg:text-lg md:text-lg text-gray-700 leading-relaxed ${fontClass} pl-8`}
     >
       {langContent.description3}
     </p>
