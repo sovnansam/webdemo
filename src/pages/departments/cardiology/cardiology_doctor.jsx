@@ -101,75 +101,64 @@ const HangingDoctorCard = ({ doctor, currentLanguage, onClick, index }) => {
     },
   ];
 
-  return (
-    <div className="flex flex-col items-center">
-            {/* The Hanging Line and Ring Container */}     {" "}
-      <div className="relative w-full h-15">
-                {/* Vertical Dotted Line */}       {" "}
-        <div
-          className={`absolute top-0 left-1/2 transform -translate-x-1/2 w-0.5 h-full border-l border-dashed ${classes.line}`}
-        ></div>
-                       {" "}
-        {/* Colored Ring/Hole - Uses the first class for the border */}       {" "}
-        <div
-          className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 w-8 h-8 rounded-full border-4 ${
-            classes.ring.split(" ")[0]
-          } bg-white shadow-md z-20`}
-        ></div>
-             {" "}
-      </div>
-            {/* The Doctor Card Body */}     {" "}
+return (
+  <div className="flex flex-col items-center">
+    {/* The Hanging Line and Ring Container */}
+    <div className="relative w-full h-15">
+      {/* Vertical Dotted Line */}
       <div
-        onClick={() => onClick(doctor)}
-        className="w-full max-w-xs cursor-pointer bg-white rounded-[20px] p-6 pt-10 shadow-2xl transition-all duration-300 ease-in-out hover:shadow-xl hover:shadow-red-200/50 hover:scale-[1.03] flex flex-col items-center -mt-[20px] z-10 border border-gray-100"
-      >
-                {/* Doctor Image */}       {" "}
-        <div className="w-full h-full rounded-xl overflow-hidden mb-4 shadow-lg border-4 border-gray-100">
-                   {" "}
-          <img
-            src={getImageUrl(doctor.profile_image)}
-            alt={name}
-            className="w-full h-full object-cover"
-          />
-                 {" "}
-        </div>
-                {/* Name and Specialization */}       {" "}
-        <div className="text-center mb-1">
-                   {" "}
-          <h3
-            className={`text-xl font-extrabold text-gray-900 mb-1 ${fontClass}`}
-          >
-                        {name}         {" "}
-          </h3>
-                   {" "}
-          <p className={`text-red-600 font-semibold text-sm ${fontClass}`}>
-                        {specialization}         {" "}
-          </p>
-                 {" "}
-        </div>
-                {/* Qualifications and Experience */}       {" "}
-        <div className="text-center text-gray-600 text-xs mb-2 px-2">
-                   {" "}
-          <p className={`${fontClass} font-medium mt-1`}>{qualifications}</p>   
-             {" "}
-        </div>
-                {/* Social Media Icons */}       {" "}
-        <div className="flex space-x-4 border-t pt-4 w-full justify-center">
-                   {" "}
-          <div className="text-center text-gray-600 text-sm mb-2 px-2">
-                     {" "}
-            <p className={`${fontClass} font-medium mt-1`}>{experience}</p>     
-             {" "}
-          </div>
-                 {" "}
-        </div>
-             {" "}
-      </div>
-         {" "}
+        className={`absolute top-0 left-1/2 transform -translate-x-1/2 w-0.5 h-full border-l border-dashed ${classes.line}`}
+      ></div>
+      
+      {/* Colored Ring/Hole - Uses the first class for the border */}
+      <div
+        className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 w-8 h-8 rounded-full border-4 ${
+          classes.ring.split(" ")[0]
+        } bg-white shadow-md z-20`}
+      ></div>
     </div>
-  );
+    
+    {/* The Doctor Card Body */}
+    <div
+      onClick={() => onClick(doctor)}
+      className="w-full max-w-xs cursor-pointer bg-white rounded-[20px] p-6 pt-10 shadow-2xl transition-all duration-300 ease-in-out hover:shadow-xl hover:shadow-red-200/50 hover:scale-[1.03] flex flex-col items-center -mt-[20px] z-10 border border-gray-100"
+    >
+      {/* Doctor Image */}
+      <div className="w-full h-full rounded-xl overflow-hidden mb-4 shadow-lg border-4 border-gray-100 flex justify-center">
+        <img
+          src={getImageUrl(doctor.profile_image)}
+          alt={name}
+          className="w-full h-full object-cover"
+        />
+      </div>
+      
+      {/* Name and Specialization */}
+      <div className="w-full text-center mb-1">
+        <h3
+          className={`text-xl font-extrabold text-gray-900 mb-1 ${fontClass} text-center`}
+        >
+          {name}
+        </h3>
+        <p className={`text-red-600 font-semibold text-sm ${fontClass} text-center`}>
+          {specialization}
+        </p>
+      </div>
+      
+      {/* Qualifications and Experience */}
+      <div className="w-full text-center text-gray-600 text-xs mb-2 px-2">
+        <p className={`${fontClass} font-medium mt-1 text-center`}>{qualifications}</p>
+      </div>
+      
+      {/* Social Media Icons */}
+      <div className="w-full flex flex-col items-center space-y-2 border-t pt-4">
+        <div className="w-full text-center text-gray-600 text-sm px-2">
+          <p className={`${fontClass} font-medium text-center`}>{experience}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+);
 };
-
 // ==========================================
 // 3. DETAILED DOCTOR MODAL COMPONENT
 // ==========================================
@@ -256,7 +245,7 @@ const DoctorDetailModal = ({
               >
                 {name}
               </h2>
-                           {" "}
+                           {""}
               <p
                 className={`text-xl font-semibold text-red-600 border-b pb-4 border-gray-100 ${fontClass}`}
               >
