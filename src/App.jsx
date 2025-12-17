@@ -5,7 +5,7 @@ import Header from "./components/headers.jsx";
 import Home from "./pages/home.jsx";
 import About from "./pages/about.jsx";
 import Blog from "./pages/Blog";
-import Oncology from "./pages/departments/oncology";
+import Oncology from "./pages/departments/oncology/oncology.jsx"
 import Optamology from "./pages/departments/optamology/optamo.jsx";
 import DepartmentsPage from "./pages/departments/department.jsx";
 import Announcements from "./pages/announcements.jsx";

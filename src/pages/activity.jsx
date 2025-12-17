@@ -5,8 +5,10 @@ import React, {
   useCallback,
   useMemo,
 } from "react";
+import ScrollToTopButton from "../contexts/scrollTop.jsx"
 
 const API_URL = "API/activities/activity_web.php";
+
 
 // ==========================================
 // 1. UTILITIES
@@ -280,14 +282,7 @@ const ExpandedBlogSection = ({
   const [activeHeaderImage, setActiveHeaderImage] = useState(blog.image_path);
   const sectionRef = useRef(null);
 
-  useEffect(() => {
-    // Scroll to top when expanded section opens
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
 
-  const handleGallerySwap = (newImagePath) => {
-    setActiveHeaderImage(newImagePath);
-  };
 
   return (
     <div ref={sectionRef} className="min-h-screen bg-white">
@@ -778,6 +773,7 @@ const Activity = () => {
   const [visibleCount, setVisibleCount] = useState(8); // Changed from 8 to 4
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
+  const [isVisible, setIsVisible] = useState(false);
 
   // Enhanced filtering states
   const [searchQuery, setSearchQuery] = useState("");
@@ -931,6 +927,30 @@ const Activity = () => {
     }),
     [currentLanguage]
   );
+
+    useEffect(() => {
+    // Scroll to top when expanded section opens
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  const handleGallerySwap = (newImagePath) => {
+    setActiveHeaderImage(newImagePath);
+  };
+
+  // Add scroll event listener to show/hide scroll to top button
+  useEffect(() => {
+    const toggleVisibility = () => {
+      if (window.pageYOffset > 300) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+
+    window.addEventListener('scroll', toggleVisibility);
+    // Cleanup function to remove the event listener
+    return () => window.removeEventListener('scroll', toggleVisibility);
+  }, []); // Empty dependency array means this runs once on mount
 
   // Enhanced filter and sort function
   const filterAndSortBlogs = useCallback(() => {
@@ -1159,6 +1179,7 @@ const Activity = () => {
   }
 
   return (
+    <>
     <section
       className={`mt-10 md:mt-15 min-h-screen bg-gray-50/50 py-12 text-gray-900 ${fontClass}`}
     >
@@ -1311,6 +1332,8 @@ const Activity = () => {
         />
       )}
     </section>
+   <ScrollToTopButton isVisible={isVisible} />
+     </>
   );
 };
 

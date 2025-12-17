@@ -7,10 +7,51 @@ import hero1 from "../images/hero/hero4.jpg";
 import hero2 from "../images/hero/hero2.jpg";
 import hero3 from "../images/hero/hero3.jpg";
 import  Hospital  from "../images/Banner_about.png";
+import Footer from "../components/footer";
 
+ const ScrollToTopButton = ({ isVisible }) => {
+    const scrollToTop = () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    };
+
+    return (
+      <button
+        onClick={scrollToTop}
+        className={`
+          fixed bottom-8 right-8 z-40  
+          w-10 h-10 p-0 rounded-full
+          text-white 
+          bg-gradient-to-br from-blue-500 to-indigo-600 
+          shadow-xl shadow-blue-500/60
+          transition-all duration-300 transform 
+          ${isVisible
+            ? 'opacity-100 translate-y-0'
+            : 'opacity-0 translate-y-4 invisible'}
+          hover:scale-110 hover:shadow-2xl hover:shadow-blue-600/70
+          focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-opacity-50
+        `}
+        aria-label="Scroll to top"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-5 w-5 mx-auto"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2.5}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+        </svg>
+      </button>
+    );
+  };
 const About = () => {
   const [showAll, setShowAll] = useState(false);
   const navigate = useNavigate();
+  const [isVisible, setIsVisible] = useState(false);
   
   // Use language context instead of local state
   const { currentLanguage, isKhmer, isEnglish } = useLanguage();
@@ -35,18 +76,37 @@ const About = () => {
   }, [currentLanguage]);
 
 
-  useEffect(() => {
-    // Scroll to anchor if exists in URL
-    const hash = window.location.hash;
-    if (hash) {
-      const element = document.querySelector(hash);
-      if (element) {
-        setTimeout(() => {
-          element.scrollIntoView({ behavior: "smooth" });
-        }, 100);
-      }
-    }
-  }, []);
+   // Add scroll event listener to show/hide scroll to top button
+   useEffect(() => {
+     const toggleVisibility = () => {
+       if (window.pageYOffset > 300) {
+         setIsVisible(true);
+       } else {
+         setIsVisible(false);
+       }
+     };
+ 
+     window.addEventListener('scroll', toggleVisibility);
+     return () => window.removeEventListener('scroll', toggleVisibility);
+   }, []);
+ 
+   useEffect(() => {
+     const scrollToHash = () => {
+       const hash = window.location.hash;
+       if (!hash) return;
+ 
+       const element = document.querySelector(hash);
+       if (element) {
+         element.scrollIntoView({ behavior: "smooth" });
+       } else {
+         // Retry after mount
+         setTimeout(scrollToHash, 300);
+       }
+     };
+ 
+     scrollToHash();
+   }, []);
+ 
 
   const AnimatedSection = ({ children, className = "" }) => {
     const [ref, inView] = useInView({
@@ -295,6 +355,7 @@ const doctors = [
   const displayedDoctors = showAll ? doctors : doctors.slice(0, 3);
 
   return (
+    <>
     <div className="pt-16">
       {/* Hero Section */}
       <AnimatedSection className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50 flex items-center relative overflow-hidden">
@@ -652,7 +713,7 @@ const doctors = [
 
     {/* Values - Centered Layout */}
     <AnimatedSection delay={0.4}>
-      <div className="text-center mb-12">
+      <div className="text-center mb-10">
         <div className="inline-flex items-center gap-3 bg-indigo-50 text-indigo-700 px-4 py-3 rounded-2xl text-lg font-semibold border border-indigo-200 mb-6">
           <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center">
             <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -675,7 +736,7 @@ const doctors = [
 
       {/* Centered Image */}
       <motion.div 
-        className="relative max-w-4xl mx-auto mb-12 group"
+        className="relative max-w-4xl mx-auto -mb-10  group"
         whileHover={{ scale: 1.01 }}
         transition={{ type: "spring", stiffness: 300 }}
       >
@@ -694,242 +755,8 @@ const doctors = [
     </AnimatedSection>
   </div>
 </section>
-
-
-<AnimatedSection className="py-20 bg-gray-50">
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div className="text-center mb-16">
-      <h2 className="text-4xl font-bold text-gray-900 mb-4">
-        {currentLanguage === "en" ? "Our Medical Experts" : "គ្រូពេទ្យឯកទេសរបស់យើង"}
-      </h2>
-      <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-        {currentLanguage === "en" 
-          ? "Meet our team of highly qualified and experienced medical professionals" 
-          : "ស្គាល់ក្រុមគ្រូពេទ្យឯកទេសដែលមានគុណភាព និងបទពិសោធន៍ខ្ពស់របស់យើង"}
-      </p>
-    </div>
-
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {displayedDoctors.map((doctor) => (
-        <motion.div 
-          key={doctor.id} 
-          className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-500 group cursor-pointer"
-          whileHover={{ 
-            scale: 1.05,
-            y: -10,
-            transition: { duration: 0.3 }
-          }}
-          whileTap={{ scale: 0.95 }}
-        >
-          {/* Circular Avatar Only - No Header Color */}
-          <div className="relative pt-8 pb-4 flex items-center justify-center">
-            <motion.div 
-              className="relative"
-              whileHover={{ scale: 1.1 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="w-32 h-32 rounded-full border-4 border-white bg-white shadow-2xl overflow-hidden group-hover:border-blue-500 group-hover:shadow-blue-200 transition-all duration-500">
-                <img
-                  src={doctor.image}
-                  alt={doctor.name}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-              </div>
-              {/* Online Status Indicator */}
-              <motion.div 
-                className="absolute bottom-3 right-3 w-5 h-5 bg-green-500 rounded-full border-2 border-white"
-                whileHover={{ scale: 1.2 }}
-                animate={{ 
-                  scale: [1, 1.2, 1],
-                  opacity: [1, 0.8, 1]
-                }}
-                transition={{ 
-                  duration: 2,
-                  repeat: Infinity,
-                  repeatType: "reverse"
-                }}
-              ></motion.div>
-              
-              {/* Speciality Badge */}
-              <motion.div 
-                className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap"
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.2 }}
-              >
-                {currentLanguage === "en" ? doctor.specialty.en : doctor.specialty.km}
-              </motion.div>
-            </motion.div>
-          </div>
-
-          {/* Doctor Information */}
-          <div className="pb-6 px-6 text-center">
-            <motion.h3 
-              className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors duration-300"
-              whileHover={{ scale: 1.05 }}
-            >
-              {doctor.name}
-            </motion.h3>
-            
-            <motion.p 
-              className="text-blue-600 font-semibold mb-3 text-sm"
-              whileHover={{ scale: 1.05 }}
-            >
-              {currentLanguage === "en" ? doctor.title.en : doctor.title.km}
-            </motion.p>
-            
-            {/* Experience & Education */}
-            <motion.div 
-              className="space-y-2 text-sm text-gray-600 mb-4"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
-            >
-              <div className="flex items-center justify-center gap-2 group-hover:text-gray-800 transition-colors duration-300">
-                <motion.span
-                  whileHover={{ rotate: 360 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  🏥
-                </motion.span>
-                <span>{doctor.experience} {currentLanguage === "en" ? "experience" : "បទពិសោធន៍"}</span>
-              </div>
-              
-              <div className="flex items-center justify-center gap-2 group-hover:text-gray-800 transition-colors duration-300">
-                <motion.span
-                  whileHover={{ scale: 1.2 }}
-                >
-                  🎓
-                </motion.span>
-                <span className="text-xs">{currentLanguage === "en" ? doctor.education.en : doctor.education.km}</span>
-              </div>
-            </motion.div>
-
-            {/* Languages */}
-            <motion.div 
-              className="mb-4"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-            >
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <span className="text-sm text-gray-500">🗣️</span>
-                <span className="text-xs text-gray-500">{currentLanguage === "en" ? "Languages" : "ភាសា"}:</span>
-              </div>
-              <div className="flex flex-wrap gap-1 justify-center">
-                {doctor.languages.map((lang, idx) => (
-                  <motion.span 
-                    key={idx} 
-                    className="bg-gray-100 px-2 py-1 rounded text-xs group-hover:bg-blue-100 group-hover:text-blue-700 transition-all duration-300"
-                    whileHover={{ 
-                      scale: 1.1,
-                      backgroundColor: "#dbeafe"
-                    }}
-                  >
-                    {lang}
-                  </motion.span>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Achievements - Appears on Hover */}
-            <motion.div 
-              className="overflow-hidden"
-              initial={{ height: 0, opacity: 0 }}
-              whileHover={{ height: "auto", opacity: 1 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="bg-blue-50 rounded-lg p-3 border-l-4 border-blue-500">
-                <p className="text-sm text-blue-800 font-medium text-left">
-                  {currentLanguage === "en" ? doctor.achievements.en : doctor.achievements.km}
-                </p>
-              </div>
-            </motion.div>
-
-            {/* Action Buttons with Hover Effects */}
-            <motion.div 
-              className="flex gap-2 mt-6 justify-center"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-            >
-              <motion.button 
-                className="bg-blue-600 text-white px-6 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors duration-300 flex items-center gap-2 group/btn"
-                whileHover={{ 
-                  scale: 1.05,
-                  boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.4)"
-                }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <motion.span
-                  animate={{ x: [0, 5, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                >
-                  📅
-                </motion.span>
-                {currentLanguage === "en" ? "Book" : "ការណាត់ជួប"}
-              </motion.button>
-              
-              <motion.button 
-                className="border border-blue-600 text-blue-600 px-6 py-2 rounded-lg text-sm font-semibold hover:bg-blue-50 transition-colors duration-300 flex items-center gap-2"
-                whileHover={{ 
-                  scale: 1.05,
-                  backgroundColor: "#dbeafe"
-                }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <motion.span
-                  whileHover={{ rotate: 360 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  👤
-                </motion.span>
-                {currentLanguage === "en" ? "Profile" : "ប្រវត្តិ"}
-              </motion.button>
-            </motion.div>
-
-            {/* Hover Effect Glow */}
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/0 via-blue-500/5 to-blue-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-          </div>
-        </motion.div>
-      ))}
-    </div>
-
-    {doctors.length > 3 && (
-      <motion.div 
-        className="text-center mt-12"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6 }}
-      >
-        <motion.button
-          onClick={() => setShowAll(!showAll)}
-          className="bg-blue-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors duration-300 relative overflow-hidden group"
-          whileHover={{ 
-            scale: 1.05,
-            boxShadow: "0 20px 25px -5px rgba(59, 130, 246, 0.3), 0 10px 10px -5px rgba(59, 130, 246, 0.2)"
-          }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <span className="relative z-10">
-            {showAll 
-              ? (currentLanguage === "en" ? "Show Less" : "បង្ហាញតិចជាងនេះ")
-              : (currentLanguage === "en" ? "View All Doctors" : "មើលគ្រូពេទ្យទាំងអស់")
-            }
-          </span>
-          <motion.div 
-            className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-            initial={false}
-            whileHover={{ scale: 1.1 }}
-          ></motion.div>
-        </motion.button>
-      </motion.div>
-    )}
-  </div>
-</AnimatedSection>
-
       {/* Hospital Facilities Section */}
-      <AnimatedSection className="py-20 bg-white">
+      <AnimatedSection className=" py-10 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
@@ -964,39 +791,13 @@ const doctors = [
         </div>
       </AnimatedSection>
 
-      {/* Emergency Services Banner */}
-      <AnimatedSection className="py-16 bg-gradient-to-r from-red-600 to-red-700 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="flex items-center gap-4">
-              <div className="bg-white/20 p-4 rounded-2xl">
-                <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-              </div>
-              <div className="text-left">
-                <h3 className="text-2xl font-bold mb-2">
-                  {currentLanguage === "en" ? "24/7 Emergency Services" : "សេវាកម្មសង្គ្រោះបន្ទាន់ ២៤/៧"}
-                </h3>
-                <p className="text-red-100">
-                  {currentLanguage === "en" 
-                    ? "Immediate medical attention for critical conditions. Our emergency department is staffed with specialized doctors and equipped with advanced life-saving equipment." 
-                    : "ការព្យាបាលវេជ្ជសាស្ត្រភ្លាមៗសម្រាប់ស្ថានភាពសំខាន់ៗ។ ផ្នែកសង្គ្រោះបន្ទាន់របស់យើងមានគ្រូពេទ្យឯកទេស និងបរិក្ខារសង្គ្រោះជីវិតទំនើប។"}
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-4">
-              <button className="bg-white text-red-600 px-8 py-3 rounded-xl font-bold hover:bg-gray-100 transition-colors duration-300">
-                {currentLanguage === "en" ? "Call Emergency" : "ទូរស័ព្ទសង្គ្រោះបន្ទាន់"}
-              </button>
-              <button className="border-2 border-white text-white px-8 py-3 rounded-xl font-bold hover:bg-white/10 transition-colors duration-300">
-                {currentLanguage === "en" ? "Get Directions" : "ស្វែងរកទីតាំង"}
-              </button>
-            </div>
-          </div>
-        </div>
-      </AnimatedSection>
+    <AnimatedSection>
+          <Footer currentLanguage={currentLanguage} />
+        </AnimatedSection>
+      
     </div>
+      <ScrollToTopButton isVisible={isVisible} />
+      </>
   );
 };
 

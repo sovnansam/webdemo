@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import CardiologyHero from "./cardiology_hero";
 import CardiologyService from "./cardiology_service";
-import CardiologyDoctors from "./cardiology_doctor";
+import Footer from "../../../components/footer";
 
 // Define API_URL here or import it from a config file
 const API_URL = "/api/cardiology/blogs"; // Assuming a default API endpoint
@@ -202,8 +202,8 @@ const Cardiology = () => {
     <>
       <CardiologyHero currentLanguage={currentLanguage} />
       <CardiologyService currentLanguage={currentLanguage} />
-      <CardiologyDoctors currentLanguage={currentLanguage} />
-      
+
+      <Footer currentLanguage={currentLanguage}/>
       {/* Scroll to Top Button added here */}
       <ScrollToTopButton isVisible={isVisible} />
     </>

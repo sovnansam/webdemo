@@ -4,6 +4,45 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 // For local testing, this URL might need to be adjusted or proxied.
 const API_URL = "API/announcement/ALL_Announcement_web.php";
 
+ const ScrollToTopButton = ({ isVisible }) => {
+    const scrollToTop = () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    };
+
+    return (
+      <button
+        onClick={scrollToTop}
+        className={`
+          fixed bottom-8 right-8 z-40  
+          w-10 h-10 p-0 rounded-full
+          text-white 
+          bg-gradient-to-br from-blue-500 to-indigo-600 
+          shadow-xl shadow-blue-500/60
+          transition-all duration-300 transform 
+          ${isVisible
+            ? 'opacity-100 translate-y-0'
+            : 'opacity-0 translate-y-4 invisible'}
+          hover:scale-110 hover:shadow-2xl hover:shadow-blue-600/70
+          focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-opacity-50 cursor-pointer
+        `}
+        aria-label="Scroll to top"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-5 w-5 mx-auto"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2.5}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+        </svg>
+      </button>
+    );
+  };
 // Renamed from Announcement to App for default export structure
 const Announcements = () => {
   const [announcements, setAnnouncements] = useState([]);
@@ -300,6 +339,38 @@ const Announcements = () => {
     localStorage.setItem("preferredLanguage", newLang);
   };
 
+  // Add scroll event listener to show/hide scroll to top button
+       useEffect(() => {
+         const toggleVisibility = () => {
+           if (window.pageYOffset > 300) {
+             setIsVisible(true);
+           } else {
+             setIsVisible(false);
+           }
+         };
+     
+         window.addEventListener('scroll', toggleVisibility);
+         return () => window.removeEventListener('scroll', toggleVisibility);
+       }, []);
+  
+          useEffect(() => {
+            const scrollToHash = () => {
+              const hash = window.location.hash;
+              if (!hash) return;
+        
+              const element = document.querySelector(hash);
+              if (element) {
+                element.scrollIntoView({ behavior: "smooth" });
+              } else {
+                // Retry after mount
+                setTimeout(scrollToHash, 300);
+              }
+            };
+        
+            scrollToHash();
+          }, []);
+        
+
   // --- NEW: Show More Functionality ---
   const handleShowMore = () => {
     setVisibleCount(prevCount => {
@@ -317,6 +388,7 @@ const Announcements = () => {
   const visibleAnnouncements = announcements.slice(0, visibleCount);
   const hasMoreToShow = visibleCount < announcements.length;
   const isShowingMoreThanInitial = visibleCount > 6;
+      const [isVisible, setIsVisible] = useState(false);
 
   // --- Interaction Handlers ---
 
@@ -447,6 +519,7 @@ const Announcements = () => {
   }
 
   return (
+    <>
     <div className="min-h-screen mt-10 md:mt-15 bg-slate-50" style={{ fontFamily: "'Battambang', 'Khmer OS', system-ui, sans-serif" }}>
       <section className="mt-10 md:mt-15 min-h-screen bg-gray-50/50 py-12 text-gray-900">
        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -737,6 +810,8 @@ const Announcements = () => {
         </div>
       )}
     </div>
+       <ScrollToTopButton isVisible={isVisible} />
+       </>
   );
 };
 

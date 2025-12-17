@@ -6,6 +6,47 @@ const API_URL = "API/blog/all_blog.php";
 // 1. UTILITIES
 // ==========================================
 
+ const ScrollToTopButton = ({ isVisible }) => {
+    const scrollToTop = () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    };
+
+    return (
+      <button
+        onClick={scrollToTop}
+        className={`
+          fixed bottom-8 right-8 z-40  
+          w-10 h-10 p-0 rounded-full
+          text-white 
+          bg-gradient-to-br from-blue-500 to-indigo-600 
+          shadow-xl shadow-blue-500/60
+          transition-all duration-300 transform 
+          ${isVisible
+            ? 'opacity-100 translate-y-0'
+            : 'opacity-0 translate-y-4 invisible'}
+          hover:scale-110 hover:shadow-2xl hover:shadow-blue-600/70
+          focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-opacity-50
+        `}
+        aria-label="Scroll to top"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-5 w-5 mx-auto"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2.5}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+        </svg>
+      </button>
+    );
+  };
+
+
 const getImageUrl = (imagePath) => {
   if (!imagePath || imagePath === "null" || imagePath === "undefined") {
     return "https://placehold.co/800x600/f3f4f6/9ca3af?text=No+Image";
@@ -353,6 +394,7 @@ const Blog = () => {
   const [currentLanguage, setCurrentLanguage] = useState("km");
   const [visibleCount, setVisibleCount] = useState(8);
   const [showAll, setShowAll] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
 
   const utils = useMemo(() => ({
     getTitle: (b) => {
@@ -452,6 +494,38 @@ const Blog = () => {
     applyLanguageStyles(savedLanguage);
   }, []);
 
+  // Add scroll event listener to show/hide scroll to top button
+     useEffect(() => {
+       const toggleVisibility = () => {
+         if (window.pageYOffset > 300) {
+           setIsVisible(true);
+         } else {
+           setIsVisible(false);
+         }
+       };
+   
+       window.addEventListener('scroll', toggleVisibility);
+       return () => window.removeEventListener('scroll', toggleVisibility);
+     }, []);
+
+        useEffect(() => {
+          const scrollToHash = () => {
+            const hash = window.location.hash;
+            if (!hash) return;
+      
+            const element = document.querySelector(hash);
+            if (element) {
+              element.scrollIntoView({ behavior: "smooth" });
+            } else {
+              // Retry after mount
+              setTimeout(scrollToHash, 300);
+            }
+          };
+      
+          scrollToHash();
+        }, []);
+      
+
   // Apply language-specific styles
   const applyLanguageStyles = (language) => {
     document.documentElement.classList.remove('language-en', 'language-km');
@@ -499,6 +573,7 @@ const Blog = () => {
 
   // Normal grid view
   return (
+    <>
     <section className={`mt-10 md:mt-15 min-h-screen bg-gray-50/50 py-12 text-gray-900 ${fontClass}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
@@ -595,6 +670,9 @@ const Blog = () => {
         <ImageModal fullImage={fullImage} closeFullImage={() => setFullImage(null)} />
       )}
     </section>
+
+      <ScrollToTopButton isVisible={isVisible} />
+      </>
   );
 };
 
