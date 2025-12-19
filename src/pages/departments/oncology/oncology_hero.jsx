@@ -388,7 +388,7 @@ const OperatingHours = ({ currentLanguage }) => {
         >
           {langContent.quickStart}
         </h3>
-        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-red-500 to-red-600 flex items-center justify-center shadow-md">
+        <div className="w-10 h-10 -mt-20 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center shadow-md">
           <svg
             className="w-5 h-5 text-white"
             fill="none"

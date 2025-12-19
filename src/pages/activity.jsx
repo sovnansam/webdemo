@@ -282,6 +282,15 @@ const ExpandedBlogSection = ({
   const [activeHeaderImage, setActiveHeaderImage] = useState(blog.image_path);
   const sectionRef = useRef(null);
 
+  useEffect(() => {
+  // Scroll to top when expanded section opens
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}, []);
+
+
+  const handleGallerySwap = (newImagePath) => {
+    setActiveHeaderImage(newImagePath);
+  };
 
 
   return (
@@ -936,6 +945,8 @@ const Activity = () => {
   const handleGallerySwap = (newImagePath) => {
     setActiveHeaderImage(newImagePath);
   };
+
+  
 
   // Add scroll event listener to show/hide scroll to top button
   useEffect(() => {

@@ -3,7 +3,10 @@ import ContactForm from "../components/contact_form";
 import { useInView } from "react-intersection-observer";
 import TelegramQR from "../images/Telegram.png";
 import footer from "../images/footer.png";
+import footer1 from "../images/footer1.png";
+import footer2 from "../images/footer2.png";
 import { motion } from "framer-motion";
+
 
 const Footer = () => {
   const [currentLanguage, setCurrentLanguage] = useState("km");
@@ -82,7 +85,7 @@ const Footer = () => {
       <div className="absolute inset-0 z-0 bg-gray-700 md:bg-transparent" />
 
       {/* Content section */}
-      <div className="relative z-10 mt-1 2xl:mt-70 lg:mt-40 md:mt-50">
+      <div className="relative z-10 mt-1 2xl:mt-50 lg:mt-20 md:mt-30">
         <section id="contact" className="py-8 md:py-4 lg:py-18">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 mt-10 ">
             {/* Desktop: 4 columns, Mobile: 1 column with 2 sub-columns for some rows */}
@@ -261,7 +264,7 @@ const Footer = () => {
                   
                   {/* Right side: QR Code */}
                   <div className="flex flex-col items-center md:items-start">
-                    <div className="w-40 h-40 md:w-32 md:h-32 lg:w-32 lg:h-32 bg-white p-2 rounded-lg shadow-lg">
+                    <div className="w-40 h-40 md:w-32 md:h-32 lg:w-32 lg:h-32 bg-white p-1 rounded-lg shadow-lg">
                       <img
                         src={TelegramQR}
                         alt={
