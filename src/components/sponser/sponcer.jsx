@@ -91,36 +91,14 @@ const HospitalSponsors = () => {
     );
   }
 
-  // If error, show error state
+  // If error, hide the page
   if (error) {
-    return (
-      <section className="bg-white -mt-10 py-4 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center py-8">
-          <p className="text-red-600">Error loading sponsors: {error}</p>
-          <button 
-            onClick={fetchSponsors}
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          >
-            Retry
-          </button>
-        </div>
-      </section>
-    );
+    return null;
   }
 
-  // If no sponsors, show empty state
+  // If no sponsors, hide the page
   if (sponsors.length === 0) {
-    return (
-      <section className="bg-white -mt-10 py-4 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center py-8">
-          <p className="text-gray-500">
-            {currentLanguage === "en" 
-              ? "No sponsors available" 
-              : "គ្មានដៃគូរសហាការណ៏"}
-          </p>
-        </div>
-      </section>
-    );
+    return null;
   }
 
   // Duplicate the sponsors for seamless marquee loop
