@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 // The API endpoint for fetching cardiology services
 const API_URL = "API/departments/cardiology/cardiology_service.php";
@@ -24,98 +26,8 @@ const getFontClass = (language) => {
     : "font-sans english-font"; // Modern English font stack
 };
 
-// Data for the Hero Section stats
-const STATS_DATA = [
-  {
-    key: "procedures",
-    value: "1000+",
-    color: "text-red-600",
-    icon: (
-      <svg
-        className="w-6 h-6"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-        />
-      </svg>
-    ),
-  },
-  {
-    key: "successRate",
-    value: "98.5%",
-    color: "text-green-600",
-    icon: (
-      <svg
-        className="w-6 h-6"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-      </svg>
-    ),
-  },
-  {
-    key: "specialists",
-    value: "25+",
-    color: "text-blue-600",
-    icon: (
-      <svg
-        className="w-6 h-6"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20v-2c0-.656-.126-1.283-.356-1.857M9 20H4v-2a3 3 0 015-2.236M9 20v-2a3 3 0 00-5.356-1.857M12 11a5 5 0 110-10 5 5 0 010 10zm0 11a7 7 0 100-14 7 7 0 000 14z"
-        />
-      </svg>
-    ),
-  },
-  {
-    key: "technology",
-    value: "Robotics",
-    color: "text-purple-600",
-    icon: (
-      <svg
-        className="w-6 h-6"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.568.35.792.428 1.065-2.572z"
-        />
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-        />
-      </svg>
-    ),
-  },
-];
-
 // ==========================================
-// 2. LOADING SKELETON COMPONENT (Unchanged)
+// 2. LOADING SKELETON COMPONENT
 // ==========================================
 
 const LoadingSkeleton = ({ currentLanguage }) => {
@@ -148,16 +60,19 @@ const LoadingSkeleton = ({ currentLanguage }) => {
 };
 
 // ==========================================
-// 3. SERVICE COMPONENT (All Descriptions Shown)
-// ==========================================
-// ==========================================
-// 3. SERVICE COMPONENT (MODIFIED FOR 3 COL LAYOUT)
+// 3. SERVICE COMPONENT
 // ==========================================
 const ServiceItem = ({ service, onClick, currentLanguage, index }) => {
   const fontClass = getFontClass(currentLanguage);
   const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate();
 
-  // ... (Title, SubTitle, Paragraph variables remain the same) ...
+  const isSelected =
+    sessionStorage.getItem("cardiology_service_last_selected") === String(index);
+  const sectionNumber = Math.min(index + 1, 10);
+  const sectionRoute = `/cardiology_section${sectionNumber}`;
+
+  // Title, SubTitle, Paragraph variables
   const title =
     service[currentLanguage === "en" ? "title_en" : "title"] || service.title;
   const subTitle =
@@ -185,6 +100,7 @@ const ServiceItem = ({ service, onClick, currentLanguage, index }) => {
     service[currentLanguage === "en" ? "paragraph6_en" : "paragraph6"] ||
     service.paragraph6;
   const imageUrl = getImageUrl(service.image_path);
+  const URL = service.youtube_url;
 
   const content = {
     en: {
@@ -216,19 +132,33 @@ const ServiceItem = ({ service, onClick, currentLanguage, index }) => {
   ].filter((desc) => desc && desc.trim().length > 0);
 
   return (
-    <div
-      className={`relative group mb-32 last:mb-0`}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      id={`cardiology-service-item-${index}`}
+      tabIndex={0}
+      className={`relative group mb-32 last:mb-0 focus:outline-none rounded-3xl transition-all duration-300 hover:shadow-2xl hover:shadow-red-200/30 ${
+        isSelected ? "bg-red-50/40 shadow-2xl shadow-red-200/30" : ""
+      }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6, delay: 0.1 }}
         // KEY CHANGE: Use grid-cols-2 on lg screens for equal width columns
         className={`grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center ${
           isEven ? "" : "lg:grid-flow-dense"
         }`}
       >
         {/* Image Column - Now spans 1 column (equal to text) */}
-        <div
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.7, delay: 0.2 }}
+          whileHover={{ scale: 1.02 }}
           className={`relative overflow-hidden rounded-3xl shadow-2xl transition-shadow duration-500 ${
             isHovered ? "shadow-red-300/50" : ""
           } aspect-video lg:aspect-auto lg:h-[300px] ${
@@ -236,32 +166,52 @@ const ServiceItem = ({ service, onClick, currentLanguage, index }) => {
             isEven ? "" : "lg:col-start-2"
           }`}
         >
-          <div className="relative w-full h-full">
-            <img
+          <motion.div
+            className="relative w-full h-full"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <motion.img
               src={imageUrl}
               alt={title}
-              className={`w-full h-full object-cover transition-transform duration-1000 ease-in-out ${
+              initial={{ scale: 1 }}
+              animate={{ scale: isHovered ? 1.05 : 1 }}
+              transition={{ duration: 0.7 }}
+              className={`w-full h-full object-cover ${
                 isHovered ? "scale-[1.05]" : "scale-100"
               }`}
               loading="lazy"
             />
 
-            <div
-              className={`absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent transition-opacity duration-700 ${
+            <motion.div
+              initial={{ opacity: 0.8 }}
+              animate={{ opacity: isHovered ? 1 : 0.8 }}
+              transition={{ duration: 0.7 }}
+              className={`absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent ${
                 isHovered ? "opacity-100" : "opacity-80"
               }`}
             />
 
-            <div
+            <motion.div
+              initial={{ scale: 1, rotate: 0 }}
+              animate={{
+                scale: isHovered ? 1.1 : 1,
+                rotate: isHovered ? 3 : 0,
+              }}
+              transition={{ duration: 0.7, type: "spring" }}
               className={`absolute top-6 ${
                 isEven ? "right-6" : "left-6"
-              } w-14 h-14 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center transition-all duration-700 ${
+              } w-14 h-14 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center ${
                 isHovered
                   ? "scale-110 rotate-3 shadow-2xl shadow-blue-400/50"
                   : "shadow-lg"
               }`}
             >
-              <svg
+              <motion.svg
+                initial={{ scale: 1 }}
+                animate={{ scale: isHovered ? 1.1 : 1 }}
+                transition={{ duration: 0.3 }}
                 className="w-7 h-7 text-blue-600"
                 fill="none"
                 stroke="currentColor"
@@ -273,13 +223,16 @@ const ServiceItem = ({ service, onClick, currentLanguage, index }) => {
                   strokeWidth={1.8}
                   d="M13 10V3L4 14h7v7l9-11h-7z"
                 />
-              </svg>
-            </div>
-          </div>
-        </div>
+              </motion.svg>
+            </motion.div>
+          </motion.div>
+        </motion.div>
 
         {/* Content Column - Also spans 1 column (equal to image) */}
-        <div
+        <motion.div
+          initial={{ opacity: 0, x: isEven ? 20 : -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.7, delay: 0.3 }}
           className={`${isEven ? "" : "lg:col-start-1 lg:row-start-1"} ${
             // Optional: Add some top padding on mobile for better spacing
             isEven ? "lg:pl-0" : "lg:pr-0"
@@ -287,69 +240,148 @@ const ServiceItem = ({ service, onClick, currentLanguage, index }) => {
         >
           {/* Category Tag */}
           {service.category && (
-            <div className="inline-block mb-4">
-              <span
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="inline-block mb-4"
+            >
+              <motion.span
+                whileHover={{ scale: 1.05 }}
                 className={`px-3 py-1 text-xs font-semibold text-blue-700 bg-blue-100 rounded-full uppercase tracking-wider ${fontClass}`}
               >
                 {service.category}
-              </span>
-            </div>
+              </motion.span>
+            </motion.div>
           )}
 
-        {/* Title with Circle Badge */}
-<div className="flex items-center gap-4 mb-6">
-  <div className="flex-shrink-0">
-    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-white font-bold text-sm transition-all duration-500 ${
-      isHovered 
-        ? "bg-gradient-to-br from-red-600 to-red-800 scale-110" 
-        : "bg-gradient-to-br from-gray-800 to-gray-900"
-    }`}>
-      {String(index + 1).padStart(2,)}
-    </div>
-  </div>
-  <h3 className={`text-xl md:text-2xl lg:text-2xl font-extrabold text-gray-900 leading-tight ${fontClass}`}>
-    <span
-      className={`bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent transition-all duration-500 ${
-        isHovered ? "from-red-600 to-red-500" : ""
-      }`}
-    >
-      {title || service.title_en}
-    </span>
-  </h3>
-</div>
+          {/* Title with Circle Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className="flex items-center gap-4 mb-6"
+          >
+            <div className="flex-shrink-0">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.6, type: "spring" }}
+                whileHover={{ scale: 1.1 }}
+                className={`w-6 h-6 rounded-full flex items-center justify-center text-white font-bold text-sm ${
+                  isHovered
+                    ? "bg-gradient-to-br from-red-600 to-red-800 scale-110"
+                    : "bg-gradient-to-br from-gray-800 to-gray-900"
+                }`}
+              >
+                {String(index + 1).padStart(2)}
+              </motion.div>
+            </div>
+            <motion.h3
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.7 }}
+              className={`text-xl md:text-2xl lg:text-2xl font-extrabold text-gray-900 leading-tight ${fontClass}`}
+            >
+              <motion.span
+                initial={{ backgroundPosition: "100% 50%" }}
+                animate={{ backgroundPosition: isHovered ? "0% 50%" : "100% 50%" }}
+                transition={{ duration: 0.5 }}
+                className={`bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent bg-[length:200%_100%] bg-left ${
+                  isHovered ? "from-red-600 to-red-500" : ""
+                }`}
+              >
+                {title || service.title_en}
+              </motion.span>
+            </motion.h3>
+          </motion.div>
 
           {/* Subtitle/Short Description */}
-          <div className="mb-6">
-            <p
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.8 }}
+            className="mb-6"
+          >
+            <motion.p
+              whileHover={{ x: 5 }}
               className={`text-gray-700 leading-relaxed text-lg font-semibold ${fontClass} transition-colors duration-300`}
             >
               {subTitle || service.subTitle_en}
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
 
           {/* Detailed Descriptions LIST */}
           {detailedDescriptions.length > 0 && (
-            <ul className="space-y-3 mb-8 pl-5 list-none">
+            <motion.ul
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.9 }}
+              className="space-y-3 mb-8 pl-5 list-none"
+            >
               {detailedDescriptions.map((desc, i) => (
-                <li key={i} className="flex items-start text-gray-600 text-md">
-                  <span className="w-2 h-2 mr-3 mt-2 bg-red-500 rounded-full flex-shrink-0"></span>
-                  <p className={`leading-relaxed ${fontClass}`}>{desc}</p>
-                </li>
+                <motion.li
+                  key={i}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.4, delay: 0.9 + i * 0.1 }}
+                  className="flex items-start text-gray-600 text-md"
+                >
+                  <motion.span
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ duration: 0.3, delay: 0.9 + i * 0.1 + 0.1 }}
+                    className="w-2 h-2 mr-3 mt-2 bg-red-500 rounded-full flex-shrink-0"
+                  ></motion.span>
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3, delay: 0.9 + i * 0.1 + 0.2 }}
+                    className={`leading-relaxed ${fontClass}`}
+                  >
+                    {desc}
+                  </motion.p>
+                </motion.li>
               ))}
-            </ul>
+            </motion.ul>
           )}
 
-          {/* Decorative Line */}
-          <div
-            className={`mt-10 h-0.5 bg-gradient-to-r from-transparent ${
-              isEven ? "via-red-200" : "via-blue-200"
-            } to-transparent transition-all duration-1000 ${
-              isHovered ? "via-red-400" : ""
-            }`}
-          />
-        </div>
-      </div>
-    </div>
+          {/* View Full Details Button - Only show if service has valid data, image, AND is_active is true */}
+          {(title || paragraph || detailedDescriptions.length > 0) &&
+            service.image_path &&
+            service.image_path !== "null" &&
+            service.image_path !== "undefined" &&
+            // ADDED THIS CHECK:
+            (service.is_active === true ||
+              service.is_active === "1" ||
+              service.is_active === 1) && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 1.2 }}
+                className="mb-8"
+              >
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => {
+                    sessionStorage.setItem(
+                      "cardiology_service_last_selected",
+                      String(index)
+                    );
+                    navigate(sectionRoute);
+                  }}
+                  className={`px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg cursor-pointer ${fontClass}`}
+                >
+                  {currentLanguage === "en"
+                    ? "View Full Details →"
+                    : "មើលព័ត៌មានលម្អិត →"}
+                </motion.button>
+              </motion.div>
+            )}
+        </motion.div>
+      </motion.div>
+    </motion.div>
   );
 };
 
@@ -357,14 +389,16 @@ const CardiologyService = ({ currentLanguage }) => {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedService, setSelectedService] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const fontClass = getFontClass(currentLanguage);
+  const navigate = useNavigate();
 
+  // Content for different languages
   const content = {
     en: {
       title: "Cardiology Services",
-      subtitle:
-        "Comprehensive heart care with advanced diagnostics and treatments",
+      subtitle: "Comprehensive heart care with advanced diagnostics and treatments",
       tagline: "Expert Cardiac Care",
       stats: {
         procedures: "Procedures",
@@ -386,8 +420,7 @@ const CardiologyService = ({ currentLanguage }) => {
     },
     km: {
       title: "សេវាកម្មបេះដូង",
-      subtitle:
-        "ការថែទាំបេះដូងទូលំទូលាយជាមួយការធ្វើរោគវិនិច្ឆ័យ និងការព្យាបាលឆ្នើម",
+      subtitle: "ការថែទាំបេះដូងទូលំទូលាយជាមួយការធ្វើរោគវិនិច្ឆ័យ និងការព្យាបាលឆ្នើម",
       tagline: "ការថែទាំបេះដូងដោយអ្នកជំនាញ",
       stats: {
         procedures: "និន្នាការ",
@@ -397,7 +430,7 @@ const CardiologyService = ({ currentLanguage }) => {
       },
       cta: {
         title: "បេះដូងរបស់អ្នកសមនឹងទទួលបានល្អបំផុត",
-        description: "កក់ណាត់ពិគ្រោះជាមួយក្រុមអ្នកជំនាญបេះដូងរបស់យើង",
+        description: "កក់ណាត់ពិគ្រោះជាមួយក្រុមអ្នកជំនា្យបេះដូងរបស់យើង",
         paragraph: "កក់ណាត់ពិគ្រោះជាមួយក្រុមអ្នកជំនាញបេះដូងរបស់យើង",
         button: "កក់ណាត់",
       },
@@ -410,12 +443,14 @@ const CardiologyService = ({ currentLanguage }) => {
   };
 
   const langContent = content[currentLanguage] || content.en;
+  const fontClass = getFontClass(currentLanguage);
 
   useEffect(() => {
     const fetchServices = async () => {
       setLoading(true);
       try {
         const response = await fetch(API_URL);
+
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
         const servicesData = Array.isArray(data.data)
@@ -435,6 +470,25 @@ const CardiologyService = ({ currentLanguage }) => {
 
     fetchServices();
   }, []);
+
+  useEffect(() => {
+    if (!services || services.length === 0) return;
+
+    const raw = sessionStorage.getItem("cardiology_service_last_selected");
+    if (raw == null) return;
+    const idx = Number(raw);
+    if (!Number.isFinite(idx) || idx < 0 || idx >= services.length) return;
+
+    const el = document.getElementById(`cardiology-service-item-${idx}`);
+    if (!el) return;
+
+    requestAnimationFrame(() => {
+      el.scrollIntoView({ block: "center", behavior: "smooth" });
+      setTimeout(() => {
+        el.focus({ preventScroll: true });
+      }, 250);
+    });
+  }, [services]);
 
   const handleServiceClick = (service) => {
     setSelectedService(service);
@@ -500,11 +554,7 @@ const CardiologyService = ({ currentLanguage }) => {
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-16 md:py-28">
         {/* Section Header */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {" "}
-          {/* Ensure padding/max-width is here or in the parent */}
-          {/* Section Header - Left Aligned within the container */}   {" "}
           <div className="mb-16 md:mb-20 max-w-6xl">
-                   {" "}
             <div className="inline-block mb-3">
               {/* Tagline/Category */}
               <p
@@ -513,35 +563,27 @@ const CardiologyService = ({ currentLanguage }) => {
                 {currentLanguage === "en" ? "Our Expertise" : "ជំនាញរបស់យើង"}
               </p>
             </div>
-                   {" "}
             <h2
               className={`text-xl md:text-3xl font-extrabold text-gray-900 mb-6 leading-tight ${fontClass} `}
             >
-                       {" "}
               {currentLanguage === "en"
                 ? "Specialized Services"
                 : "សេវ៉ាកម្មឯកទេស"}
-                     {" "}
             </h2>
-            {/* Subtitle/Description - Max width set for readability */}       {" "}
+            {/* Subtitle/Description - Max width set for readability */}
             <p
               className={`text-md md:text-lg text-gray-700 leading-relaxed ${fontClass}`}
             >
-                       {" "}
               {currentLanguage === "en"
                 ? "The Cardiovascular and Geriatric Center located in Khmer-Soviet Friendship Hospital, provide a wide range of service for heart diseases and geriatric patient, from early diagnosis and preventive treatments to comprehensive cardiovascular care, including interventional cardiology, electrophysiology, advanced heart failure management, and cardiovascular surgery. The cardiac care and services we offer include:."
                 : "មជ្ឈមណ្ឌលជំងឺបេះដូង និងសរសៃឈាម មានទីតាំងនៅក្នុងមន្ទីរពេទ្យមិត្តភាពខ្មែរ-សូវៀត ផ្តល់សេវាកម្មយ៉ាងទូលំទូលាយសម្រាប់ជំងឺបេះដូង និងអ្នកជំងឺវ័យចំណាស់ តាំងពីការធ្វើរោគវិនិច្ឆ័យ និងការព្យាបាលបង្ការមុន ដល់ការថែទាំសរសៃឈាមបេះដូងដ៏ទូលំទូលាយ រួមទាំងការវះកាត់បេះដូង អេឡិចត្រូសរីរវិទ្យា ការគ្រប់គ្រងជំងឺខ្សោយបេះដូងកម្រិតខ្ពស់ និងការវះកាត់សរសៃឈាមបេះដូង។ សេវាថែទាំបេះដូង និងសេវាកម្មដែលយើងផ្តល់ជូនរួមមាន:"}
-                     {" "}
             </p>
-                    {/* Accent line - Now left-aligned */}       {" "}
+            {/* Accent line - Now left-aligned */}
             <div className="h-1 w-50 bg-gradient-to-r from-red-500 to-red-700 mt-6 rounded-full"></div>
-               {" "}
           </div>
         </div>
         {/* Services List */}
         <div className="space-y-32">
-          {" "}
-          {/* Increased spacing */}
           {services.map((service, index) => (
             <ServiceItem
               key={service.id || index}

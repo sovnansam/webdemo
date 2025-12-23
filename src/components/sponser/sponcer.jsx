@@ -103,7 +103,7 @@ const HospitalSponsors = () => {
 
   // Duplicate the sponsors for seamless marquee loop
   // We duplicate enough times to ensure smooth animation
-  const runningSponsors = [...sponsors, ...sponsors];
+  const runningSponsors = [...sponsors];
 
   // Scroll handlers
   const scroll = (direction) => {

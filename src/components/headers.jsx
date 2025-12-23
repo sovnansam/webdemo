@@ -23,9 +23,13 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Close mobile menu when route changes
+  // ==========================================
+  // UPDATED: Close menu AND Scroll to top on route change
+  // ==========================================
   useEffect(() => {
     setIsMenuOpen(false)
+    // This ensures the page starts at the top when switching pages
+    window.scrollTo(0, 0)
   }, [location.pathname])
 
   const handleLogoClick = () => {
