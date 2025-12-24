@@ -284,9 +284,7 @@ const CardiologySection2
                 <span className="text-red-700 group-hover:text-red-800 font-semibold text-base">
                   {langContent.backButton}
                 </span>
-                <span className="ml-auto text-xs text-gray-400 group-hover:text-gray-600 font-medium">
-                  ESC
-                </span>
+                
               </motion.button>
             </div>
           </div>

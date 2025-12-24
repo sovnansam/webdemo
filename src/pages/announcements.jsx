@@ -640,7 +640,7 @@ const Announcements = () => {
                               {hasAdditionalContent(announcement) && (
                                 <button
                                   onClick={() => toggleCardExpansion(index)}
-                                  className="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium transition-colors duration-200 "
+                                  className="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium transition-colors duration-200 cursor-pointer "
                                 >
                                   {isExpanded ? (
                                     <>

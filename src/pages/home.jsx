@@ -16,6 +16,10 @@ const Home = () => {
   const [showAll, setShowAll] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
+  useEffect(() => {
+    sessionStorage.removeItem("cardiology_service_last_selected");
+  }, []);
+
   // Add scroll event listener to show/hide scroll to top button
   useEffect(() => {
     const toggleVisibility = () => {
