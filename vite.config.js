@@ -8,7 +8,7 @@ export default defineConfig({
     proxy: {
       // All requests starting with /API will be proxied
       '/API': {
-        target: 'http://203.189.137.34:1265', // Your backend server
+        target: 'https://203.189.137.34:1265', // Your backend server
         changeOrigin: true,
         secure: false, // set false if backend is HTTP
         rewrite: (path) => path.replace(/^\/API/, '/ksfh_backend/API'),
