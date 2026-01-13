@@ -2,6 +2,6 @@ const dev = import.meta.env.DEV;
 
 const API_BASE = dev
   ? "/API" 
-  : "https://203.189.137.34:1265/ksfh_backend/API";
+  : "http://192.168.10.10:9592/ksfh_backend/API";
 
 export default API_BASE;

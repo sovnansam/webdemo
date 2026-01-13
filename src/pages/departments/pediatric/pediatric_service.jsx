@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
-// The API endpoint for fetching cardiology services
-const API_URL = "API/departments/oncology/oncology_service.php";
+// The API endpoint for fetching pediatric services
+const API_URL = "API/departments/pediatrics/pediatrics_service.php";
 
 // ==========================================
 // 1. UTILITIES - IMPROVED FONT STACK
@@ -16,7 +16,7 @@ const getImageUrl = (imagePath) => {
   }
   if (imagePath.startsWith("http")) return imagePath;
   if (imagePath.startsWith("/")) return imagePath.substring(1);
-  return `API/departments/oncology/${imagePath}`;
+  return `API/departments/pediatrics/${imagePath}`;
 };
 
 // Use a more modern and readable font stack for English (font-sans)
@@ -161,9 +161,9 @@ const ServiceItem = ({ service, onClick, currentLanguage, index }) => {
   const navigate = useNavigate();
 
   const isSelected =
-    sessionStorage.getItem("oncology_service_last_selected") === String(index);
+    sessionStorage.getItem("Pediatric_service_last_selected") === String(index);
   const sectionNumber = Math.min(index + 1, 10);
-  const sectionRoute = `/oncology_section${sectionNumber}`;
+  const sectionRoute = `/Pediatric_section${sectionNumber}`;
 
   // Title, SubTitle, Paragraph variables
   const title =
@@ -229,7 +229,7 @@ const ServiceItem = ({ service, onClick, currentLanguage, index }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      id={`oncology-service-item-${index}`}
+      id={`Pediatric-service-item-${index}`}
       tabIndex={0}
       className={`relative group mb-32 last:mb-0 focus:outline-none rounded-3xl transition-all duration-300 hover:shadow-2xl hover:shadow-blue-200/30 ${
         isSelected ? "bg-blue-50/40 shadow-2xl shadow-blue-200/30" : ""
@@ -382,7 +382,7 @@ const ServiceItem = ({ service, onClick, currentLanguage, index }) => {
                   whileTap={{ scale: 0.95 }}
                   onClick={() => {
                     sessionStorage.setItem(
-                      "oncology_service_last_selected",
+                      "Pediatric_service_last_selected",
                       String(index)
                     );
                     navigate(sectionRoute);
@@ -401,7 +401,7 @@ const ServiceItem = ({ service, onClick, currentLanguage, index }) => {
   );
 };
 
-const OncologyService = ({ currentLanguage }) => {
+const PediatricService = ({ currentLanguage }) => {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -414,10 +414,10 @@ const OncologyService = ({ currentLanguage }) => {
 
   const content = {
     en: {
-      title: "Oncology Services",
+      title: "Pediatric Services",
       subtitle:
-        "Comprehensive cancer care with advanced diagnostics and treatments",
-      tagline: "Expert Cancer Care",
+        "Comprehensive pediatric care with advanced diagnostics and treatments",
+      tagline: "Expert pediatric Care",
       stats: {
         procedures: "Procedures",
         successRate: "Success Rate",
@@ -425,9 +425,9 @@ const OncologyService = ({ currentLanguage }) => {
         technology: "Technology",
       },
       cta: {
-        title: "Your Health Deserves The Best",
-        description: "Schedule a consultation with our expert oncology team",
-        paragraph: "Schedule a consultation with our expert oncology team",
+        title: "Your Child's Health Deserves The Best",
+        description: "Schedule a consultation with our expert Pediatric team",
+        paragraph: "Schedule a consultation with our expert Pediatric team",
         button: "Book Appointment",
       },
       error: {
@@ -437,10 +437,10 @@ const OncologyService = ({ currentLanguage }) => {
       },
     },
     km: {
-      title: "សេវាកម្មមហារីក",
+      title: "សេវាកម្មមន្ទីរពេទ្យកុមារ",
       subtitle:
-        "ការថែទាំមហារីកទូលំទូលាយជាមួយការធ្វើរោគវិនិច្ឆ័យ និងការព្យាបាលឆ្នើម",
-      tagline: "ការថែទាំមហារីកដោយអ្នកជំនាញ",
+        "ការថែទាំមន្ទីរពេទ្យកុមារទូលំទូលាយជាមួយការធ្វើរោគវិនិច្ឆ័យ និងការព្យាបាលឆ្នើម",
+      tagline: "ការថែទាំមន្ទីរពេទ្យកុមារដោយអ្នកជំនាញ",
       stats: {
         procedures: "និន្នាការ",
         successRate: "អត្រាជោគជ័យ",
@@ -448,9 +448,9 @@ const OncologyService = ({ currentLanguage }) => {
         technology: "បច្ចេកវិទ្យា",
       },
       cta: {
-        title: "សុខភាពរបស់អ្នកសមនឹងទទួលបានល្អបំផុត",
-        description: "កក់ណាត់ពិគ្រោះជាមួយក្រុមអ្នកជំនា៍មហារីករបស់យើង",
-        paragraph: "កក់ណាត់ពិគ្រោះជាមួយក្រុមអ្នកជំនាញមហារីករបស់យើង",
+        title: "សុខភាពកុមាររបស់អ្នកសមនឹងទទួលបានល្អបំផុត",
+        description: "កក់ណាត់ពិគ្រោះជាមួយក្រុមអ្នកជំនា៍មន្ទីរពេទ្យកុមាររបស់យើង",
+        paragraph: "កក់ណាត់ពិគ្រោះជាមួយក្រុមអ្នកជំនាញមន្ទីរពេទ្យកុមាររបស់យើង",
         button: "កក់ណាត់",
       },
       error: {
@@ -478,7 +478,7 @@ const OncologyService = ({ currentLanguage }) => {
         setServices(servicesData);
         setError(null);
       } catch (err) {
-        console.error("Error fetching cardiology services:", err);
+        console.error("Error fetching pediatric services:", err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -554,9 +554,9 @@ const OncologyService = ({ currentLanguage }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {" "}
           {/* Ensure padding/max-width is here or in the parent */}
-          {/* Section Header - Left Aligned within the container */}   {" "}
+          {/* Section Header - Left Aligned within the container */}   {" "}
           <div className="mb-16 md:mb-20 max-w-6xl">
-                   {" "}
+              {" "}
             <div className="inline-block mb-3">
               {/* Tagline/Category */}
               <p
@@ -565,29 +565,29 @@ const OncologyService = ({ currentLanguage }) => {
                 {currentLanguage === "en" ? "Our Expertise" : "ជំនាញរបស់យើង"}
               </p>
             </div>
-                   {" "}
+              {" "}
             <h2
               className={`text-xl md:text-3xl font-extrabold text-gray-900 mb-6 leading-tight ${fontClass} `}
             >
-                       {" "}
+                 {" "}
               {currentLanguage === "en"
                 ? "Specialized Services"
                 : "សេវ៉ាកម្មឯកទេស"}
-                     {" "}
+                 {" "}
             </h2>
-            {/* Subtitle/Description - Max width set for readability */}       {" "}
+            {/* Subtitle/Description - Max width set for readability */}      {" "}
             <p
               className={`text-md md:text-lg text-gray-700 leading-relaxed ${fontClass}`}
             >
-                       {" "}
+                 {" "}
               {currentLanguage === "en"
-                ? "The Cardiovascular and Geriatric Center located in Khmer-Soviet Friendship Hospital, provide a wide range of service for heart diseases and geriatric patient, from early diagnosis and preventive treatments to comprehensive cardiovascular care, including interventional cardiology, electrophysiology, advanced heart failure management, and cardiovascular surgery. The cardiac care and services we offer include:."
-                : "មជ្ឈមណ្ឌលជំងឺបេះដូង និងសរសៃឈាម មានទីតាំងនៅក្នុងមន្ទីរពេទ្យមិត្តភាពខ្មែរ-សូវៀត ផ្តល់សេវាកម្មយ៉ាងទូលំទូលាយសម្រាប់ជំងឺបេះដូង និងអ្នកជំងឺវ័យចំណាស់ តាំងពីការធ្វើរោគវិនិច្ឆ័យ និងការព្យាបាលបង្ការមុន ដល់ការថែទាំសរសៃឈាមបេះដូងដ៏ទូលំទូលាយ រួមទាំងការវះកាត់បេះដូង អេឡិចត្រូសរីរវិទ្យា ការគ្រប់គ្រងជំងឺខ្សោយបេះដូងកម្រិតខ្ពស់ និងការវះកាត់សរសៃឈាមបេះដូង។ សេវាថែទាំបេះដូង និងសេវាកម្មដែលយើងផ្តល់ជូនរួមមាន:"}
-                     {" "}
+                ? "The Pediatric Department located in Khmer-Soviet Friendship Hospital, provides a wide range of services for children, from early diagnosis and preventive treatments to comprehensive pediatric care, including pediatric surgery, neonatal care, pediatric cardiology, and specialized treatments for childhood diseases. The pediatric care and services we offer include:."
+                : "នាយកដ្ឋានមន្ទីរពេទ្យកុមារមានទីតាំងនៅក្នុងមន្ទីរពេទ្យមិត្តភាពខ្មែរ-សូវៀត ផ្តល់សេវាកម្មយ៉ាងទូលំទូលាយសម្រាប៰កុមារ តាំងពីការធ្វើរោគវិនិច្ឆ័យ និងការព្យាបាលបង្ការមុន ដល់ការថែទាំមន្ទីរពេទ្យកុមារដ៏ទូលំទូលាយ រួមទាំងការវះកាត់កុមារ ការថែទាំទារកកើតថ្មី ជំងឺបេះដូងកុមារ និងការព្យាបាលឯកទេសសម្រាប់ជំងឺកុមារ។ សេវាថែទាំកុមារ និងសេវាកម្មដែលយើងផ្តល់ជូនរួមមាន:"}
+                 {" "}
             </p>
-                    {/* Accent line - Now left-aligned */}       {" "}
+               {/* Accent line - Now left-aligned */}      {" "}
             <div className="h-1 w-50 bg-gradient-to-r from-blue-500 to-blue-700 mt-6 rounded-full"></div>
-               {" "}
+             {" "}
           </div>
         </div>
         {/* Services List */}
@@ -609,4 +609,4 @@ const OncologyService = ({ currentLanguage }) => {
   );
 };
 
-export default OncologyService;
+export default PediatricService;

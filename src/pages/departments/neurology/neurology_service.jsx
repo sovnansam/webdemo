@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 // The API endpoint for fetching cardiology services
-const API_URL = "API/departments/oncology/oncology_service.php";
+const API_URL = "API/departments/Neurology/Neurology_service.php";
 
 // ==========================================
 // 1. UTILITIES - IMPROVED FONT STACK
@@ -16,7 +16,7 @@ const getImageUrl = (imagePath) => {
   }
   if (imagePath.startsWith("http")) return imagePath;
   if (imagePath.startsWith("/")) return imagePath.substring(1);
-  return `API/departments/oncology/${imagePath}`;
+  return `API/departments/Neurology/${imagePath}`;
 };
 
 // Use a more modern and readable font stack for English (font-sans)
@@ -161,9 +161,9 @@ const ServiceItem = ({ service, onClick, currentLanguage, index }) => {
   const navigate = useNavigate();
 
   const isSelected =
-    sessionStorage.getItem("oncology_service_last_selected") === String(index);
+    sessionStorage.getItem("Neurology_service_last_selected") === String(index);
   const sectionNumber = Math.min(index + 1, 10);
-  const sectionRoute = `/oncology_section${sectionNumber}`;
+  const sectionRoute = `/Neurology_section${sectionNumber}`;
 
   // Title, SubTitle, Paragraph variables
   const title =
@@ -229,7 +229,7 @@ const ServiceItem = ({ service, onClick, currentLanguage, index }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      id={`oncology-service-item-${index}`}
+      id={`Neurology-service-item-${index}`}
       tabIndex={0}
       className={`relative group mb-32 last:mb-0 focus:outline-none rounded-3xl transition-all duration-300 hover:shadow-2xl hover:shadow-blue-200/30 ${
         isSelected ? "bg-blue-50/40 shadow-2xl shadow-blue-200/30" : ""
@@ -382,7 +382,7 @@ const ServiceItem = ({ service, onClick, currentLanguage, index }) => {
                   whileTap={{ scale: 0.95 }}
                   onClick={() => {
                     sessionStorage.setItem(
-                      "oncology_service_last_selected",
+                      "Neurology_service_last_selected",
                       String(index)
                     );
                     navigate(sectionRoute);
@@ -401,7 +401,7 @@ const ServiceItem = ({ service, onClick, currentLanguage, index }) => {
   );
 };
 
-const OncologyService = ({ currentLanguage }) => {
+const NeurologyService = ({ currentLanguage }) => {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -414,10 +414,10 @@ const OncologyService = ({ currentLanguage }) => {
 
   const content = {
     en: {
-      title: "Oncology Services",
+      title: "Neurology Services",
       subtitle:
-        "Comprehensive cancer care with advanced diagnostics and treatments",
-      tagline: "Expert Cancer Care",
+        "Comprehensive neurological care with advanced diagnostics and treatments",
+      tagline: "Expert neurological Care",
       stats: {
         procedures: "Procedures",
         successRate: "Success Rate",
@@ -426,8 +426,8 @@ const OncologyService = ({ currentLanguage }) => {
       },
       cta: {
         title: "Your Health Deserves The Best",
-        description: "Schedule a consultation with our expert oncology team",
-        paragraph: "Schedule a consultation with our expert oncology team",
+        description: "Schedule a consultation with our expert Neurology team",
+        paragraph: "Schedule a consultation with our expert Neurology team",
         button: "Book Appointment",
       },
       error: {
@@ -609,4 +609,4 @@ const OncologyService = ({ currentLanguage }) => {
   );
 };
 
-export default OncologyService;
+export default NeurologyService;

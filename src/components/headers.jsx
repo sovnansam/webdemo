@@ -150,10 +150,10 @@ const Header = () => {
     en: {
       clinical: [
         { name: 'Cardiology', href: '/cardiology', icon: '❤️' },
-        { name: 'Gastroenterology', href: '#gastro', icon: '🩺'},
-        { name: 'Pulmonology', href: '#pulmonology', icon: '🫁'},
-        { name: 'Neurology', href: '#neurology', icon: '🧠' },
-        { name: 'Dermatology', href: '#dermatology', icon: '🌟'},
+        { name: 'Gastroenterology', href: '/gastrology', icon: '🩺'},
+        { name: 'Pulmonology', href: '/pulmonology', icon: '🫁'},
+        { name: 'Neurology', href: '/neurology', icon: '🧠' },
+        { name: 'Dermatology', href: '/dermatology', icon: '🌟'},
         { name: 'Oncology', href: '/oncology', icon: '🎗️'}
       ],
       surgical: [
@@ -163,7 +163,7 @@ const Header = () => {
         { name: 'Cardiac Surgery', href: '#cardiac-surgery', icon: '💓'}
       ],
       specialized: [
-        { name: 'Pediatrics', href: '#pediatrics', icon: '👶'},
+        { name: 'Pediatrics', href: '/pediatric', icon: '👶'},
         { name: 'OB-GYN', href: '#obgyn', icon: '🤰'},
         { name: 'Urology', href: '#urology', icon: '💧'},
         { name: 'ENT', href: '#ent', icon: '👂'},
@@ -179,10 +179,10 @@ const Header = () => {
     km: {
       clinical: [
         { name: 'ជំងឺបេះដូង', href: '/cardiology', icon: '❤️' },
-        { name: 'ជំងឺក្រពះ', href: '#gastro', icon: '🩺' },
-        { name: 'ជំងឺសួត', href: '#pulmonology', icon: '🫁' },
-        { name: 'ប្រសាទ', href: '#neurology', icon: '🧠'},
-        { name: 'ជំងឺស្បែក', href: '#dermatology', icon: '🌟'},
+        { name: 'ជំងឺក្រពះ', href: '/gastrology', icon: '🩺' },
+        { name: 'ជំងឺសួត', href: '/pulmonology', icon: '🫁' },
+        { name: 'ប្រសាទ', href: '/neurology', icon: '🧠'},
+        { name: 'ជំងឺស្បែក', href: '/dermatology', icon: '🌟'},
         { name: 'ជំងឺមហារីក', href: '/oncology', icon: '🎗️' }
       ],
       surgical: [
@@ -192,7 +192,7 @@ const Header = () => {
         { name: 'វះកាត់បេះដូង', href: '#cardiac-surgery', icon: '💓'}
       ],
       specialized: [
-        { name: 'ជំងឺកុមារ', href: '#pediatrics', icon: '👶'},
+        { name: 'ជំងឺកុមារ', href: '/pediatric', icon: '👶'},
         { name: 'ស្ត្រីធំ', href: '#obgyn', icon: '🤰'},
         { name: 'ផ្លូវនោម', href: '#urology', icon: '💧'},
         { name: 'ត្រចៀកក', href: '#ent', icon: '👂' },

@@ -1,18 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
-import OncologyHero from "./oncology_hero";
-import OncologyService from "./oncology_service";
-import OncologySection1 from "./OncologySection1";
-import OncologySection2 from "./OncologySection2";
-import OncologySection3 from "./OncologySection3";
-import OncologySection4 from "./OncologySection4";
-import OncologySection5 from "./OncologySection5";
-import OncologySection6 from "./OncologySection6";
-import OncologySection7 from "./OncologySection7";
-import OncologySection8 from "./OncologySection8";
-import OncologySection9 from "./OncologySection9";
-import OncologySection10 from "./OncologySection10";
+import PediatricHero from "./pediatric_hero";
+import PediatricService from "./pediatric_service";
 import Footer from "../../../components/footer";
 import ScrollToTopButton from "../../../contexts/scrollTop"
+
+const API_URL = "API/departments/pediatrics/pediatrics.php";
 
 const getFontClass = (language) => {
   return language === 'km'
@@ -26,7 +18,7 @@ const getFontClass = (language) => {
 // 5. MAIN PAGE COMPONENT
 // ==========================================
 
-const Oncology = () => {
+const Pediatric = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -119,8 +111,8 @@ const Oncology = () => {
   // Normal grid view
   return (
     <>
-      <OncologyHero currentLanguage={currentLanguage} />
-      <OncologyService currentLanguage={currentLanguage} />
+      <PediatricHero currentLanguage={currentLanguage} />
+      <PediatricService currentLanguage={currentLanguage} />
 
       <Footer currentLanguage={currentLanguage}/>
       {/* Scroll to Top Button added here */}
@@ -129,4 +121,4 @@ const Oncology = () => {
   );
 };
 
-export default Oncology;
+export default Pediatric;

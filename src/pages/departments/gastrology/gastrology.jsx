@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
-import OncologyHero from "./oncology_hero";
-import OncologyService from "./oncology_service";
-import OncologySection1 from "./OncologySection1";
-import OncologySection2 from "./OncologySection2";
-import OncologySection3 from "./OncologySection3";
-import OncologySection4 from "./OncologySection4";
-import OncologySection5 from "./OncologySection5";
-import OncologySection6 from "./OncologySection6";
-import OncologySection7 from "./OncologySection7";
-import OncologySection8 from "./OncologySection8";
-import OncologySection9 from "./OncologySection9";
-import OncologySection10 from "./OncologySection10";
+import GastrologyHero from "./gastrology_hero";
+import GastrologyService from "./gastrology_service";
+import GastrologySection1 from "./GastrologySection1";
+import GastrologySection2 from "./GastrologySection2";
+import GastrologySection3 from "./GastrologySection3";
+import GastrologySection4 from "./GastrologySection4";
+import GastrologySection5 from "./GastrologySection5";
+import GastrologySection6 from "./GastrologySection6";
+import GastrologySection7 from "./GastrologySection7";
+import GastrologySection8 from "./GastrologySection8";
+import GastrologySection9 from "./GastrologySection9";
+import GastrologySection10 from "./GastrologySection10";
 import Footer from "../../../components/footer";
 import ScrollToTopButton from "../../../contexts/scrollTop"
 
@@ -26,7 +26,7 @@ const getFontClass = (language) => {
 // 5. MAIN PAGE COMPONENT
 // ==========================================
 
-const Oncology = () => {
+const Gastrology = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -119,9 +119,8 @@ const Oncology = () => {
   // Normal grid view
   return (
     <>
-      <OncologyHero currentLanguage={currentLanguage} />
-      <OncologyService currentLanguage={currentLanguage} />
-
+      <GastrologyHero currentLanguage={currentLanguage} />
+      <GastrologyService currentLanguage={currentLanguage} />
       <Footer currentLanguage={currentLanguage}/>
       {/* Scroll to Top Button added here */}
       <ScrollToTopButton isVisible={isVisible} />
@@ -129,4 +128,4 @@ const Oncology = () => {
   );
 };
 
-export default Oncology;
+export default Gastrology;
