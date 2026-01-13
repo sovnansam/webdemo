@@ -21,7 +21,7 @@ import {
 } from "@mui/icons-material";
 import { keyframes } from "@emotion/react";
 import { heroImages } from "../images/index.js";  
-import API_BASE from "../config.js";
+
 
 // Modern animations (keep your existing animations)
 const floatAnimation = keyframes`
@@ -211,7 +211,7 @@ const HeroSlideshow = ({ currentLanguage = 'en' }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const isTablet = useMediaQuery(theme.breakpoints.down("lg"));
-  const API_URL = `${API_BASE}/hero/hero_web.php`;
+  const API_URL = `/hero/hero_web.php`;
   const { hero1 } = heroImages;  
 
   // Fallback slides
@@ -923,5 +923,6 @@ const HeroSlideshow = ({ currentLanguage = 'en' }) => {
     </Box>
   );
 };
+
 
 export default HeroSlideshow;
