@@ -211,7 +211,7 @@ const HeroSlideshow = ({ currentLanguage = 'en' }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const isTablet = useMediaQuery(theme.breakpoints.down("lg"));
-  const API_URL = `API/hero/hero_web.php`;
+  const API_URL = "API/hero/hero_web.php";
   const { hero1 } = heroImages;  
 
   // Fallback slides
@@ -926,4 +926,5 @@ const HeroSlideshow = ({ currentLanguage = 'en' }) => {
 
 
 export default HeroSlideshow;
+
 
