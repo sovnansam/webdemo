@@ -6,11 +6,10 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     proxy: {
-      // All requests starting with /API will be proxied
       '/API': {
-        target: 'https://203.189.137.34:1265', // Your backend server
+        target: 'http://203.189.137.34:1265', 
         changeOrigin: true,
-        secure: false, // set false if backend is HTTP
+        secure: false, 
         rewrite: (path) => path.replace(/^\/API/, '/ksfh_backend/API'),
         configure: (proxy, _options) => {
           proxy.on('error', (err, _req, _res) => {

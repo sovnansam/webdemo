@@ -296,16 +296,7 @@ const PediatricSection1 = () => {
           className="mt-20 md:mt-30 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-16"
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            <motion.div
-              variants={itemVariants}
-              className="rounded-3xl overflow-hidden shadow-2xl"
-            >
-              <img
-                src={imageUrl}
-                alt={title}
-                className="w-full h-96 object-cover"
-              />
-            </motion.div>
+            
             <motion.div variants={itemVariants}>
               {service.category && (
                 <span

@@ -4,13 +4,15 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
 const Departments = () => {
-  const [currentLanguage, setCurrentLanguage] = useState("km");
+  const [currentLanguage, setCurrentLanguage] = useState(() => {
+    return localStorage.getItem('preferredLanguage') || 'km';
+  });
   const navigate = useNavigate();
 
   // Load language from localStorage on component mount
   useEffect(() => {
     const savedLanguage = localStorage.getItem("preferredLanguage");
-    if (savedLanguage) {
+    if (savedLanguage && savedLanguage !== currentLanguage) {
       setCurrentLanguage(savedLanguage);
     }
   }, []);
@@ -24,11 +26,51 @@ const Departments = () => {
       }
     };
 
-    const interval = setInterval(handleLanguageChange, 1000);
-    return () => clearInterval(interval);
+    window.addEventListener('languageChanged', handleLanguageChange);
+    return () => window.removeEventListener('languageChanged', handleLanguageChange);
   }, [currentLanguage]);
 
-  const getDepartmentIcon = (departmentName, language) => {
+  useEffect(() => {
+    const updateDocumentFont = () => {
+      const html = document.documentElement;
+      const body = document.body;
+      
+      if (currentLanguage === 'km') {
+        html.classList.add('font-khmer');
+        html.classList.remove('font-english');
+        body.classList.add('font-khmer');
+        body.classList.remove('font-english');
+        
+        html.style.setProperty('--font-family', "'Battambang', 'Khmer OS', 'sans-serif'");
+        html.style.setProperty('--font-weight', 'normal');
+        html.style.setProperty('--letter-spacing', 'normal');
+      } else {
+        html.classList.add('font-english');
+        html.classList.remove('font-khmer');
+        body.classList.add('font-english');
+        body.classList.remove('font-khmer');
+        
+        html.style.setProperty('--font-family', 'system-ui, -apple-system, sans-serif');
+        html.style.setProperty('--font-weight', 'normal');
+        html.style.setProperty('--letter-spacing', 'normal');
+      }
+    };
+
+    updateDocumentFont();
+    localStorage.setItem('preferredLanguage', currentLanguage);
+    window.dispatchEvent(new CustomEvent('languageChanged', { 
+      detail: { language: currentLanguage } 
+    }));
+
+    return () => {
+      const html = document.documentElement;
+      html.style.removeProperty('--font-family');
+      html.style.removeProperty('--font-weight');
+      html.style.removeProperty('--letter-spacing');
+    };
+  }, [currentLanguage]);
+
+  const getDepartmentIcon = (departmentName, currentLanguage) => {
     const iconMap = {
       // Cardiology & Heart
       "Cardiology": "💓",

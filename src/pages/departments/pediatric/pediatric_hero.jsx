@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Activity } from "lucide-react";
+
 
 const API_URL = "API/departments/pediatrics/pediatrics_hero.php";
 
@@ -484,7 +484,7 @@ const PediatricHero = ({ currentLanguage, onLanguageChange }) => {
     },
     km: {
       title: "ផ្នែក",
-      titleHighlight: "�ន្ទីរពេទ្យកុមារ",
+      titleHighlight: "កុមារ",
       description:
         "នាយកដ្ឋានមន្ទីរពេទ្យកុមាររបស់យើងប្ដេជ្ញាផ្ដល់ការថែទាំសុខភាពកុមារដ៏ទូលំទូលាយជាមួយនឹងវិធីសាស្រ្តផ្តោតលើអ្នកជំងឺកុមារ។ យើងមានជំនាញក្នុងការធ្វើរោគវិនិច្ឆ័យ ការព្យាបាល និងការគ្រប់គ្រងជំងឺរបស់កុមារប្រភេទផ្សេងៗ ដោយប្រើប្រាស់បច្ចេកវិទ្យាវេជ្ជសាស្ត្រទំនើប និងការព្យាបាលដែលមានមូលដ្ឋានលើភស្តុតាង។",
     },

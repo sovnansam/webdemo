@@ -8,17 +8,75 @@ import Announcement from "../components/announcement";
 import { useInView } from "react-intersection-observer";
 import ksfhImage from '../images/KSFH.jpg';
 import Footer from '../components/footer';
- import ScrollToTopButton from "../contexts/scrollTop.jsx";
- import HospitalSponsors from '../components/sponser/sponcer.jsx';
+import ScrollToTopButton from "../contexts/scrollTop.jsx";
+import HospitalSponsors from '../components/sponser/sponcer.jsx';
+
 const Home = () => {
-  const [currentLanguage, setCurrentLanguage] = useState("km");
+  const [currentLanguage, setCurrentLanguage] = useState(() => {
+    return localStorage.getItem('preferredLanguage') || 'km';
+  });
   const navigate = useNavigate();
   const [showAll, setShowAll] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    sessionStorage.removeItem("cardiology_service_last_selected");
+    const savedLanguage = localStorage.getItem('preferredLanguage');
+    if (savedLanguage && savedLanguage !== currentLanguage) {
+      setCurrentLanguage(savedLanguage);
+    }
   }, []);
+
+  useEffect(() => {
+    const handleLanguageChange = () => {
+      const savedLanguage = localStorage.getItem('preferredLanguage');
+      if (savedLanguage && savedLanguage !== currentLanguage) {
+        setCurrentLanguage(savedLanguage);
+      }
+    };
+
+    window.addEventListener('languageChanged', handleLanguageChange);
+    return () => window.removeEventListener('languageChanged', handleLanguageChange);
+  }, [currentLanguage]);
+
+  useEffect(() => {
+    const updateDocumentFont = () => {
+      const html = document.documentElement;
+      const body = document.body;
+      
+      if (currentLanguage === 'km') {
+        html.classList.add('font-khmer');
+        html.classList.remove('font-english');
+        body.classList.add('font-khmer');
+        body.classList.remove('font-english');
+        
+        html.style.setProperty('--font-family', "'Battambang', 'Khmer OS', 'sans-serif'");
+        html.style.setProperty('--font-weight', 'normal');
+        html.style.setProperty('--letter-spacing', 'normal');
+      } else {
+        html.classList.add('font-english');
+        html.classList.remove('font-khmer');
+        body.classList.add('font-english');
+        body.classList.remove('font-khmer');
+        
+        html.style.setProperty('--font-family', 'system-ui, -apple-system, sans-serif');
+        html.style.setProperty('--font-weight', 'normal');
+        html.style.setProperty('--letter-spacing', 'normal');
+      }
+    };
+
+    updateDocumentFont();
+    localStorage.setItem('preferredLanguage', currentLanguage);
+    window.dispatchEvent(new CustomEvent('languageChanged', { 
+      detail: { language: currentLanguage } 
+    }));
+
+    return () => {
+      const html = document.documentElement;
+      html.style.removeProperty('--font-family');
+      html.style.removeProperty('--font-weight');
+      html.style.removeProperty('--letter-spacing');
+    };
+  }, [currentLanguage]);
 
   // Add scroll event listener to show/hide scroll to top button
   useEffect(() => {
@@ -49,40 +107,6 @@ const Home = () => {
     };
 
     scrollToHash();
-  }, []);
-
-  // Load language from localStorage on component mount
-  useEffect(() => {
-    const savedLanguage = localStorage.getItem("preferredLanguage");
-    if (savedLanguage) {
-      setCurrentLanguage(savedLanguage);
-    }
-  }, []);
-
-  // Listen for language changes
-  useEffect(() => {
-    const handleLanguageChange = () => {
-      const savedLanguage = localStorage.getItem("preferredLanguage");
-      if (savedLanguage && savedLanguage !== currentLanguage) {
-        setCurrentLanguage(savedLanguage);
-      }
-    };
-
-    const interval = setInterval(handleLanguageChange, 1000);
-    return () => clearInterval(interval);
-  }, [currentLanguage]);
-
-  useEffect(() => {
-    // Scroll to anchor if exists in URL
-    const hash = window.location.hash;
-    if (hash) {
-      const element = document.querySelector(hash);
-      if (element) {
-        setTimeout(() => {
-          element.scrollIntoView({ behavior: "smooth" });
-        }, 100);
-      }
-    }
   }, []);
 
   const AnimatedSection = ({ children, className = "" }) => {
@@ -315,11 +339,7 @@ const Home = () => {
       { name: "Surgery", href: "#surgery", description: "General" },
       { name: "Orthopedics", href: "#orthopedics", description: "Bones" },
       { name: "Neurology", href: "#neurology", description: "Brain" },
-      {
-        name: "Neurosurgery",
-        href: "#neurosurgery",
-        description: "Brain Surg",
-      },
+      { name: "Neurosurgery", href: "#neurosurgery", description: "Brain Surg" },
 
       // Specialized Medicine
       { name: "Pediatrics", href: "#pediatrics", description: "Children" },
@@ -337,6 +357,7 @@ const Home = () => {
       { name: "Psychiatry", href: "#psychiatry", description: "Mental" },
       { name: "Dentistry", href: "#dentistry", description: "Teeth" },
       { name: "Physiotherapy", href: "#physio", description: "Rehab" },
+      { name: "Hematology", href: "#hematology", description: "Blood" },
     ],
     km: [
       // Major Clinical Departments
@@ -351,11 +372,7 @@ const Home = () => {
       { name: "ការវះកាត់", href: "#surgery", description: "ទូទៅ" },
       { name: "ឆ្អឹងជំនី", href: "#orthopedics", description: "ឆ្អឹង" },
       { name: "ប្រសាទ", href: "#neurology", description: "ខួរក្បាល" },
-      {
-        name: "វះកាត់ខួរក្បាល",
-        href: "#neurosurgery",
-        description: "ខួរក្បាល",
-      },
+      { name: "វះកាត់ខួរក្បាល", href: "#neurosurgery", description: "ខួរក្បាល" },
 
       // Specialized Medicine
       { name: "ជំងឺកុមារ", href: "#pediatrics", description: "កុមារ" },
@@ -373,38 +390,29 @@ const Home = () => {
       { name: "ចិត្តវិទ្យា", href: "#psychiatry", description: "ចិត្ត" },
       { name: "ធ្មេញ", href: "#dentistry", description: "ធ្មេញ" },
       { name: "រោគព្យាបាល", href: "#physio", description: "ស្តារ" },
+      { name: "ជំងឺឈាម", href: "#hematology", description: "ឈាម" },
     ],
   };
 
+  const handleViewAllDepartments = () => {
+    // Navigate to departments page
+    navigate("/departments");
+   
+    
+
+  };
+
+
   const handleDepartmentClick = (department) => {
-    console.log("Navigating to:", department.href);
-    if (department.href.startsWith("/")) {
-      // Navigate to internal page
+    if (department.href.startsWith('/')) {
       navigate(department.href);
     } else {
-      // Scroll to section on same page
       const element = document.querySelector(department.href);
       if (element) {
         element.scrollIntoView({ behavior: "smooth" });
       }
     }
   };
-
-  const handleViewAllDepartments = () => {
-    // Navigate to departments page
-    navigate("/departments");
-  };
-
-
-    // --- SCROLL BUTTON LOGIC START ---
-    const toggleVisibility = () => {
-        // Show button if page Y offset is greater than 300px
-        if (window.scrollY > 300) { 
-            setIsVisible(true);
-        } else {
-            setIsVisible(false);
-        }
-    };
 
   return (
     <>

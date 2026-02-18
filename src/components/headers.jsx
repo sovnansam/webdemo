@@ -164,11 +164,11 @@ const Header = () => {
       ],
       specialized: [
         { name: 'Pediatrics', href: '/pediatric', icon: '👶'},
-        { name: 'OB-GYN', href: '#obgyn', icon: '🤰'},
-        { name: 'Urology', href: '#urology', icon: '💧'},
-        { name: 'ENT', href: '#ent', icon: '👂'},
-        { name: 'Ophthalmology', href: '/optamo', icon: '👁️'},
-        { name: 'Dentistry', href: '#dentistry', icon: '🦷'}
+        { name: 'OB-GYN', href: '/obgy', icon: '🤰'},
+        { name: 'Urology', href: '/urology', icon: '💧'},
+        { name: 'ENT', href: '/ent', icon: '👂'},
+        { name: 'Ophthalmology', href: '/ophthalmology', icon: '👁️'},
+        { name: 'Dentistry', href: '/dentistry', icon: '🦷'}
       ],
       emergency: [
         { name: 'Emergency Medicine', href: '#emergency-med', icon: '🚑'},
@@ -193,11 +193,11 @@ const Header = () => {
       ],
       specialized: [
         { name: 'ជំងឺកុមារ', href: '/pediatric', icon: '👶'},
-        { name: 'ស្ត្រីធំ', href: '#obgyn', icon: '🤰'},
-        { name: 'ផ្លូវនោម', href: '#urology', icon: '💧'},
-        { name: 'ត្រចៀកក', href: '#ent', icon: '👂' },
-        { name: 'ជំងឺភ្នែក', href: '/optamo', icon: '👁️'},
-        { name: 'ធ្មេញ', href: '#dentistry', icon: '🦷'}
+        { name: 'ស្ត្រីធំ', href: '/obgy', icon: '🤰'},
+        { name: 'ផ្លូវនោម', href: '/urology', icon: '💧'},
+        { name: 'ត្រចៀកក', href: '/ent', icon: '👂' },
+        { name: 'ជំងឺភ្នែក', href: '/ophthalmology', icon: '👁️'},
+        { name: 'ធ្មេញ', href: '/dentistry', icon: '🦷'}
       ],
       emergency: [
         { name: 'ភ្លាមៗ', href: '#emergency-med', icon: '🚑' },

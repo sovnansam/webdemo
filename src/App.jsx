@@ -6,18 +6,28 @@ import Header from "./components/headers.jsx";
 import Home from "./pages/home.jsx";
 import About from "./pages/about.jsx";
 import Blog from "./pages/Blog";
-import Oncology from "./pages/departments/oncology/oncology.jsx"
-import OncologySection1 from "./pages/departments/oncology/OncologySection1.jsx";
-import OncologySection2 from "./pages/departments/oncology/OncologySection2.jsx";
-import OncologySection3 from "./pages/departments/oncology/OncologySection3.jsx";
-import OncologySection4 from "./pages/departments/oncology/OncologySection4.jsx";
-import OncologySection5 from "./pages/departments/oncology/OncologySection5.jsx";
-import OncologySection6 from "./pages/departments/oncology/OncologySection6.jsx";
-import OncologySection7 from "./pages/departments/oncology/OncologySection7.jsx";
-import OncologySection8 from "./pages/departments/oncology/OncologySection8.jsx";
-import OncologySection9 from "./pages/departments/oncology/OncologySection9.jsx";
-import OncologySection10 from "./pages/departments/oncology/OncologySection10.jsx";
-import Optamology from "./pages/departments/optamology/optamo.jsx";
+import Ophthalmology from "./pages/departments/ophthalmology/ophthalmology.jsx";
+import OphthalmologySection1 from "./pages/departments/ophthalmology/OphthalmologySection1.jsx";
+import OphthalmologySection2 from "./pages/departments/ophthalmology/OphthalmologySection2.jsx";
+import OphthalmologySection3 from "./pages/departments/ophthalmology/OphthalmologySection3.jsx";
+import OphthalmologySection4 from "./pages/departments/ophthalmology/OphthalmologySection4.jsx";
+import OphthalmologySection5 from "./pages/departments/ophthalmology/OphthalmologySection5.jsx";
+import OphthalmologySection6 from "./pages/departments/ophthalmology/OphthalmologySection6.jsx";
+import OphthalmologySection7 from "./pages/departments/ophthalmology/OphthalmologySection7.jsx";
+import OphthalmologySection8 from "./pages/departments/ophthalmology/OphthalmologySection8.jsx";
+import OphthalmologySection9 from "./pages/departments/ophthalmology/OphthalmologySection9.jsx";
+import OphthalmologySection10 from "./pages/departments/ophthalmology/OphthalmologySection10.jsx";
+import Dentistry from "./pages/departments/dentistry/dentistry.jsx";
+import DentistrySection1 from "./pages/departments/dentistry/DentistrySection1.jsx";
+import DentistrySection2 from "./pages/departments/dentistry/DentistrySection2.jsx";
+import DentistrySection3 from "./pages/departments/dentistry/DentistrySection3.jsx";
+import DentistrySection4 from "./pages/departments/dentistry/DentistrySection4.jsx";
+import DentistrySection5 from "./pages/departments/dentistry/DentistrySection5.jsx";
+import DentistrySection6 from "./pages/departments/dentistry/DentistrySection6.jsx";
+import DentistrySection7 from "./pages/departments/dentistry/DentistrySection7.jsx";
+import DentistrySection8 from "./pages/departments/dentistry/DentistrySection8.jsx";
+import DentistrySection9 from "./pages/departments/dentistry/DentistrySection9.jsx";
+import DentistrySection10 from "./pages/departments/dentistry/DentistrySection10.jsx";
 import DepartmentsPage from "./pages/departments/department.jsx";
 import Announcements from "./pages/announcements.jsx";
 import ContactUs from "./pages/contact.jsx";
@@ -76,6 +86,39 @@ import DermatologySection7 from "./pages/departments/dermatology/DermatologySect
 import DermatologySection8 from "./pages/departments/dermatology/DermatologySection8.jsx";
 import DermatologySection9 from "./pages/departments/dermatology/DermatologySection9.jsx";
 import DermatologySection10 from "./pages/departments/dermatology/DermatologySection10.jsx";
+import Obgy from "./pages/departments/obgy/obgy.jsx";
+import ObgySection1 from "./pages/departments/obgy/ObgySection1.jsx";
+import ObgySection2 from "./pages/departments/obgy/ObgySection2.jsx";
+import ObgySection3 from "./pages/departments/obgy/ObgySection3.jsx";
+import ObgySection4 from "./pages/departments/obgy/ObgySection4.jsx";
+import ObgySection5 from "./pages/departments/obgy/ObgySection5.jsx";
+import ObgySection6 from "./pages/departments/obgy/ObgySection6.jsx";
+import ObgySection7 from "./pages/departments/obgy/ObgySection7.jsx";
+import ObgySection8 from "./pages/departments/obgy/ObgySection8.jsx";
+import ObgySection9 from "./pages/departments/obgy/ObgySection9.jsx";
+import ObgySection10 from "./pages/departments/obgy/ObgySection10.jsx";
+import Urology from "./pages/departments/urology/urology.jsx";
+import UrologySection1 from "./pages/departments/urology/UrologySection1.jsx";
+import UrologySection2 from "./pages/departments/urology/UrologySection2.jsx";
+import UrologySection3 from "./pages/departments/urology/UrologySection3.jsx";
+import UrologySection4 from "./pages/departments/urology/UrologySection4.jsx";
+import UrologySection5 from "./pages/departments/urology/UrologySection5.jsx";
+import UrologySection6 from "./pages/departments/urology/UrologySection6.jsx";
+import UrologySection7 from "./pages/departments/urology/UrologySection7.jsx";
+import UrologySection8 from "./pages/departments/urology/UrologySection8.jsx";
+import UrologySection9 from "./pages/departments/urology/UrologySection9.jsx";
+import UrologySection10 from "./pages/departments/urology/UrologySection10.jsx";
+import Ent from "./pages/departments/ent/ent.jsx";
+import EntSection1 from "./pages/departments/ent/EntSection1.jsx";
+import EntSection2 from "./pages/departments/ent/EntSection2.jsx";
+import EntSection3 from "./pages/departments/ent/EntSection3.jsx";
+import EntSection4 from "./pages/departments/ent/EntSection4.jsx";
+import EntSection5 from "./pages/departments/ent/EntSection5.jsx";
+import EntSection6 from "./pages/departments/ent/EntSection6.jsx";
+import EntSection7 from "./pages/departments/ent/EntSection7.jsx";
+import EntSection8 from "./pages/departments/ent/EntSection8.jsx";
+import EntSection9 from "./pages/departments/ent/EntSection9.jsx";
+import EntSection10 from "./pages/departments/ent/EntSection10.jsx";
 import Activity from "./pages/activity.jsx";
 import Pediatric from "./pages/departments/pediatric/pediatric.jsx";
 import PediatricSection1 from "./pages/departments/pediatric/PediatricSection1.jsx";
@@ -106,18 +149,28 @@ function App() {
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/activity" element={<Activity />} />
-          <Route path="/oncology" element={<Oncology />} />
-          <Route path="/oncology_section1" element={<OncologySection1 />} />
-          <Route path="/oncology_section2" element={<OncologySection2 />} />
-          <Route path="/oncology_section3" element={<OncologySection3 />} />
-          <Route path="/oncology_section4" element={<OncologySection4 />} />
-          <Route path="/oncology_section5" element={<OncologySection5 />} />
-          <Route path="/oncology_section6" element={<OncologySection6 />} />
-          <Route path="/oncology_section7" element={<OncologySection7 />} />
-          <Route path="/oncology_section8" element={<OncologySection8 />} />
-          <Route path="/oncology_section9" element={<OncologySection9 />} />
-          <Route path="/oncology_section10" element={<OncologySection10 />} />
-          <Route path="/optamo" element={<Optamology />} />
+          <Route path="/ophthalmology" element={<Ophthalmology />} />
+          <Route path="/ophthalmology_section1" element={<OphthalmologySection1 />} />
+          <Route path="/ophthalmology_section2" element={<OphthalmologySection2 />} />
+          <Route path="/ophthalmology_section3" element={<OphthalmologySection3 />} />
+          <Route path="/ophthalmology_section4" element={<OphthalmologySection4 />} />
+          <Route path="/ophthalmology_section5" element={<OphthalmologySection5 />} />
+          <Route path="/ophthalmology_section6" element={<OphthalmologySection6 />} />
+          <Route path="/ophthalmology_section7" element={<OphthalmologySection7 />} />
+          <Route path="/ophthalmology_section8" element={<OphthalmologySection8 />} />
+          <Route path="/ophthalmology_section9" element={<OphthalmologySection9 />} />
+          <Route path="/ophthalmology_section10" element={<OphthalmologySection10 />} />
+          <Route path="/dentistry" element={<Dentistry />} />
+          <Route path="/dentistry_section1" element={<DentistrySection1 />} />
+          <Route path="/dentistry_section2" element={<DentistrySection2 />} />
+          <Route path="/dentistry_section3" element={<DentistrySection3 />} />
+          <Route path="/dentistry_section4" element={<DentistrySection4 />} />
+          <Route path="/dentistry_section5" element={<DentistrySection5 />} />
+          <Route path="/dentistry_section6" element={<DentistrySection6 />} />
+          <Route path="/dentistry_section7" element={<DentistrySection7 />} />
+          <Route path="/dentistry_section8" element={<DentistrySection8 />} />
+          <Route path="/dentistry_section9" element={<DentistrySection9 />} />
+          <Route path="/dentistry_section10" element={<DentistrySection10 />} />
           <Route path="/cardiology" element={<Cardiology />} />
           <Route path="/cardiology_section1" element={<CardiologySection1 />} />
           <Route path="/cardiology_section2" element={<CardiologySection2 />} />
@@ -173,6 +226,39 @@ function App() {
           <Route path="/dermatology_section8" element={<DermatologySection8 />} />
           <Route path="/dermatology_section9" element={<DermatologySection9 />} />
           <Route path="/dermatology_section10" element={<DermatologySection10 />} />
+          <Route path="/obgy" element={<Obgy />} />
+          <Route path="/obgy_section1" element={<ObgySection1 />} />
+          <Route path="/obgy_section2" element={<ObgySection2 />} />
+          <Route path="/obgy_section3" element={<ObgySection3 />} />
+          <Route path="/obgy_section4" element={<ObgySection4 />} />
+          <Route path="/obgy_section5" element={<ObgySection5 />} />
+          <Route path="/obgy_section6" element={<ObgySection6 />} />
+          <Route path="/obgy_section7" element={<ObgySection7 />} />
+          <Route path="/obgy_section8" element={<ObgySection8 />} />
+          <Route path="/obgy_section9" element={<ObgySection9 />} />
+          <Route path="/obgy_section10" element={<ObgySection10 />} />
+          <Route path="/urology" element={<Urology />} />
+          <Route path="/urology_section1" element={<UrologySection1 />} />
+          <Route path="/urology_section2" element={<UrologySection2 />} />
+          <Route path="/urology_section3" element={<UrologySection3 />} />
+          <Route path="/urology_section4" element={<UrologySection4 />} />
+          <Route path="/urology_section5" element={<UrologySection5 />} />
+          <Route path="/urology_section6" element={<UrologySection6 />} />
+          <Route path="/urology_section7" element={<UrologySection7 />} />
+          <Route path="/urology_section8" element={<UrologySection8 />} />
+          <Route path="/urology_section9" element={<UrologySection9 />} />
+          <Route path="/urology_section10" element={<UrologySection10 />} />
+          <Route path="/ent" element={<Ent />} />
+          <Route path="/ent_section1" element={<EntSection1 />} />
+          <Route path="/ent_section2" element={<EntSection2 />} />
+          <Route path="/ent_section3" element={<EntSection3 />} />
+          <Route path="/ent_section4" element={<EntSection4 />} />
+          <Route path="/ent_section5" element={<EntSection5 />} />
+          <Route path="/ent_section6" element={<EntSection6 />} />
+          <Route path="/ent_section7" element={<EntSection7 />} />
+          <Route path="/ent_section8" element={<EntSection8 />} />
+          <Route path="/ent_section9" element={<EntSection9 />} />
+          <Route path="/ent_section10" element={<EntSection10 />} />
           <Route path="/pediatric" element={<Pediatric />} />
           <Route path="/pediatric_section1" element={<PediatricSection1 />} />
           <Route path="/pediatric_section2" element={<PediatricSection2 />} />

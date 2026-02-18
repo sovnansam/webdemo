@@ -1,2 +1,30 @@
 @import 'tailwindcss';
 
+/* Font classes for Khmer and English */
+.font-khmer {
+  font-family: var(--font-family, 'Battambang', 'Khmer OS', 'sans-serif') !important;
+  font-weight: var(--font-weight, normal);
+  letter-spacing: var(--letter-spacing, normal);
+}
+
+.font-english {
+  font-family: var(--font-family, system-ui, -apple-system, sans-serif) !important;
+  font-weight: var(--font-weight, normal);
+  letter-spacing: var(--letter-spacing, normal);
+}
+
+/* Ensure all text elements use custom font family */
+.font-khmer *,
+.font-khmer h1,
+.font-khmer h2,
+.font-khmer h3,
+.font-khmer h4,
+.font-khmer h5,
+.font-khmer h6,
+.font-khmer p,
+.font-khmer span,
+.font-khmer div,
+.font-khmer button,
+.font-khmer a {
+  font-family: inherit !important;
+}
