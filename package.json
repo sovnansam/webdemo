@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
+    "prebuild": "ls -la node_modules/.bin/vite && file node_modules/.bin/vite",
     "lint": "eslint .",
     "preview": "vite preview"
   },
