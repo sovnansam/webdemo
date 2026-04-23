@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
-    "prebuild": "ls -la node_modules/.bin/vite && file node_modules/.bin/vite",
+    "prebuild": "node --input-type=module -e \"import fs from 'node:fs'; const p='node_modules/.bin/vite'; console.log('prebuild check:', p, 'exists=', fs.existsSync(p));\"",
     "lint": "eslint .",
     "preview": "vite preview"
   },
