@@ -30,6 +30,7 @@ import DentistrySection9 from "./pages/departments/dentistry/DentistrySection9.j
 import DentistrySection10 from "./pages/departments/dentistry/DentistrySection10.jsx";
 import DepartmentsPage from "./pages/departments/department.jsx";
 import Announcements from "./pages/announcements.jsx";
+import AnnouncementDetail from "./pages/announcementDetail.jsx";
 import ContactUs from "./pages/contact.jsx";
 import Cardiology from "./pages/departments/cardiology/cardiology.jsx";
 import CardiologySection1 from "./pages/departments/cardiology/CardiologySection1.jsx";
@@ -131,6 +132,7 @@ import PediatricSection7 from "./pages/departments/pediatric/PediatricSection7.j
 import PediatricSection8 from "./pages/departments/pediatric/PediatricSection8.jsx";
 import PediatricSection9 from "./pages/departments/pediatric/PediatricSection9.jsx";
 import PediatricSection10 from "./pages/departments/pediatric/PediatricSection10.jsx";
+import MRIPage from "./pages/services/MRI/mri.jsx";
 
 
 
@@ -145,6 +147,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/departments" element={<DepartmentsPage />} />
           <Route path="/announcement" element={<Announcements />} />
+          <Route path="/announcement/:id" element={<AnnouncementDetail />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/blog" element={<Blog />} />
@@ -270,6 +273,8 @@ function App() {
           <Route path="/pediatric_section8" element={<PediatricSection8 />} />
           <Route path="/pediatric_section9" element={<PediatricSection9 />} />
           <Route path="/pediatric_section10" element={<PediatricSection10 />} />
+
+          <Route path="/mri" element={<MRIPage/>} />
          
 
         </Routes>

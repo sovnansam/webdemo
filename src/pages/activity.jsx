@@ -10,6 +10,7 @@ import ScrollToTopButton from "../contexts/scrollTop.jsx"
 const API_URL = "API/activities/activity_web.php";
 
 
+
 // ==========================================
 // 1. UTILITIES
 // ==========================================
@@ -44,8 +45,9 @@ const getImageUrl = (imagePath) => {
     return "https://placehold.co/800x600/f3f4f6/9ca3af?text=No+Image";
   }
   if (imagePath.startsWith("http")) return imagePath;
+  if (imagePath.startsWith("D:")) return `file:///${imagePath.replace(/\\/g, "/")}`;
   if (imagePath.startsWith("/")) return imagePath.substring(1);
-  return `API/activities/${imagePath}`;
+  return 'API/activities/' + imagePath;
 };
 
 const getYouTubeEmbedUrl = (url) => {

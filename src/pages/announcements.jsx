@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import { Link } from "react-router-dom";
 
 // NOTE: The API_URL is assumed to be accessible from this environment.
 // For local testing, this URL might need to be adjusted or proxied.
@@ -59,6 +60,8 @@ const Announcements = () => {
 
   const [expandedCard, setExpandedCard] = useState(null);
   const [currentLanguage, setCurrentLanguage] = useState("km");
+  const [selectedAnnouncementId, setSelectedAnnouncementId] = useState(null);
+  const [scrollPosition, setScrollPosition] = useState({});
 
   // Refs for card elements, initialized to an empty array
   const cardRefs = useRef([]);
@@ -340,43 +343,117 @@ const Announcements = () => {
   };
 
   // Add scroll event listener to show/hide scroll to top button
-       useEffect(() => {
-         const toggleVisibility = () => {
-           if (window.pageYOffset > 300) {
-             setIsVisible(true);
-           } else {
-             setIsVisible(false);
-           }
-         };
-     
-         window.addEventListener('scroll', toggleVisibility);
-         return () => window.removeEventListener('scroll', toggleVisibility);
-       }, []);
-  
-          useEffect(() => {
-            const scrollToHash = () => {
-              const hash = window.location.hash;
-              if (!hash) return;
+  useEffect(() => {
+    const toggleVisibility = () => {
+      if (window.pageYOffset > 300) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+
+    window.addEventListener('scroll', toggleVisibility);
+    return () => window.removeEventListener('scroll', toggleVisibility);
+  }, []);
+
+  // Scroll position restoration effect
+  useEffect(() => {
+    // Check if we have a selected announcement ID from navigation
+    const savedAnnouncementId = sessionStorage.getItem('selectedAnnouncementId');
+    const savedScrollPosition = sessionStorage.getItem('scrollPosition');
+    const savedVisibleCount = sessionStorage.getItem('visibleCount');
+    
+    // Restore visible count if it exists
+    if (savedVisibleCount) {
+      const count = parseInt(savedVisibleCount);
+      if (!isNaN(count) && count > 0) {
+        setVisibleCount(count);
+      }
+    }
+    
+    if (savedAnnouncementId && savedScrollPosition && announcements.length > 0) {
+      setSelectedAnnouncementId(savedAnnouncementId);
+      
+      // Ultra-smooth scroll restoration with staged animations
+      const timer = setTimeout(() => {
+        // Stage 1: Fade in effect for smooth entry
+        document.body.style.scrollBehavior = 'smooth';
         
-              const element = document.querySelector(hash);
-              if (element) {
-                element.scrollIntoView({ behavior: "smooth" });
-              } else {
-                // Retry after mount
-                setTimeout(scrollToHash, 300);
-              }
-            };
+        // Stage 2: Calculate target position with offset for better visibility
+        const targetPosition = parseInt(savedScrollPosition) - 100; // Offset for header
+        window.scrollTo({ top: targetPosition, behavior: 'smooth' });
         
-            scrollToHash();
-          }, []);
+        // Stage 3: Find and prepare the announcement card
+        const selectedIndex = announcements.findIndex(ann => ann.id.toString() === savedAnnouncementId);
+        if (selectedIndex !== -1 && cardRefs.current[selectedIndex]) {
+          const card = cardRefs.current[selectedIndex];
+          
+          // Stage 4: Add subtle entrance animation
+          card.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+          card.style.transform = 'scale(0.98)';
+          card.style.opacity = '0.7';
+          
+          // Stage 5: Add highlight with smooth transition
+          setTimeout(() => {
+            card.classList.add('ring-4', 'ring-blue-400', 'ring-opacity-60', 'bg-blue-50/50');
+            card.style.transform = 'scale(1.02)';
+            card.style.opacity = '1';
+            
+            // Stage 6: Final smooth scroll to center
+            card.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'center',
+              inline: 'nearest'
+            });
+          }, 200);
+          
+          // Stage 7: Gradual highlight removal
+          setTimeout(() => {
+            card.style.transform = 'scale(1)';
+            card.classList.remove('ring-4', 'ring-blue-400', 'ring-opacity-60', 'bg-blue-50/50');
+            card.classList.add('ring-2', 'ring-blue-300', 'ring-opacity-40');
+          }, 1200);
+          
+          // Stage 8: Complete cleanup
+          setTimeout(() => {
+            card.classList.remove('ring-2', 'ring-blue-300', 'ring-opacity-40');
+            card.style.transition = '';
+            card.style.transform = '';
+            card.style.opacity = '';
+          }, 1800);
+        }
         
+        // Stage 9: Clean up sessionStorage with delay
+        setTimeout(() => {
+          sessionStorage.removeItem('selectedAnnouncementId');
+          sessionStorage.removeItem('scrollPosition');
+          sessionStorage.removeItem('visibleCount');
+          document.body.style.scrollBehavior = '';
+        }, 2000);
+      }, 400); // Slightly longer delay for DOM readiness
+      
+      return () => clearTimeout(timer);
+    }
+  }, [announcements]);
+
+  // Handle Read More click - store scroll position and announcement ID
+  const handleReadMoreClick = (announcement, index) => {
+    // Store current scroll position and announcement ID
+    sessionStorage.setItem('selectedAnnouncementId', announcement.id.toString());
+    sessionStorage.setItem('scrollPosition', window.pageYOffset.toString());
+    // Also store current visible count
+    sessionStorage.setItem('visibleCount', visibleCount.toString());
+  };
 
   // --- NEW: Show More Functionality ---
   const handleShowMore = () => {
     setVisibleCount(prevCount => {
       const newCount = prevCount + itemsPerLoad;
       // Don't exceed total announcements length
-      return Math.min(newCount, announcements.length);
+      const finalCount = Math.min(newCount, announcements.length);
+      // Store the new visible count
+      sessionStorage.setItem('visibleCount', finalCount.toString());
+      return finalCount;
     });
   };
 
@@ -605,9 +682,20 @@ const Announcements = () => {
                             </h3>
 
                             {/* Description */}
-                            <p className="text-sm text-gray-600 mb-6 leading-relaxed flex-grow">
-                              {getDescription(announcement)}
-                            </p>
+                            <div className="mb-6 flex-grow">
+                              <p className="text-gray-700 leading-relaxed text-base font-normal">
+                                {getDescription(announcement)}
+                              </p>
+                              {/* Add a subtle divider */}
+                              <div className="mt-4 pt-4 border-t border-gray-100">
+                                <div className="flex items-center text-sm text-gray-500">
+                                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                  </svg>
+                                  <span>{currentLanguage === "en" ? "Click to read more details" : "ចុចដើម្បីអានព័ត៌មានលម្អិត"}</span>
+                                </div>
+                              </div>
+                            </div>
 
                             {/* Additional Content (Expanded - with smooth transition) */}
                             {hasAdditionalContent(announcement) && (
@@ -638,50 +726,28 @@ const Announcements = () => {
                             {/* Footer with expand/collapse button and view image button */}
                             <div className="flex justify-between items-center mt-auto pt-4 border-t border-gray-100 ">
                               {hasAdditionalContent(announcement) && (
-                                <button
-                                  onClick={() => toggleCardExpansion(index)}
+                                <Link
+                                  to={`/announcement/${announcement.id}`}
+                                  onClick={() => handleReadMoreClick(announcement, index)}
                                   className="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium transition-colors duration-200 cursor-pointer "
                                 >
-                                  {isExpanded ? (
-                                    <>
-                                      <svg
-                                        className="w-4 h-4 mr-2 "
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                      >
-                                        <path
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                          strokeWidth={2}
-                                          d="M5 15l7-7 7 7"
-                                        />
-                                      </svg>
-                                      {currentLanguage === "en"
-                                        ? "Show Less"
-                                        : "បង្ហាញតិច"}
-                                    </>
-                                  ) : (
-                                    <>
-                                      <svg
-                                        className="w-4 h-4 mr-2"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                      >
-                                        <path
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                          strokeWidth={2}
-                                          d="M19 9l-7 7-7-7"
-                                        />
-                                      </svg>
-                                      {currentLanguage === "en"
-                                        ? "Read More"
-                                        : "អានបន្ថែម"}
-                                    </>
-                                  )}
-                                </button>
+                                  <svg
+                                    className="w-4 h-4 mr-2"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M19 9l-7 7-7-7"
+                                    />
+                                  </svg>
+                                  {currentLanguage === "en"
+                                    ? "Read More"
+                                    : "អានបន្ថែម"}
+                                </Link>
                               )}
 
                               <span className="inline-flex text-sm text-yellow-600 md:inline-flex text-sm text-yellow-600 lg:inline-flex text-sm text-yellow-600 font-medium px-3 py-1 rounded-full border border-gray-200 select-none">

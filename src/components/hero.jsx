@@ -186,6 +186,65 @@ const slideInFromLeft = keyframes`
   }
 `;
 
+// Enhanced slide transition animations
+const slideOutToLeft = keyframes`
+  0% { 
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  100% { 
+    opacity: 0;
+    transform: translateX(-50px) scale(0.95);
+  }
+`;
+
+const slideOutToRight = keyframes`
+  0% { 
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  100% { 
+    opacity: 0;
+    transform: translateX(50px) scale(0.95);
+  }
+`;
+
+const slideInFromBottom = keyframes`
+  0% { 
+    opacity: 0;
+    transform: translateY(100px) scale(0.9);
+  }
+  100% { 
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+`;
+
+const slideInFromTop = keyframes`
+  0% { 
+    opacity: 0;
+    transform: translateY(-100px) scale(0.9);
+  }
+  100% { 
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+`;
+
+const crossfade = keyframes`
+  0% { 
+    opacity: 0;
+    transform: scale(1.05);
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% { 
+    opacity: 1;
+    transform: scale(1);
+  }
+`;
+
 const gradientFlow = keyframes`
   0%, 100% { 
     background-position: 0% 50%;
@@ -543,7 +602,12 @@ const HeroSlideshow = ({ currentLanguage = 'en' }) => {
           height: "100%",
         }}
       >
-        {slides.map((slide, index) => (
+        {slides.map((slide, index) => {
+          const isActive = index === currentSlide;
+          const isPrev = (currentSlide - 1 + slides.length) % slides.length === index;
+          const isNext = (currentSlide + 1) % slides.length === index;
+          
+          return (
           <Box
             key={slide.id}
             sx={{
@@ -552,11 +616,15 @@ const HeroSlideshow = ({ currentLanguage = 'en' }) => {
               left: 0,
               width: "100%",
               height: "100%",
-              opacity: index === currentSlide ? 1 : 0,
-              pointerEvents: index === currentSlide ? 'auto' : 'none',
-              transition: 'opacity 0.3s ease',
-              animation: index === currentSlide ? 
-                `${getImageAnimation()} ${getAnimationDuration()} cubic-bezier(0.25, 0.46, 0.45, 0.94) both` : 'none',
+              opacity: isActive ? 1 : 0,
+              pointerEvents: isActive ? 'auto' : 'none',
+              transition: 'opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+              animation: isActive ? 
+                `${getImageAnimation()} ${getAnimationDuration()} cubic-bezier(0.25, 0.46, 0.45, 0.94) both` : 
+                (isPrev && slideDirection === "right" ? `${slideOutToLeft} 0.6s cubic-bezier(0.4, 0, 0.2, 1) both` :
+                 isNext && slideDirection === "left" ? `${slideOutToRight} 0.6s cubic-bezier(0.4, 0, 0.2, 1) both` :
+                 'none'),
+              zIndex: isActive ? 2 : 1,
             }}
           >
             {/* Main Image */}
@@ -625,7 +693,8 @@ const HeroSlideshow = ({ currentLanguage = 'en' }) => {
               />
             </Box>
           </Box>
-        ))}
+          );
+        })}
       </Box>
 
       {/* Content Container - ALWAYS VISIBLE ON ALL SCREENS */}
@@ -658,7 +727,7 @@ const HeroSlideshow = ({ currentLanguage = 'en' }) => {
               },
               animation: `${
                 slideDirection === "right" ? slideInFromLeft : slideInFromRight
-              } 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both`,
+              } 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both`,
               fontFamily: currentLanguage === 'km' ? "'Khmer OS', 'Noto Sans Khmer', sans-serif" : 'inherit',
             }}
           >
@@ -910,10 +979,16 @@ const HeroSlideshow = ({ currentLanguage = 'en' }) => {
                   : "rgba(255,255,255,0.4)",
               borderRadius: 2,
               cursor: "pointer",
-              transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+              transition: "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
+              transform: index === currentSlide ? "scaleX(1)" : "scaleX(0.8)",
+              boxShadow: index === currentSlide ? "0 2px 8px rgba(255,255,255,0.3)" : "none",
               "&:hover": {
                 backgroundColor: "white",
-                transform: "scaleY(1.5)",
+                transform: "scaleY(1.5) scaleX(1.1)",
+                boxShadow: "0 2px 12px rgba(255,255,255,0.5)",
+              },
+              "&:active": {
+                transform: "scaleY(1.3) scaleX(0.95)",
               },
             }}
           />
