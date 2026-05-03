@@ -411,13 +411,14 @@ const AnnouncementDetail = () => {
 
   const ogTitle = getTitle(announcement);
   const ogDescription = getDescription(announcement);
+  const SITE_URL = "https://webdemo-wheat.vercel.app";
   const ogImage = announcement.image_path
     ? (() => {
         const url = getImageUrl(announcement.image_path);
         if (url.startsWith("http")) return url;
-        return `${window.location.origin}${url}`;
+        return `${SITE_URL}${url}`;
       })()
-    : `${window.location.origin}/Logo.png`;
+    : `${SITE_URL}/Logo.png`;
   const ogUrl = `${window.location.origin}/announcement/${id}`;
 
   return (
