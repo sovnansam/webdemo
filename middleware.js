@@ -1,9 +1,6 @@
-import { NextResponse } from "next/server";
-
 const API_URL = "http://203.189.137.34:1265/ksfh_backend/API/announcement/ALL_Announcement_web.php";
 const SITE_URL = "https://webdemo-wheat.vercel.app";
 
-// Social media crawler user agents
 const CRAWLER_AGENTS = [
   "facebookexternalhit",
   "Facebot",
@@ -43,6 +40,14 @@ async function getAnnouncement(id) {
   }
 }
 
+function escapeHtml(str) {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
 function buildHtml(announcement, url) {
   const title = announcement
     ? announcement.title || announcement.title_en || "KHMER SOVIET FRIENDSHIP HOSPITAL"
@@ -68,45 +73,39 @@ function buildHtml(announcement, url) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${title} - KHMER SOVIET FRIENDSHIP HOSPITAL</title>
-
-  <!-- Open Graph / Facebook -->
+  <title>${escapeHtml(title)} - KHMER SOVIET FRIENDSHIP HOSPITAL</title>
+  <link rel="icon" type="image/svg+xml" href="/KSFH.ico" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="KHMER SOVIET FRIENDSHIP HOSPITAL" />
-  <meta property="og:title" content="${title}" />
-  <meta property="og:description" content="${description}" />
+  <meta property="og:title" content="${escapeHtml(title)}" />
+  <meta property="og:description" content="${escapeHtml(description)}" />
   <meta property="og:image" content="${image}" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:url" content="${url}" />
-
-  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="${title}" />
-  <meta name="twitter:description" content="${description}" />
+  <meta name="twitter:title" content="${escapeHtml(title)}" />
+  <meta name="twitter:description" content="${escapeHtml(description)}" />
   <meta name="twitter:image" content="${image}" />
 </head>
 <body>
   <div id="root"></div>
-  <script type="module" src="/assets/index-CsS3mHeX.js"></script>
-  <link rel="stylesheet" href="/assets/index-jlXyhEqf.css" />
 </body>
 </html>`;
 }
 
-export async function middleware(request) {
-  const { pathname } = request.nextUrl;
+export default async function middleware(request) {
+  const url = new URL(request.url);
   const userAgent = request.headers.get("user-agent") || "";
 
-  // Only intercept announcement detail pages for crawlers
-  const match = pathname.match(/^\/announcement\/(\d+)$/);
+  const match = url.pathname.match(/^\/announcement\/(\d+)$/);
 
   if (match && isCrawler(userAgent)) {
     const id = match[1];
     const announcement = await getAnnouncement(id);
     const html = buildHtml(announcement, request.url);
 
-    return new NextResponse(html, {
+    return new Response(html, {
       status: 200,
       headers: {
         "Content-Type": "text/html; charset=utf-8",
@@ -115,7 +114,8 @@ export async function middleware(request) {
     });
   }
 
-  return NextResponse.next();
+  // Pass through for normal browser requests
+  return;
 }
 
 export const config = {
