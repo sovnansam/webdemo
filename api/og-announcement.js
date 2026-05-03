@@ -1,22 +1,23 @@
-const API_URL = "http://203.189.137.34:1265/ksfh_backend/API/announcement/ALL_Announcement_web.php";
+const API_URL =
+  "http://203.189.137.34:1265/ksfh_backend/API/announcement/ALL_Announcement_web.php";
 const SITE_URL = "https://webdemo-wheat.vercel.app";
 
 const CRAWLER_AGENTS = [
   "facebookexternalhit",
-  "Facebot",
-  "Twitterbot",
-  "LinkedInBot",
-  "Slackbot",
-  "Discordbot",
-  "WhatsApp",
-  "TelegramBot",
-  "Googlebot",
+  "facebot",
+  "twitterbot",
+  "linkedinbot",
+  "slackbot",
+  "discordbot",
+  "whatsapp",
+  "telegrambot",
+  "googlebot",
 ];
 
 function isCrawler(userAgent) {
   if (!userAgent) return false;
   const lower = userAgent.toLowerCase();
-  return CRAWLER_AGENTS.some((agent) => lower.includes(agent.toLowerCase()));
+  return CRAWLER_AGENTS.some((agent) => lower.includes(agent));
 }
 
 async function getAnnouncement(id) {
@@ -63,8 +64,12 @@ function buildHtml(announcement, url) {
     if (imgPath.startsWith("http")) {
       image = imgPath;
     } else {
+      // image_path from API is like "API/announcement/images/xxx.jpg"
+      // This gets proxied through Vercel rewrite to the backend
       const clean = imgPath.replace(/^[./]+/, "");
-      image = imgPath.startsWith("/") ? `${SITE_URL}${imgPath}` : `${SITE_URL}/${clean}`;
+      image = imgPath.startsWith("/")
+        ? `${SITE_URL}${imgPath}`
+        : `${SITE_URL}/${clean}`;
     }
   }
 
@@ -94,16 +99,17 @@ function buildHtml(announcement, url) {
 </html>`;
 }
 
-export default async function middleware(request) {
+export default async function handler(request) {
   const url = new URL(request.url);
   const userAgent = request.headers.get("user-agent") || "";
 
-  const match = url.pathname.match(/^\/announcement\/(\d+)$/);
+  // Extract announcement ID from query param or path
+  const id = url.searchParams.get("id");
 
-  if (match && isCrawler(userAgent)) {
-    const id = match[1];
+  if (id && isCrawler(userAgent)) {
     const announcement = await getAnnouncement(id);
-    const html = buildHtml(announcement, request.url);
+    const pageUrl = `${SITE_URL}/announcement/${id}`;
+    const html = buildHtml(announcement, pageUrl);
 
     return new Response(html, {
       status: 200,
@@ -114,10 +120,11 @@ export default async function middleware(request) {
     });
   }
 
-  // Pass through for normal browser requests
-  return;
+  // For non-crawler requests, redirect to the SPA page
+  return new Response(null, {
+    status: 302,
+    headers: {
+      Location: `/announcement/${id || ""}`,
+    },
+  });
 }
-
-export const config = {
-  matcher: ["/announcement/:id*"],
-};
