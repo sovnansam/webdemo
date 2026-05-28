@@ -3,7 +3,8 @@ import Footer from "../../../components/footer";
 import ScrollToTopButton from "../../../contexts/scrollTop";
 import { useLocation } from "react-router-dom";
 import MriHero from "./MriHero";
-import MriService from "./mri_service";
+import MriService from "./Mri_Service";
+import MriSection1 from "./MriSection1";
 
 // Font utility function
 const getFontClass = (language) => {
