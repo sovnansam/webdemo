@@ -91,7 +91,7 @@ const MriPage = () => {
   return (
     <>
     <MriHero currentLanguage={currentLanguage}/>
-    <MriService currentLanguage={currentLanguage}/>
+    
       <Footer currentLanguage={currentLanguage}/>
    
       <ScrollToTopButton isVisible={isVisible} />
