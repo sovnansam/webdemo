@@ -39,7 +39,7 @@ const getYouTubeEmbedUrl = (url) => {
   return null;
 };
 
-const MRISection1 = () => {
+const MriSection1 = () => {
   const navigate = useNavigate();
   const { currentLanguage } = useLanguage();
   const [service, setService] = useState(null);
@@ -467,4 +467,4 @@ const MRISection1 = () => {
   );
 };
 
-export default MRISection1;
+export default MriSection1;

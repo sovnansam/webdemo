@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import Footer from "../../../components/footer";
 import ScrollToTopButton from "../../../contexts/scrollTop";
 import { useLocation } from "react-router-dom";
-import MRIHero from "./mriHero";
-import MRIService from "./mri_service";
+import MriHero from "./MriHero";
+import MriService from "./mri_service";
 
 // Font utility function
 const getFontClass = (language) => {
@@ -12,7 +12,7 @@ const getFontClass = (language) => {
     : 'font-battambang english-font';
 };
 
-const MRIPage = () => {
+const MriPage = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -89,8 +89,8 @@ const MRIPage = () => {
 
   return (
     <>
-    <MRIHero currentLanguage={currentLanguage}/>
-    <MRIService currentLanguage={currentLanguage}/>
+    <MriHero currentLanguage={currentLanguage}/>
+    <MriService currentLanguage={currentLanguage}/>
       <Footer currentLanguage={currentLanguage}/>
    
       <ScrollToTopButton isVisible={isVisible} />
@@ -98,4 +98,4 @@ const MRIPage = () => {
   );
 };
 
-export default MRIPage;
+export default MriPage;

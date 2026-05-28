@@ -385,7 +385,7 @@ const ServiceItem = ({ service, onClick, currentLanguage, index }) => {
   );
 };
 
-const MRIService = ({ currentLanguage = 'km' }) => {
+const MriService = ({ currentLanguage = 'km' }) => {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -905,4 +905,4 @@ const MRIService = ({ currentLanguage = 'km' }) => {
   );
 };
 
-export default MRIService;
+export default MriService;

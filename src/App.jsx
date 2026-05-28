@@ -133,7 +133,8 @@ import PediatricSection7 from "./pages/departments/pediatric/PediatricSection7.j
 import PediatricSection8 from "./pages/departments/pediatric/PediatricSection8.jsx";
 import PediatricSection9 from "./pages/departments/pediatric/PediatricSection9.jsx";
 import PediatricSection10 from "./pages/departments/pediatric/PediatricSection10.jsx";
-import MRIPage from "./pages/services/mri/mri.jsx";
+import MriPage from "./pages/services/mri/Mri.jsx";
+import MriSection1 from "./pages/services/mri/MriSection1.jsx";
 
 
 
@@ -280,7 +281,7 @@ function App() {
           <Route path="/pediatric_section9" element={<PediatricSection9 />} />
           <Route path="/pediatric_section10" element={<PediatricSection10 />} />
 
-          <Route path="/mri" element={<MRIPage />} />
+          <Route path="/mri" element={<MriPage />} />
       
          
 
