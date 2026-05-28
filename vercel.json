@@ -5,6 +5,17 @@
       "destination": "http://203.189.137.34:1265/ksfh_backend/API/:path*"
     },
     {
+      "source": "/announcement/:id*",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": "(?i).*(facebookexternalhit|facebot|twitterbot|linkedinbot|slackbot|discordbot|whatsapp|telegrambot|googlebot).*"
+        }
+      ],
+      "destination": "/api/og-announcement?id=:id"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

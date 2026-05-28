@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
 
 const API_URL = "/API/announcement/ALL_Announcement_web.php";
 
@@ -409,30 +408,8 @@ const AnnouncementDetail = () => {
   const typeInfo = getTypeText(announcement);
   const colors = getTypeColor(typeInfo.en.toLowerCase());
 
-  const ogTitle = getTitle(announcement);
-  const ogDescription = getDescription(announcement);
-  const SITE_URL = "https://webdemo-wheat.vercel.app";
-  const ogImage = announcement.image_path
-    ? (() => {
-        const url = getImageUrl(announcement.image_path);
-        if (url.startsWith("http")) return url;
-        return `${SITE_URL}${url}`;
-      })()
-    : `${SITE_URL}/Logo.png`;
-  const ogUrl = `${window.location.origin}/announcement/${id}`;
-
   return (
     <>
-      <Helmet>
-        <title>{ogTitle} - KHMER SOVIET FRIENDSHIP HOSPITAL</title>
-        <meta property="og:title" content={ogTitle} />
-        <meta property="og:description" content={ogDescription} />
-        <meta property="og:image" content={ogImage} />
-        <meta property="og:url" content={ogUrl} />
-        <meta name="twitter:title" content={ogTitle} />
-        <meta name="twitter:description" content={ogDescription} />
-        <meta name="twitter:image" content={ogImage} />
-      </Helmet>
       <div className="min-h-screen mt-10 md:mt-15 bg-slate-50" style={{ fontFamily: "'Battambang', 'Khmer OS', system-ui, sans-serif" }}>
         <section className="mt-10 md:mt-15 min-h-screen bg-gray-50/50 py-12 text-gray-900">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

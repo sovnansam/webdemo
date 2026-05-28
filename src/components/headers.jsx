@@ -221,12 +221,19 @@ const Header = () => {
       { name: "MRI Scan", href: "/mri" },
       { name: "X-Ray", href: "#xray" },
       { name: "CT Scan", href: "#ctscan" },
-      { name: "Laboratory Tests", href: "#lab" },
+     {name: "Mammography", href: "#mammography"},
+      { name: "Ultrasound", href: "#ultrasound" },
+      { name: "C-Arm Machine", href: "#c-arm" },
+       { name: "Laboratory Tests", href: "#lab" },
+
     ],
     km: [
-      { name: "ថ្នាំងរូបភាពដោយម៉ាញេទិក", href: "mri" },
+      { name: "ថ្នាំងរូបភាពដោយម៉ាញេទិក", href: "/mri" },
       { name: "អេក្រុង", href: "#xray" },
       { name: "ជកតាស្គេន", href: "#ctscan" },
+      { name: "ម៉ាម៉ូក្រាប់", href: "#mammography" },
+      { name: "អ៊ុលត្រាសោន", href: "#ultrasound" },
+      { name: "ម៉ាស៊ីន C-Arm", href: "#c-arm" },
       { name: "មន្ទីរពិសោធន៍", href: "#lab" },
     ],
   };
@@ -585,7 +592,7 @@ const Header = () => {
               </button>
 
               <div
-                className={`absolute top-full left-0 mt-2 w-[280px] lg:w-[320px] bg-white rounded-xl shadow-xl border border-gray-100 transition-all duration-200 origin-top-left ${
+                className={`absolute top-full left-0 mt-2 w-[220px] lg:w-[220px] bg-white rounded-xl shadow-xl border border-gray-100 transition-all duration-200 origin-top-left ${
                   activeDropdown === "services"
                     ? "opacity-100 visible scale-100 translate-y-0"
                     : "opacity-0 invisible scale-95 -translate-y-2"

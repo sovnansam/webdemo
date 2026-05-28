@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 const API_URL = "API/departments/mri/mri_hero.php";
 
 const getImageUrl = (imagePath) => {
-  if (!imagePath || imagePath === "null" || imagePath === "undefined") {
+  if (!imagePath || imagePath === "null" || imagePath === "undefined" || typeof imagePath !== "string") {
     return "https://placehold.co/800x600/1a1a1a/333333?text=Cardiology+Image";
   }
   if (imagePath.startsWith("http")) return imagePath;
@@ -124,7 +124,7 @@ const MRIHero = ({ currentLanguage = 'km' }) => {
       )}
 
       {/* Title with gradient and dual-layer shadow */}
-      <h1 className="relative text-xl sm:text-5xl lg:text-6xl xl:text-7xl font-black tracking-[0.2em] lg:leading-[1.15] mb-2 lg:mb-6">
+      <h1 className="relative text-xl sm:text-5xl lg:text-6xl xl:text-7xl font-black tracking-[0.1em] lg:leading-[1.15] mb-2 lg:mb-6">
         <span className="relative inline-block bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 bg-clip-text text-transparent">
           {title}
         </span>
