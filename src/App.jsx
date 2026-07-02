@@ -133,8 +133,7 @@ import PediatricSection7 from "./pages/departments/pediatric/PediatricSection7.j
 import PediatricSection8 from "./pages/departments/pediatric/PediatricSection8.jsx";
 import PediatricSection9 from "./pages/departments/pediatric/PediatricSection9.jsx";
 import PediatricSection10 from "./pages/departments/pediatric/PediatricSection10.jsx";
-import MriPage from "./pages/services/mri/Mri.jsx";
-import MriSection1 from "./pages/services/mri/MriSection1.jsx";
+
 
 
 
