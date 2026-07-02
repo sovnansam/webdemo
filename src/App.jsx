@@ -281,7 +281,7 @@ function App() {
           <Route path="/pediatric_section9" element={<PediatricSection9 />} />
           <Route path="/pediatric_section10" element={<PediatricSection10 />} />
 
-          <Route path="/mri" element={<MriPage />} />
+     
       
          
 
