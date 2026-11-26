@@ -385,7 +385,11 @@ const ServiceItem = ({ service, onClick, currentLanguage, index }) => {
   );
 };
 
+<<<<<<< HEAD
 const MRIService = ({ currentLanguage = 'km' }) => {
+=======
+const MriService = ({ currentLanguage = 'km' }) => {
+>>>>>>> 4bffb4f7eb2cbf2e7b2a72496cb72e022755372d
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -882,7 +886,11 @@ const MRIService = ({ currentLanguage = 'km' }) => {
             >
               {currentLanguage === "en"
                 ? "The MRI Center provides advanced magnetic resonance imaging services with state-of-the-art technology, offering precise diagnostics for various medical conditions. Our high-field MRI systems deliver exceptional image quality with reduced scan times and enhanced patient comfort. The MRI services we offer include:"
+<<<<<<< HEAD
                 : "មជ្ឈមណ្ឌល MRI ផ្តល់សេវាកម្មថតរូបម៉ាញេទិចកម្រិតខ្ពស់ជាមួយបច្ចេកវិទ្យាទំនើប ដែលផ្តល់ការធ្វើរោគវិនិច្ឆ័យត្រឹមត្រូវសម្រាប់ជំងឺផ្សេងៗ។ ប្រព័ន MRI កម្រិតខ្ពស់របស់យើងផ្តល់គុណភាពរូបភាពដ៏ល្អប្រសើរជាមួយនឹងពេលវេលាស្កែនកាត់បន្ថយ និងការលើកស្ទើងភាពងាយស្រួលដល់អ្នកជំងឺ។ សេវាកម្ម MRI ដែលយើងផ្តល់ជូនរួមមាន:"}}
+=======
+                : "មជ្ឈមណ្ឌល MRI ផ្តល់សេវាកម្មថតរូបម៉ាញេទិចកម្រិតខ្ពស់ជាមួយបច្ចេកវិទ្យាទំនើប ដែលផ្តល់ការធ្វើរោគវិនិច្ឆ័យត្រឹមត្រូវសម្រាប់ជំងឺផ្សេងៗ។ ប្រព័ន MRI កម្រិតខ្ពស់របស់យើងផ្តល់គុណភាពរូបភាពដ៏ល្អប្រសើរជាមួយនឹងពេលវេលាស្កែនកាត់បន្ថយ និងការលើកស្ទើងភាពងាយស្រួលដល់អ្នកជំងឺ។ សេវាកម្ម MRI ដែលយើងផ្តល់ជូនរួមមាន:"}
+>>>>>>> 4bffb4f7eb2cbf2e7b2a72496cb72e022755372d
             </p>
             {/* Accent line - Now left-aligned */}
             <div className="h-1 w-50 bg-gradient-to-r from-blue-500 to-blue-700 mt-6 rounded-full"></div>
@@ -905,4 +913,4 @@ const MRIService = ({ currentLanguage = 'km' }) => {
   );
 };
 
-export default MRIService;
+export default MriService;

@@ -16,7 +16,7 @@ const getFontClass = (language) => {
     : "font-battambang english-font";
 };
 
-const MRIHero = ({ currentLanguage = 'km' }) => {
+const MriHero = ({ currentLanguage = 'km' }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -155,4 +155,4 @@ const MRIHero = ({ currentLanguage = 'km' }) => {
   );
 };
 
-export default MRIHero;
+export default MriHero;
