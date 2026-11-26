@@ -71,10 +71,10 @@ const Footer = () => {
       <div
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat hidden md:block"
         style={{
-          backgroundImage: `url(${footer})`,
+          backgroundImage: `url(${footer1})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
-          minHeight: "100%",
+          minHeight: "70%",
         }}
       >
         {/* Dark overlay for better text readability */}
@@ -85,7 +85,7 @@ const Footer = () => {
       <div className="absolute inset-0 z-0 bg-gray-700 md:bg-transparent" />
 
       {/* Content section */}
-      <div className="relative z-10 mt-1 2xl:mt-50 lg:mt-20 md:mt-30">
+      <div className="relative z-10">
         <section id="contact" className="py-8 md:py-4 lg:py-18">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 mt-10 ">
             {/* Desktop: 4 columns, Mobile: 1 column with 2 sub-columns for some rows */}
@@ -262,9 +262,13 @@ const Footer = () => {
                     </div>
                   </div>
                   
-                  {/* Right side: QR Code */}
-                  <div className="flex flex-col items-center md:items-start">
-                    <div className="w-40 h-40 md:w-32 md:h-32 lg:w-32 lg:h-32 bg-white p-1 rounded-lg shadow-lg">
+            
+                </div>
+              </div>
+
+             {/* Column 4: Contact Form */}
+ <div className="flex flex-col items-center md:items-start mt-5">
+                    <div className="w-60 h-60 md:w-50 md:h-50 lg:w-50 lg:h-50 bg-white p-1 rounded-lg shadow-lg">
                       <img
                         src={TelegramQR}
                         alt={
@@ -279,18 +283,6 @@ const Footer = () => {
                       {currentLanguage === "en" ? "Scan for Telegram" : "ស្កេនសម្រាប់តេឡេក្រាម"}
                     </p>
                   </div>
-                </div>
-              </div>
-
-             {/* Column 4: Contact Form */}
-<div className="md:col-span-1">
-  <h2 className="text-lg md:text-xl font-bold mb-2 md:mb-6 text-center md:text-left">
-    {currentLanguage === "en" ? "Message Us" : "ផ្ញើរសារ"}
-  </h2>
-  <div className="transform scale-[0.85] md:scale-100 origin-center md:origin-left">
-    <ContactForm currentLanguage={currentLanguage} />
-  </div>
-</div>
             </div>
           </div>
         </section>

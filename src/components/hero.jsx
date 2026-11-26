@@ -22,12 +22,7 @@ import {
 import { keyframes } from "@emotion/react";
 import { heroImages } from "../images/index.js";  
 
-// Modern animations (keep your existing animations)
-const floatAnimation = keyframes`
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  33% { transform: translateY(-10px) rotate(1deg); }
-  66% { transform: translateY(5px) rotate(-1deg); }
-`;
+
 
 const modernShimmer = keyframes`
   0% { 

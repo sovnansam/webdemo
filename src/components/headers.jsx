@@ -14,6 +14,10 @@ const Header = () => {
   // Use language context
   const { currentLanguage, isKhmer, isEnglish, setLanguage } = useLanguage();
 
+
+
+  
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -151,64 +155,58 @@ const Header = () => {
       clinical: [
         { name: "Cardiology", href: "/cardiology" },
         { name: "Gastroenterology", href: "/gastrology" },
-        { name: "Pulmonology", href: "/pulmonology" },
-        { name: "Neurology", href: "/neurology" },
-        { name: "Dermatology", href: "/dermatology" },
-        { name: "Oncology", href: "/oncology" },
+        //{ name: "Pulmonology", href: "/pulmonology" },
+        //{ name: "Neurology", href: "/neurology" },
+        //{ name: "Dermatology", href: "/dermatology" },
+        //{ name: "Oncology", href: "/oncology" },
       ],
       surgical: [
-        { name: "General Surgery", href: "#surgery" },
+        //{ name: "General Surgery", href: "#surgery" },
         { name: "Orthopedics", href: "#orthopedics" },
-        { name: "Neurosurgery", href: "#neurosurgery" },
+        //{ name: "Neurosurgery", href: "#neurosurgery" },
         { name: "Dentistry", href: "/dentistry" },
-        { name: "Urology", href: "/urology" },
+        //{ name: "Urology", href: "/urology" },
       ],
       specialized: [
-        { name: "Pediatrics", href: "/pediatric" },
-        { name: "OB-GYN", href: "/obgy" },
-        { name: "ENT", href: "/ent" },
+        //{ name: "Pediatrics", href: "/pediatric" },
+        { name: "OB-GYN & Pediatrics", href: "/obgy" },
+        //{ name: "ENT", href: "/ent" },
         { name: "Ophthalmology", href: "/ophthalmology" },
-        { name: "Mental Health & Substance Abuse", href: "/#" },
+        //{ name: "Mental Health & Substance Abuse", href: "/#" },
       ],
       emergency: [
         { name: "Emergency Medicine", href: "#emergency-med" },
         { name: "ICU", href: "#icu" },
-        { name: "Anesthesiology", href: "#anesthesia" },
-        { name: "Blood Transfusion", href: "#" },
+        //{ name: "Anesthesiology", href: "#anesthesia" },
+        //{ name: "Blood Transfusion", href: "#" },
       ],
     },
     km: {
       clinical: [
         { name: "ជំងឺបេះដូង និង​ ព្យាបាលជំងឺមនុស្សចាស់", href: "/cardiology" },
         { name: "ផ្នែកប្រព័ន្ធរំលាយអាហារ", href: "/gastrology" },
-        { name: "មជ្ឈមណ្ឌលឯកទេសជំងឺសួត", href: "/pulmonology" },
-        { name: "ប្រព័ន្ធប្រសាទ", href: "/neurology" },
-        { name: "ផ្នែកសើស្បែកនិងកាមរោគ", href: "/dermatology" },
-        { name: "ជំងឺមហារីក", href: "/oncology" },
+       // { name: "មជ្ឈមណ្ឌលឯកទេសជំងឺសួត", href: "/pulmonology" },
+       // { name: "ប្រព័ន្ធប្រសាទ", href: "/neurology" },
+       // { name: "ផ្នែកសើស្បែកនិងកាមរោគ", href: "/dermatology" },
+       // { name: "ជំងឺមហារីក", href: "/oncology" },
       ],
       surgical: [
-        { name: "ផ្នែកវះកាត់ទូទៅ", href: "#surgery" },
+      //  { name: "ផ្នែកវះកាត់ទូទៅ", href: "#surgery" },
         { name: "ផ្នែកវះកាត់ឆ្អឹងបាក់បែកនិងសន្លាក់", href: "#orthopedics" },
-        {
-          name: "ផ្នែកវះកាត់ប្រព័ន្ធប្រសាទ​ និង​ ខួរក្បាល",
-          href: "#neurosurgery",
-        },
-        {
-          name: "ផ្នែកវះកាត់មុខ-មាត់-ថ្គាម និងទន្តសាស្រ្ត",
-          href: "/dentistry",
-        },
-        { name: "ផ្នែកវះកាត់តម្រងនោម", href: "/urology" },
+       // { name: "ផ្នែកវះកាត់ប្រព័ន្ធប្រសាទ​ និង​ ខួរក្បាល",   href: "#neurosurgery",},
+        { name: "ផ្នែកវះកាត់មុខ-មាត់-ថ្គាម និងទន្តសាស្រ្ត", href: "/dentistry"},
+        //{ name: "ផ្នែកវះកាត់តម្រងនោម", href: "/urology" },
       ],
       specialized: [
-        { name: "ផ្នែកកុមារនិងទារក", href: "/pediatric" },
-        { name: "ផ្នែកសម្ភពនិងរោគស្ត្រី", href: "/obgy" },
-        { name: "ផ្នែកត្រចៀក-ច្រមុះ-បំពង់ក", href: "/ent" },
+        //{ name: "ផ្នែកកុមារនិងទារក", href: "/pediatric" },
+        { name: "ផ្នែកសម្ភព រោគស្ត្រីនិងកុមារ​", href: "/obgy" },
+        //{ name: "ផ្នែកត្រចៀក-ច្រមុះ-បំពង់ក", href: "/ent" },
         { name: "ផ្នែកចក្ខុរោគ", href: "/ophthalmology" },
-        { name: "ផ្នែកសុខភាពផ្លូវចិត្តនិងបំពានគ្រឿងញៀន", href: "/#" },
+        //{ name: "ផ្នែកសុខភាពផ្លូវចិត្តនិងបំពានគ្រឿងញៀន", href: "/#" },
       ],
       emergency: [
-        { name: "សង្គ្រោះបន្ទាន់", href: "#emergency-med" },
-        { name: "ថែទាំធ្ងន់", href: "#icu" },
+        //{ name: "សង្គ្រោះបន្ទាន់", href: "#emergency-med" },
+        //{ name: "ថែទាំធ្ងន់", href: "#icu" },
         { name: "សន្តំរ", href: "#anesthesia" },
         { name: "មជ្ឈមណ្ឌលលាងឈាម", href: "#" },
       ],
@@ -221,12 +219,19 @@ const Header = () => {
       { name: "MRI Scan", href: "/mri" },
       { name: "X-Ray", href: "#xray" },
       { name: "CT Scan", href: "#ctscan" },
-      { name: "Laboratory Tests", href: "#lab" },
+     {name: "Mammography", href: "#mammography"},
+      { name: "Ultrasound", href: "#ultrasound" },
+      { name: "C-Arm Machine", href: "#c-arm" },
+       { name: "Laboratory Tests", href: "#lab" },
+
     ],
     km: [
-      { name: "ថ្នាំងរូបភាពដោយម៉ាញេទិក", href: "mri" },
+      { name: "ថ្នាំងរូបភាពដោយម៉ាញេទិក", href: "/mri" },
       { name: "អេក្រុង", href: "#xray" },
       { name: "ជកតាស្គេន", href: "#ctscan" },
+      { name: "ម៉ាម៉ូក្រាប់", href: "#mammography" },
+      { name: "អ៊ុលត្រាសោន", href: "#ultrasound" },
+      { name: "ម៉ាស៊ីន C-Arm", href: "#c-arm" },
       { name: "មន្ទីរពិសោធន៍", href: "#lab" },
     ],
   };
@@ -585,7 +590,7 @@ const Header = () => {
               </button>
 
               <div
-                className={`absolute top-full left-0 mt-2 w-[280px] lg:w-[320px] bg-white rounded-xl shadow-xl border border-gray-100 transition-all duration-200 origin-top-left ${
+                className={`absolute top-full left-0 mt-2 w-[220px] lg:w-[220px] bg-white rounded-xl shadow-xl border border-gray-100 transition-all duration-200 origin-top-left ${
                   activeDropdown === "services"
                     ? "opacity-100 visible scale-100 translate-y-0"
                     : "opacity-0 invisible scale-95 -translate-y-2"

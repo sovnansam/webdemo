@@ -6,6 +6,7 @@ import Header from "./components/headers.jsx";
 import Home from "./pages/home.jsx";
 import About from "./pages/about.jsx";
 import Blog from "./pages/Blog";
+import BlogDetail from "./pages/blogDetail";
 import Ophthalmology from "./pages/departments/ophthalmology/ophthalmology.jsx";
 import OphthalmologySection1 from "./pages/departments/ophthalmology/OphthalmologySection1.jsx";
 import OphthalmologySection2 from "./pages/departments/ophthalmology/OphthalmologySection2.jsx";
@@ -133,6 +134,7 @@ import PediatricSection8 from "./pages/departments/pediatric/PediatricSection8.j
 import PediatricSection9 from "./pages/departments/pediatric/PediatricSection9.jsx";
 import PediatricSection10 from "./pages/departments/pediatric/PediatricSection10.jsx";
 import MRIPage from "./pages/services/MRI/mri.jsx";
+import MriSection1 from "./pages/services/MRI/mriSection1.jsx";
 
 
 
@@ -151,6 +153,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:id" element={<BlogDetail />} />
           <Route path="/activity" element={<Activity />} />
           <Route path="/ophthalmology" element={<Ophthalmology />} />
           <Route path="/ophthalmology_section1" element={<OphthalmologySection1 />} />
@@ -275,6 +278,7 @@ function App() {
           <Route path="/pediatric_section10" element={<PediatricSection10 />} />
 
           <Route path="/mri" element={<MRIPage/>} />
+          <Route path="/mri_section1" element={<MriSection1/>} />
          
 
         </Routes>

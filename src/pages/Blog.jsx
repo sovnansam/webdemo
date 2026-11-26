@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import { Link } from "react-router-dom";
 import ScrollToTopButton from "../contexts/scrollTop";
 const API_URL = "API/blog/all_blog.php";
 
@@ -99,199 +100,14 @@ const ConsistentImage = ({ src, alt, className = "", containerClassName = "", ob
   </div>
 );
 
-const TopImageSection = ({ 
-  blog, 
-  utils, 
-  activeImagePath,
-  onGalleryClick,
-  currentLanguage
-}) => {
-  const { getImageUrl } = utils;
-  const mainImageSrc = getImageUrl(activeImagePath);
-  const fontClass = getFontClass(currentLanguage);
-
-  return (
-    <div className="mt-20 w-full border-b border-gray-100">
-      {/* Main Hero Image - Fixed Size */}
-      <div className="w-full max-w-4xl mx-auto p-6">
-        <div className="w-full h-full bg-gray-100 rounded-2xl overflow-hidden shadow-lg">
-          <ConsistentImage 
-            src={mainImageSrc} 
-            alt={utils.getTitle(blog)} 
-            objectFit="contain"
-            containerClassName="w-full h-full"
-          />
-        </div>
-      </div>
-
-      {/* Gallery Strip - Fixed Size Thumbnails */}
-      {blog.images && blog.images.length > 0 && (
-        <div className="p-6 bg-white border-t border-gray-100">
-          <div className="max-w-4xl mx-auto">
-            <h4 className={`text-sm font-bold text-gray-400 uppercase tracking-widest mb-4 ${fontClass}`}>
-              {currentLanguage === 'en' ? 'Image Gallery' : 'វិចិត្រសាល'}
-            </h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3">
-              {/* Additional Image Thumbnails */}
-              {blog.images.map((img, idx) => {
-                const isActive = activeImagePath === img.image_path;
-                return (
-                  <div 
-                    key={idx} 
-                    className={`group relative overflow-hidden rounded-lg cursor-pointer bg-gray-100 ${isActive ? 'ring-2 ring-blue-500' : ''}`} 
-                    onClick={() => onGalleryClick(img.image_path)}
-                  >
-                    <ConsistentImage 
-                      src={getImageUrl(img.image_path)}
-                      alt={`Gallery ${idx + 1}`}
-                      containerClassName="w-full h-full"
-                      className="group-hover:scale-110"
-                    />
-                    {isActive && (
-                      <div className="absolute inset-0 bg-blue-500/10 pointer-events-none"></div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-const BottomVideoSection = ({ blog, utils, currentLanguage }) => {
-  const { getYouTubeEmbedUrl } = utils;
-  const videoUrl = getYouTubeEmbedUrl(blog.youtube_url);
-  const fontClass = getFontClass(currentLanguage);
-
-  if (!videoUrl) return null;
-
-  return (
-    <div className="max-w-4xl mx-auto w-full px-6 pb-12 pt-8 border-t border-gray-100 mt-8">
-      <h3 className={`text-xl font-bold text-gray-900 mb-6 flex items-center gap-3 ${fontClass}`}>
-        <span className="w-10 h-1 bg-red-600 rounded-full"></span>
-        {currentLanguage === 'en' ? 'Video Content' : 'មាតិកាវីដេអូ'}
-      </h3>
-      <div className="rounded-xl overflow-hidden shadow-lg bg-black aspect-video">
-        <iframe src={videoUrl} className="w-full h-full" allowFullScreen title="Video" />
-      </div>
-    </div>
-  );
-};
-
-// ==========================================
-// 3. EXPANDED SECTION COMPONENT
-// ==========================================
-
-const ExpandedBlogSection = ({ 
-  blog, 
-  currentLanguage, 
-  utils, 
-  onClose,
-  onImageClick 
-}) => {
-  const { getTitle, getDescription, formatDate, getMergedParagraphs } = utils;
-  const categoryData = getCategoryData(blog.section_type);
-  const title = getTitle(blog);
-  const content = getMergedParagraphs(blog);
-  const fontClass = getFontClass(currentLanguage);
-  
-  const [activeHeaderImage, setActiveHeaderImage] = useState(blog.image_path);
-  const sectionRef = useRef(null);
-
-  useEffect(() => {
-    // Scroll to top when expanded section opens
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, []);
-
-  const handleGallerySwap = (newImagePath) => {
-    setActiveHeaderImage(newImagePath);
-  };
-
-  return (
-    <div ref={sectionRef} className="min-h-screen bg-white">
-      {/* Close Button - Fixed at top */}
-      <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <button 
-              onClick={onClose}
-              className={`flex items-center gap-3 px-6 py-3 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-all duration-200 font-semibold border border-gray-200 cursor-pointer ${fontClass}`}
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-              {currentLanguage === "en" ? "Back to All Articles" : "ត្រលប់ទៅអត្ថបទទាំងអស់"}
-            </button>
-            
-            <div className="flex items-center gap-3">
-              <span className={`${categoryData.className} ${fontClass}`}>
-                {currentLanguage === "en" ? categoryData.label.en : categoryData.label.km}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-      
-
-      {/* Top Images */}
-      <TopImageSection 
-        blog={blog} 
-        utils={utils}
-        activeImagePath={activeHeaderImage}
-        onGalleryClick={handleGallerySwap}
-        currentLanguage={currentLanguage}
-      />
-
-      {/* Text Content with Max Width */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="mb-8">
-          <span className={`text-sm text-gray-400 font-medium ${fontClass}`}>
-            {formatDate(blog.created_at)}
-          </span>
-        </div>
-
-        <h1 className={`text-lg md:text-3xl sm:text-lg font-extrabold text-gray-900 leading-tight mb-8 ${fontClass}`}>
-          {title}
-        </h1>
-
-        <p className={`text-xl text-gray-600 font-medium leading-relaxed mb-12 border-l-4 border-blue-500 pl-6 py-2 ${fontClass}`}>
-          {getDescription(blog)}
-        </p>
-
-        <div className={`prose prose-lg max-w-none text-gray-700 leading-relaxed whitespace-pre-line ${fontClass}`}>
-          {content.split('\n\n').map((paragraph, idx) => (
-            <p key={idx} className="mb-8 text-lg leading-8 last:mb-0">
-              {paragraph}
-            </p>
-          ))}
-        </div>
-      </div>
-
-      {/* YouTube Video */}
-      <BottomVideoSection 
-        blog={blog} 
-        utils={utils}
-        currentLanguage={currentLanguage}
-      />
-    </div>
-  );
-};
-
 // ==========================================
 // 4. MAIN CARD COMPONENT (Grid View)
 // ==========================================
 
 const BlogCard = ({ 
   blog, 
-  index, 
   currentLanguage, 
   utils, 
-  onExpand,
   onImageClick
 }) => {
   const { getTitle, getDescription, formatDate, getImageUrl } = utils;
@@ -300,9 +116,12 @@ const BlogCard = ({
   const fontClass = getFontClass(currentLanguage);
 
   return (
-    <div 
-      className={`group bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col h-full ${fontClass}`}
-      onClick={() => onExpand(index)}
+    <Link 
+      to={`/blog/${blog.id}`}
+      data-blog-card
+      data-blog-id={blog.id}
+      tabIndex={0}
+      className={`group bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col h-full focus:outline-none focus:ring-4 focus:ring-blue-400 focus:ring-offset-4 focus:border-blue-500 ${fontClass}`}
     >
       {/* Card Image - Fixed Size */}
       <div className="relative h-48 w-full overflow-hidden">
@@ -337,7 +156,7 @@ const BlogCard = ({
           </svg>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
@@ -350,9 +169,8 @@ const Blog = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [fullImage, setFullImage] = useState(null);
-  const [expandedCardIndex, setExpandedCardIndex] = useState(null);
   const [currentLanguage, setCurrentLanguage] = useState("km");
-  const [visibleCount, setVisibleCount] = useState(8);
+  const [visibleCount, setVisibleCount] = useState(4);
   const [showAll, setShowAll] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
 
@@ -484,7 +302,59 @@ const Blog = () => {
       
           scrollToHash();
         }, []);
-      
+
+        useEffect(() => {
+          // Focus on previously visited blog card when navigating back
+          const previousBlogId = sessionStorage.getItem('lastVisitedBlogId');
+  
+          
+          if (previousBlogId && blogs.length > 0) {
+            // Check if the target blog is in the currently displayed set
+            const targetBlog = blogs.find(blog => String(blog.id) === String(previousBlogId));
+            const displayedBlogs = showAll ? blogs : blogs.slice(0, visibleCount);
+            const isTargetDisplayed = displayedBlogs.some(blog => String(blog.id) === String(previousBlogId));
+            
+   
+            
+            // If target blog is not displayed, show more blogs or show all
+            if (!isTargetDisplayed && targetBlog) {
+              const targetIndex = blogs.findIndex(blog => String(blog.id) === String(previousBlogId));
+
+              
+              if (targetIndex < visibleCount) {
+                // Should be visible, but might not be due to pagination
+                setVisibleCount(Math.max(visibleCount, targetIndex + 1));
+              } else if (targetIndex < blogs.length) {
+                // Show all blogs to ensure target is visible
+                setShowAll(true);
+              }
+            }
+            
+            // Wait a bit longer for DOM to be ready and for any state changes to take effect
+            setTimeout(() => {
+              const blogCard = document.querySelector(`[data-blog-id="${previousBlogId}"]`);
+            
+              
+              if (blogCard) {
+                // Add visual indicator for debugging
+                blogCard.style.border = '2px solid #00d9ff';
+                blogCard.focus();
+                blogCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+             
+                
+                // Remove debug border after 2 seconds
+                setTimeout(() => {
+                  blogCard.style.border = '';
+                }, 2000);
+              } else {
+                console.log('Blog card not found for ID:', previousBlogId); // Debug log
+              }
+              
+              // Clear the stored ID after attempting to focus
+              sessionStorage.removeItem('lastVisitedBlogId');
+            }, 800); // Increased delay to allow for state changes
+          }
+        }, [blogs, visibleCount, showAll]);
 
   // Apply language-specific styles
   const applyLanguageStyles = (language) => {
@@ -500,33 +370,9 @@ const Blog = () => {
     }
   };
 
-  const handleExpand = useCallback((index) => {
-    setExpandedCardIndex(index);
-    document.body.style.overflow = "auto";
-  }, []);
-
-  const handleCloseExpanded = useCallback(() => {
-    setExpandedCardIndex(null);
-    // Scroll to top when returning to grid view
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, []);
-
   const fontClass = getFontClass(currentLanguage);
 
-  // If a blog is expanded, show only the expanded section
-  if (expandedCardIndex !== null) {
-    const expandedBlog = blogs[expandedCardIndex];
-    return (
-      <ExpandedBlogSection 
-        blog={expandedBlog}
-        currentLanguage={currentLanguage}
-        utils={utils}
-        onClose={handleCloseExpanded}
-        onImageClick={setFullImage}
-      />
-    );
-  }
-
+  
   // Calculate which blogs to show
   const displayedBlogs = showAll ? blogs : blogs.slice(0, visibleCount);
   const hasMoreBlogs = blogs.length > displayedBlogs.length;
@@ -567,10 +413,8 @@ const Blog = () => {
                 <BlogCard 
                   key={blog.id || index}
                   blog={blog}
-                  index={index}
                   currentLanguage={currentLanguage}
                   utils={utils}
-                  onExpand={handleExpand}
                   onImageClick={setFullImage}
                 />
               ))

@@ -660,18 +660,21 @@ const Announcements = () => {
                     >
                       <div className="lg:flex cursor-pointer">
                         {/* Image Section (lg:w-1/3 for smaller image) */}
-                        <div className="flex items-center justify-center rounded-xl overflow-hidden p-2">
+                        <Link
+                          to={`/announcement/${announcement.id}`}
+                          onClick={() => handleReadMoreClick(announcement, index)}
+                          className="flex items-center justify-center rounded-xl overflow-hidden p-2"
+                        >
                           <img
-                            onClick={() => handleImageClick(announcement)}
                             src={getImageUrl(announcement.image_path)}
-                            className="max-h-50 w-auto object-contain"
+                            className="max-h-50 w-auto object-contain hover:scale-105 transition-transform duration-300"
                             onError={(e) => {
                               e.target.onerror = null;
                               e.target.src =
                                 "https://placehold.co/600x400/3b82f6/ffffff?text=Image+Load+Error";
                             }}
                           />
-                        </div>
+                        </Link>
 
                         {/* Content Section (lg:w-2/3) */}
                         <div className="lg:w-2/3 p-2 md:p-8 flex flex-col justify-between">

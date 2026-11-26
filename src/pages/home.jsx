@@ -11,6 +11,27 @@ import Footer from '../components/footer';
 import ScrollToTopButton from "../contexts/scrollTop.jsx";
 import HospitalSponsors from '../components/sponser/sponcer.jsx';
 
+// Defined OUTSIDE Home so its component reference stays stable across re-renders
+const AnimatedSection = ({ children, className = "", id }) => {
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
+
+  return (
+    <motion.div
+      id={id}
+      ref={ref}
+      initial={{ opacity: 0, y: 40 }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+      transition={{ duration: 0.7 }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+};
+
 const Home = () => {
   const [currentLanguage, setCurrentLanguage] = useState(() => {
     return localStorage.getItem('preferredLanguage') || 'km';
@@ -18,13 +39,6 @@ const Home = () => {
   const navigate = useNavigate();
   const [showAll, setShowAll] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const savedLanguage = localStorage.getItem('preferredLanguage');
-    if (savedLanguage && savedLanguage !== currentLanguage) {
-      setCurrentLanguage(savedLanguage);
-    }
-  }, []);
 
   useEffect(() => {
     const handleLanguageChange = () => {
@@ -42,13 +56,13 @@ const Home = () => {
     const updateDocumentFont = () => {
       const html = document.documentElement;
       const body = document.body;
-      
+
       if (currentLanguage === 'km') {
         html.classList.add('font-khmer');
         html.classList.remove('font-english');
         body.classList.add('font-khmer');
         body.classList.remove('font-english');
-        
+
         html.style.setProperty('--font-family', "'Battambang', 'Khmer OS', 'sans-serif'");
         html.style.setProperty('--font-weight', 'normal');
         html.style.setProperty('--letter-spacing', 'normal');
@@ -57,7 +71,7 @@ const Home = () => {
         html.classList.remove('font-khmer');
         body.classList.add('font-english');
         body.classList.remove('font-khmer');
-        
+
         html.style.setProperty('--font-family', 'system-ui, -apple-system, sans-serif');
         html.style.setProperty('--font-weight', 'normal');
         html.style.setProperty('--letter-spacing', 'normal');
@@ -66,8 +80,8 @@ const Home = () => {
 
     updateDocumentFont();
     localStorage.setItem('preferredLanguage', currentLanguage);
-    window.dispatchEvent(new CustomEvent('languageChanged', { 
-      detail: { language: currentLanguage } 
+    window.dispatchEvent(new CustomEvent('languageChanged', {
+      detail: { language: currentLanguage }
     }));
 
     return () => {
@@ -78,7 +92,7 @@ const Home = () => {
     };
   }, [currentLanguage]);
 
-  // Add scroll event listener to show/hide scroll to top button
+  // Show/hide scroll to top button
   useEffect(() => {
     const toggleVisibility = () => {
       if (window.pageYOffset > 300) {
@@ -88,7 +102,7 @@ const Home = () => {
       }
     };
 
-    window.addEventListener('scroll', toggleVisibility);
+    window.addEventListener('scroll', toggleVisibility, { passive: true });
     return () => window.removeEventListener('scroll', toggleVisibility);
   }, []);
 
@@ -101,7 +115,6 @@ const Home = () => {
       if (element) {
         element.scrollIntoView({ behavior: "smooth" });
       } else {
-        // Retry after mount
         setTimeout(scrollToHash, 300);
       }
     };
@@ -109,26 +122,7 @@ const Home = () => {
     scrollToHash();
   }, []);
 
-  const AnimatedSection = ({ children, className = "" }) => {
-    const [ref, inView] = useInView({
-      triggerOnce: true,
-      threshold: 0.1,
-    });
-
-    return (
-      <motion.div
-        ref={ref}
-        initial={{ opacity: 0, y: 50 }}
-        animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-        transition={{ duration: 0.8 }}
-        className={className}
-      >
-        {children}
-      </motion.div>
-    );
-  };
-
-  const getServiceIcon = (serviceName, language) => {
+  const getServiceIcon = (serviceName) => {
     const iconMap = {
       // MRI & Imaging
       "MRI Scan": "🔍",
@@ -235,89 +229,48 @@ const Home = () => {
     ],
   };
 
-  const getDepartmentIcon = (departmentName, language) => {
+  const getDepartmentIcon = (departmentName) => {
     const iconMap = {
-      // Cardiology & Heart
       "Cardiology": "💓",
       "ជំងឺបេះដូង": "💓",
-
-      // Gastroenterology & Stomach
       "Gastroenterology": "🩺",
       "ជំងឺក្រពះ": "🩺",
-
-      // Oncology & Cancer
       "Oncology": "🎗️",
       "ជំងឺមហារីក": "🎗️",
-
-      // Pulmonology & Lungs
       "Pulmonology": "🫁",
       "ជំងឺសួត": "🫁",
-
-      // Dermatology & Skin
       "Dermatology": "🤚",
       "ជំងឺស្បែក": "🤚",
-
-      // Ophthalmology & Eyes
       "Ophthalmology": "👁️",
       "ជំងឺភ្នែក": "👁️",
-
-      // Surgery
       "Surgery": "🔪",
       "ការវះកាត់": "🔪",
-
-      // Orthopedics & Bones
       "Orthopedics": "🦴",
       "ឆ្អឹងជំនី": "🦴",
-
-      // Neurology & Brain
       "Neurology": "🧠",
       "ប្រសាទ": "🧠",
-
-      // Neurosurgery & Brain Surgery
       "Neurosurgery": "⚡",
       "វះកាត់ខួរក្បាល": "⚡",
-
-      // Pediatrics & Children
       "Pediatrics": "👶",
       "ជំងឺកុមារ": "👶",
-
-      // OB-GYN & Women
       "OB-GYN": "👩",
       "ស្ត្រីធំ": "👩",
-
-      // Urology & Urinary
       "Urology": "🚽",
       "ផ្លូវនោម": "🚽",
-
-      // Nephrology & Kidney
       "Nephrology": "🥩",
       "តម្រងនោម": "🥩",
-
-      // Emergency & Critical Care
       "Emergency": "🚨",
       "ភ្លាមៗ": "🚨",
-
-      // ICU & Critical
       "ICU": "🏥",
       "ថែទាំធ្ងន់": "🏥",
-
-      // Anesthesia & Pain
       "Anesthesia": "💤",
       "ដេកលក់": "💤",
-
-      // ENT & Ear Nose Throat
       "ENT": "👂",
       "ត្រចៀកក": "👂",
-
-      // Psychiatry & Mental
       "Psychiatry": "🧠",
       "ចិត្តវិទ្យា": "🧠",
-
-      // Dentistry & Teeth
       "Dentistry": "🦷",
       "ធ្មេញ": "🦷",
-
-      // Physiotherapy & Rehab
       "Physiotherapy": "💪",
       "រោគព្យាបាល": "💪",
     };
@@ -327,32 +280,23 @@ const Home = () => {
 
   const medicalDepartments = {
     en: [
-      // Major Clinical Departments
       { name: "Cardiology", href: "#cardiology", description: "Heart Care" },
       { name: "Gastroenterology", href: "#gastro", description: "Digestive" },
       { name: "Oncology", href: "/oncology", description: "Cancer" },
       { name: "Pulmonology", href: "#pulmonology", description: "Lungs" },
       { name: "Dermatology", href: "#dermatology", description: "Skin" },
       { name: "Ophthalmology", href: "/optamo", description: "Eyes" },
-
-      // Surgical Departments
       { name: "Surgery", href: "#surgery", description: "General" },
       { name: "Orthopedics", href: "#orthopedics", description: "Bones" },
       { name: "Neurology", href: "#neurology", description: "Brain" },
       { name: "Neurosurgery", href: "#neurosurgery", description: "Brain Surg" },
-
-      // Specialized Medicine
       { name: "Pediatrics", href: "#pediatrics", description: "Children" },
       { name: "OB-GYN", href: "#obgyn", description: "Women's" },
       { name: "Urology", href: "#urology", description: "Urinary" },
       { name: "Nephrology", href: "#nephrology", description: "Kidney" },
-
-      // Emergency & Critical Care
       { name: "Emergency", href: "#emergency-med", description: "24/7 Care" },
       { name: "ICU", href: "#icu", description: "Critical" },
       { name: "Anesthesia", href: "#anesthesia", description: "Pain" },
-
-      // Additional Specialties
       { name: "ENT", href: "#ent", description: "Ear Nose" },
       { name: "Psychiatry", href: "#psychiatry", description: "Mental" },
       { name: "Dentistry", href: "#dentistry", description: "Teeth" },
@@ -360,32 +304,23 @@ const Home = () => {
       { name: "Hematology", href: "#hematology", description: "Blood" },
     ],
     km: [
-      // Major Clinical Departments
       { name: "ជំងឺបេះដូង", href: "#cardiology", description: "បេះដូង" },
       { name: "ជំងឺក្រពះ", href: "#gastro", description: "ក្រពះ" },
       { name: "ជំងឺមហារីក", href: "/oncology", description: "មហារីក" },
       { name: "ជំងឺសួត", href: "#pulmonology", description: "សួត" },
       { name: "ជំងឺស្បែក", href: "#dermatology", description: "ស្បែក" },
       { name: "ជំងឺភ្នែក", href: "/optamo", description: "ភ្នែក" },
-
-      // Surgical Departments
       { name: "ការវះកាត់", href: "#surgery", description: "ទូទៅ" },
       { name: "ឆ្អឹងជំនី", href: "#orthopedics", description: "ឆ្អឹង" },
       { name: "ប្រសាទ", href: "#neurology", description: "ខួរក្បាល" },
       { name: "វះកាត់ខួរក្បាល", href: "#neurosurgery", description: "ខួរក្បាល" },
-
-      // Specialized Medicine
       { name: "ជំងឺកុមារ", href: "#pediatrics", description: "កុមារ" },
       { name: "ស្ត្រីធំ", href: "#obgyn", description: "ស្ត្រី" },
       { name: "ផ្លូវនោម", href: "#urology", description: "នោម" },
       { name: "តម្រងនោម", href: "#nephrology", description: "តម្រង" },
-
-      // Emergency & Critical Care
       { name: "ភ្លាមៗ", href: "#emergency-med", description: "២៤/៧" },
       { name: "ថែទាំធ្ងន់", href: "#icu", description: "ធ្ងន់" },
       { name: "ដេកលក់", href: "#anesthesia", description: "ឈឺ" },
-
-      // Additional Specialties
       { name: "ត្រចៀកក", href: "#ent", description: "ត្រចៀក" },
       { name: "ចិត្តវិទ្យា", href: "#psychiatry", description: "ចិត្ត" },
       { name: "ធ្មេញ", href: "#dentistry", description: "ធ្មេញ" },
@@ -395,13 +330,8 @@ const Home = () => {
   };
 
   const handleViewAllDepartments = () => {
-    // Navigate to departments page
     navigate("/departments");
-   
-    
-
   };
-
 
   const handleDepartmentClick = (department) => {
     if (department.href.startsWith('/')) {
@@ -417,15 +347,11 @@ const Home = () => {
   return (
     <>
       <div className="pt-16">
-        <AnimatedSection>
-          <HeroSlideshow currentLanguage={currentLanguage} />
-        </AnimatedSection>
+        {/* Render above-the-fold HeroSlideshow directly without AnimatedSection wrapper */}
+        <HeroSlideshow currentLanguage={currentLanguage} />
 
         {/* Hero Section */}
-        <AnimatedSection
-          id=""
-          className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50 flex items-center relative overflow-hidden"
-        >
+        <AnimatedSection className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50 flex items-center relative overflow-hidden">
           <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-blue-100 rounded-full -translate-y-1/2 translate-x-1/2 opacity-70"></div>
           <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-teal-100 rounded-full translate-y-1/2 -translate-x-1/2 opacity-60"></div>
 
@@ -678,7 +604,7 @@ const Home = () => {
               ))}
             </div>
 
-            {/* Show More/Less Button - Reduced spacing */}
+            {/* Show More/Less Button */}
             {medicalServices[currentLanguage].length > 4 && (
               <div className="text-center mt-8">
                 <button
@@ -702,8 +628,7 @@ const Home = () => {
                         : "បង្ហាញបន្ថែម"}
                   </span>
                   <svg
-                    className={`w-4 h-4 transition-transform duration-300 ${showAll ? "rotate-180" : ""
-                      }`}
+                    className={`w-4 h-4 transition-transform duration-300 ${showAll ? "rotate-180" : ""}`}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -737,7 +662,7 @@ const Home = () => {
               </p>
             </div>
 
-            {/* Departments Grid - Show only first 8 departments */}
+            {/* Departments Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
               {medicalDepartments[currentLanguage]
                 .slice(0, 4)
@@ -819,9 +744,9 @@ const Home = () => {
           </div>
         </AnimatedSection>
 
-<AnimatedSection>
-  <HospitalSponsors currentLanguage={currentLanguage} />
-</AnimatedSection>
+        <AnimatedSection>
+          <HospitalSponsors currentLanguage={currentLanguage} />
+        </AnimatedSection>
 
         <AnimatedSection>
           <Footer currentLanguage={currentLanguage} />

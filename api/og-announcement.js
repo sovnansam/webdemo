@@ -50,9 +50,8 @@ function escapeHtml(str) {
 }
 
 function buildHtml(announcement, url) {
-  const title = announcement
-    ? announcement.title || announcement.title_en || "KHMER SOVIET FRIENDSHIP HOSPITAL"
-    : "KHMER SOVIET FRIENDSHIP HOSPITAL";
+  // Title is ALWAYS "KHMER SOVIET FRIENDSHIP HOSPITAL" - never changes
+  const title = "KHMER SOVIET FRIENDSHIP HOSPITAL";
 
   const description = announcement
     ? announcement.subTitle || announcement.subTitle_en || "Khmer Soviet Friendship Hospital - Providing quality healthcare services"
@@ -78,10 +77,10 @@ function buildHtml(announcement, url) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${escapeHtml(title)} - KHMER SOVIET FRIENDSHIP HOSPITAL</title>
+  <title>${escapeHtml(title)}</title>
   <link rel="icon" type="image/svg+xml" href="/KSFH.ico" />
   <meta property="og:type" content="article" />
-  <meta property="og:site_name" content="KHMER SOVIET FRIENDSHIP HOSPITAL" />
+  <meta property="og:site_name" content="${escapeHtml(title)}" />
   <meta property="og:title" content="${escapeHtml(title)}" />
   <meta property="og:description" content="${escapeHtml(description)}" />
   <meta property="og:image" content="${image}" />
@@ -103,7 +102,6 @@ export default async function handler(request) {
   const url = new URL(request.url);
   const userAgent = request.headers.get("user-agent") || "";
 
-  // Extract announcement ID from query param or path
   const id = url.searchParams.get("id");
 
   if (id && isCrawler(userAgent)) {

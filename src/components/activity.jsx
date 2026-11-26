@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef,useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 
-const API_BASE_URL = "API/activities/";
 const API_URLS = {
   rcp: "API/activities/activity_RCP.php",
   grandvisit: "API/activities/activity_GrandVisit.php",
@@ -25,10 +24,11 @@ const ActivityRCP = ({ currentLanguage = "km" }) => {
   });
   const [fullImage, setFullImage] = useState(null);
   const [showFullImage, setShowFullImage] = useState(false);
-  const [expandedCard, setExpandedCard] = useState(null);
-  
-  // Refs for card elements
-  const cardRefs = useRef([]);
+
+  // selectedCard controls open/close state; displayedCard retains data during close animation
+  const [selectedCard, setSelectedCard] = useState(null);
+  const [displayedCard, setDisplayedCard] = useState(null);
+  const detailCardRef = useRef(null);
 
   useEffect(() => {
     fetchAllActivities();
@@ -36,23 +36,21 @@ const ActivityRCP = ({ currentLanguage = "km" }) => {
 
   const fetchAllActivities = async () => {
     const types = ['rcp', 'grandvisit', 'activity'];
-    
+
     types.forEach(async (type) => {
       try {
         setLoading(prev => ({ ...prev, [type]: true }));
         setErrors(prev => ({ ...prev, [type]: null }));
-        
+
         const response = await fetch(`${API_URLS[type]}`);
-        
+
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
+
         const data = await response.json();
-        
-        // Handle the response format
         let activityData = null;
-        
+
         if (data.success && data.data) {
           activityData = data.data;
         } else if (data.success && data.data === null) {
@@ -60,8 +58,7 @@ const ActivityRCP = ({ currentLanguage = "km" }) => {
         } else {
           throw new Error(data.message || `Failed to fetch ${type} activity`);
         }
-        
-    
+
         setActivities(prev => ({ ...prev, [type]: activityData }));
       } catch (err) {
         console.error(`Error fetching ${type} activity:`, err);
@@ -72,7 +69,28 @@ const ActivityRCP = ({ currentLanguage = "km" }) => {
     });
   };
 
-  // Function to show full image on click
+  // Toggle detail card with smooth expand/collapse animation
+  const handleToggleReadMore = (activity, typeKey) => {
+    if (selectedCard?.typeKey === typeKey) {
+      setSelectedCard(null);
+    } else {
+      const newSelection = { activity, typeKey };
+      setDisplayedCard(newSelection);
+      setSelectedCard(newSelection);
+
+      setTimeout(() => {
+        detailCardRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest'
+        });
+      }, 150);
+    }
+  };
+
+  const handleCloseDetailCard = () => {
+    setSelectedCard(null);
+  };
+
   const handleImageClick = (imageUrl, activity) => {
     setFullImage({
       url: imageUrl,
@@ -87,111 +105,83 @@ const ActivityRCP = ({ currentLanguage = "km" }) => {
     setFullImage(null);
   };
 
-  // Toggle card expansion with focus management
-  const toggleCardExpansion = (index) => {
-    setExpandedCard(expandedCard === index ? null : index);
-    
-    setTimeout(() => {
-      const cardElement = cardRefs.current[index];
-      if (cardElement) {
-        cardElement.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'center',
-          inline: 'nearest'
-        });
-        
-        cardElement.focus({ preventScroll: true });
-        cardElement.classList.add('ring-2', 'ring-blue-500', 'ring-opacity-50');
-        
-        setTimeout(() => {
-          cardElement.classList.remove('ring-2', 'ring-blue-500', 'ring-opacity-50');
-        }, 1500);
-      }
-    }, 100);
-  };
-
-  // Close full image on escape key
   useEffect(() => {
     const handleEscape = (e) => {
-      if (e.key === 'Escape' && showFullImage) {
-        closeFullImage();
+      if (e.key === 'Escape') {
+        if (showFullImage) closeFullImage();
+        else if (selectedCard) handleCloseDetailCard();
       }
     };
 
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
-  }, [showFullImage]);
+  }, [showFullImage, selectedCard]);
 
   const getTypeColor = (type) => {
     const colors = {
-      rcp: { 
-        bg: "bg-blue-100", 
-        text: "text-blue-800", 
+      rcp: {
+        bg: "bg-blue-100",
+        text: "text-blue-800",
         border: "border-blue-200",
-        gradient: "from-blue-500 to-blue-700",
+        hoverBorder: "hover:border-blue-200",
         label: { en: "RCP", km: "RCP" }
       },
-      grandvisit: { 
-        bg: "bg-violet-100", 
-        text: "text-violet-800", 
+      grandvisit: {
+        bg: "bg-violet-100",
+        text: "text-violet-800",
         border: "border-violet-200",
-        gradient: "from-violet-500 to-violet-700",
+        hoverBorder: "hover:border-violet-200",
         label: { en: "GrandVisit", km: "ទស្សនកិច្ច" }
       },
-      activity: { 
-        bg: "bg-emerald-100", 
-        text: "text-emerald-800", 
+      activity: {
+        bg: "bg-emerald-100",
+        text: "text-emerald-800",
         border: "border-emerald-200",
-        gradient: "from-emerald-500 to-emerald-700",
+        hoverBorder: "hover:border-emerald-200",
         label: { en: "Activity", km: "សកម្មភាព" }
       }
     };
     return colors[type] || colors.rcp;
   };
 
-const formatDate = useCallback(
-  (dateString) => {
-    if (!dateString) {
-      return currentLanguage === "en" ? "No date" : "គ្មានកាលបរិច្ឆេទ";
-    }
-
-    try {
-      const date = new Date(dateString);
-      
-      if (currentLanguage === "en") {
-        return date.toLocaleDateString("en-US", { 
-          year: "numeric", 
-          month: "long", 
-          day: "numeric" 
-        });
-      } else {
-        // Manual Khmer date formatting
-        const khmerMonths = [
-          "មករា", "កុម្ភៈ", "មីនា", "មេសា", "ឧសភា", "មិថុនា",
-          "កក្កដា", "សីហា", "កញ្ញា", "តុលា", "វិច្ឆិកា", "ធ្នូ"
-        ];
-        
-        const khmerNumerals = ["០", "១", "២", "៣", "៤", "៥", "៦", "៧", "៨", "៩"];
-        
-        const year = date.getFullYear();
-        const month = khmerMonths[date.getMonth()];
-        const day = date.getDate();
-        
-        // Convert numbers to Khmer numerals
-        const toKhmerNum = (num) => {
-          return num.toString().split('').map(digit => khmerNumerals[digit] || digit).join('');
-        };
-        
-        return `${toKhmerNum(day)} ${month} ${toKhmerNum(year)}`;
+  const formatDate = useCallback(
+    (dateString) => {
+      if (!dateString) {
+        return currentLanguage === "en" ? "No date" : "គ្មានកាលបរិច្ឆេទ";
       }
-    } catch (error) {
-      console.error("Date parsing error:", error, dateString);
-      return dateString;
-    }
-  },
-  [currentLanguage]
-);
 
+      try {
+        const date = new Date(dateString);
+
+        if (currentLanguage === "en") {
+          return date.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+          });
+        } else {
+          const khmerMonths = [
+            "មករា", "កុម្ភៈ", "មីនា", "មេសា", "ឧសភា", "មិថុនា",
+            "កក្កដា", "សីហា", "កញ្ញា", "តុលា", "វិច្ឆិកា", "ធ្នូ"
+          ];
+          const khmerNumerals = ["០", "១", "២", "៣", "៤", "៥", "៦", "៧", "៨", "៩"];
+
+          const year = date.getFullYear();
+          const month = khmerMonths[date.getMonth()];
+          const day = date.getDate();
+
+          const toKhmerNum = (num) =>
+            num.toString().split('').map(digit => khmerNumerals[digit] || digit).join('');
+
+          return `${toKhmerNum(day)} ${month} ${toKhmerNum(year)}`;
+        }
+      } catch (error) {
+        console.error("Date parsing error:", error, dateString);
+        return dateString;
+      }
+    },
+    [currentLanguage]
+  );
 
   const getImageUrl = (imagePath) => {
     if (!imagePath || imagePath === "null" || imagePath === "undefined") {
@@ -204,7 +194,7 @@ const formatDate = useCallback(
 
   const getTitle = (activity) => {
     if (!activity) return currentLanguage === "en" ? "No Title" : "គ្មានចំណងជើង";
-    return currentLanguage === "en" 
+    return currentLanguage === "en"
       ? activity.title_en || activity.title || "No Title"
       : activity.title || activity.title_en || "គ្មានចំណងជើង";
   };
@@ -216,47 +206,39 @@ const formatDate = useCallback(
       : activity.subTitle || activity.subTitle_en || "គ្មានការពិពណ៌នា";
   };
 
-  // Get all paragraphs content merged together
   const getMergedParagraphs = (activity) => {
     if (!activity) return "";
-    
     const paragraphs = [];
-    
-    // First, check the main paragraph field
+
     const mainParagraph = currentLanguage === "en"
       ? activity.paragraph_en || activity.paragraph || ""
       : activity.paragraph || activity.paragraph_en || "";
-    
+
     if (mainParagraph && mainParagraph.trim() !== '') {
       paragraphs.push(mainParagraph);
     }
-    
-    // Then check for paragraph1 to paragraph4 in both languages
+
     for (let i = 1; i <= 4; i++) {
       const paragraphKey = `paragraph${i}`;
       const paragraphKeyEn = `paragraph${i}_en`;
-      
-      const paragraphContent = currentLanguage === "en" 
+
+      const paragraphContent = currentLanguage === "en"
         ? activity[paragraphKeyEn] || activity[paragraphKey]
         : activity[paragraphKey] || activity[paragraphKeyEn];
-      
+
       if (paragraphContent && paragraphContent.trim() !== '') {
         paragraphs.push(paragraphContent);
       }
     }
-    
-    // Merge all paragraphs with double line breaks for spacing
+
     return paragraphs.join('\n\n');
   };
 
-  // Check if activity has additional paragraph content
   const hasAdditionalContent = (activity) => {
     if (!activity) return false;
-    const mergedParagraphs = getMergedParagraphs(activity);
-    return mergedParagraphs.length > 0;
+    return getMergedParagraphs(activity).length > 0;
   };
 
-  // Check if any activity is loading
   const isLoading = loading.rcp || loading.grandvisit || loading.activity;
 
   if (isLoading) {
@@ -292,48 +274,61 @@ const formatDate = useCallback(
     );
   }
 
-  // Activity data array for rendering
   const activityTypes = [
-     { key: 'activity', label: 'Activity' },
+    { key: 'activity', label: 'Activity' },
     { key: 'grandvisit', label: 'GrandVisit' },
-   
     { key: 'rcp', label: 'RCP' }
   ];
 
+  const isDetailOpen = Boolean(selectedCard);
+
   return (
     <>
+      {/* Custom Keyframes for switching between cards and modal fade */}
+      <style>{`
+        @keyframes cardContentFade {
+          0% {
+            opacity: 0;
+            transform: translateY(12px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-card-content {
+          animation: cardContentFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+      `}</style>
+
       <section className="py-8 bg-gradient-to-br from-slate-50 to-blue-50/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
- {/* Header */}
-        <div className="max-w-7xl mx-auto mb-12">
-          <div className="mb-4">
-            <h2
-              className={`text-xl md:text-2xl font-extrabold tracking-tight text-gray-700`}
-            >
-              {currentLanguage === "en"
-                ? "Latest Activities & Insights"
-                : "សកម្មភាពថ្មីៗ​ និង ព័ត៌មាន"}
-            </h2>
+          {/* Header */}
+          <div className="max-w-7xl mx-auto mb-12">
+            <div className="mb-4">
+              <h2 className="text-xl md:text-2xl font-extrabold tracking-tight text-gray-700">
+                {currentLanguage === "en"
+                  ? "Latest Activities & Insights"
+                  : "សកម្មភាពថ្មីៗ និង ព័ត៌មាន"}
+              </h2>
+            </div>
+            <div className="h-1 w-full bg-blue-600 rounded-full mb-6"></div>
           </div>
-          <div className="h-1 w-full bg-blue-600 rounded-full mb-6"></div>
-        </div>
 
-          {/* Three Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-8">
-            {activityTypes.map((type, index) => {
+          {/* Three Cards Grid - Always stays 3 columns */}
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-8">
+            {activityTypes.map((type) => {
               const activity = activities[type.key];
               const error = errors[type.key];
               const typeColor = getTypeColor(type.key);
-              const isExpanded = expandedCard === index;
+              const isSelected = selectedCard?.typeKey === type.key;
               const hasMoreContent = hasAdditionalContent(activity);
-              const mergedParagraphs = getMergedParagraphs(activity);
               const images = activity?.images || [];
               const mainImage = activity?.image_path || (images.length > 0 ? images[0]?.image_path : null);
 
-              // Render error state for this card
               if (error) {
                 return (
-                  <div 
+                  <div
                     key={type.key}
                     className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 p-6 flex flex-col items-center justify-center text-center min-h-[400px]"
                   >
@@ -348,10 +343,9 @@ const formatDate = useCallback(
                     <p className="text-sm text-gray-600 mb-4">{error}</p>
                     <button
                       onClick={() => {
-                        const types = { rcp: 'rcp', grandvisit: 'grandvisit', activity: 'activity' };
                         setLoading(prev => ({ ...prev, [type.key]: true }));
                         setErrors(prev => ({ ...prev, [type.key]: null }));
-                        fetch(`${API_BASE_URL}${API_URLS[type.key]}`)
+                        fetch(`${API_URLS[type.key]}`)
                           .then(response => response.json())
                           .then(data => {
                             if (data.success && data.data) {
@@ -373,10 +367,9 @@ const formatDate = useCallback(
                 );
               }
 
-              // Render empty state for this card
               if (!activity) {
                 return (
-                  <div 
+                  <div
                     key={type.key}
                     className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 p-8 flex flex-col items-center justify-center text-center min-h-[400px]"
                   >
@@ -389,7 +382,7 @@ const formatDate = useCallback(
                       {typeColor.label[currentLanguage]}
                     </h3>
                     <p className="text-sm text-gray-600">
-                      {currentLanguage === "en" 
+                      {currentLanguage === "en"
                         ? `No ${type.label} activity available`
                         : `មិនទាន់មានសកម្មភាព ${type.label}`}
                     </p>
@@ -397,33 +390,29 @@ const formatDate = useCallback(
                 );
               }
 
-              // Render activity card
               return (
                 <div
                   key={activity.id || type.key}
-                  ref={el => cardRefs.current[index] = el}
-                  tabIndex={-1}
-                  className={`group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-${type.key === 'rcp' ? 'blue' : type.key === 'grandvisit' ? 'violet' : 'emerald'}-200 transform hover:-translate-y-2 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 ${
-                    isExpanded ? 'lg:col-span-3' : ''
-                  }`}
+                  className={`group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border ${
+                    isSelected
+                      ? 'border-blue-500 ring-2 ring-blue-500/40 -translate-y-1'
+                      : `border-gray-100 ${typeColor.hoverBorder} hover:-translate-y-2`
+                  } transform flex flex-col`}
                 >
-                  {/* Image with click functionality */}
-                  <div 
+                  {/* Image */}
+                  <div
                     className="relative overflow-hidden cursor-pointer"
                     onClick={() => handleImageClick(getImageUrl(mainImage), activity)}
                   >
                     <img
                       src={getImageUrl(mainImage)}
                       alt={getTitle(activity)}
-                      className={`w-full object-cover group-hover:scale-110 transition-transform duration-500 ${
-                        isExpanded ? 'h-96' : 'h-60'
-                      }`}
+                      className="w-full h-60 object-cover group-hover:scale-110 transition-transform duration-500"
                       onError={(e) => {
                         e.target.src = "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80";
                       }}
                     />
-                    
-                    {/* Click to view indicator */}
+
                     <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/70 text-white px-3 py-1 rounded-full text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <div className="flex items-center gap-2">
                         <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -434,17 +423,15 @@ const formatDate = useCallback(
                       </div>
                     </div>
 
-                    {/* Type Badge */}
                     <div className="absolute top-4 right-4">
                       <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${typeColor.bg} ${typeColor.text} ${typeColor.border} border`}>
                         {typeColor.label[currentLanguage]}
                       </span>
                     </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
 
                   {/* Content */}
-                  <div className="p-6">
+                  <div className="p-6 flex flex-col flex-grow">
                     <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
                       <div className="flex items-center gap-1">
                         <svg className="w-4 h-4 mr-1 text-purple-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -453,46 +440,32 @@ const formatDate = useCallback(
                         {formatDate(activity.created_at)}
                       </div>
                     </div>
-                    
+
                     <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-200 line-clamp-2">
                       {getTitle(activity)}
                     </h3>
-                    
-                    {/* SubTitle Description */}
-                    <p className="text-sm text-gray-600 mb-4 leading-relaxed line-clamp-3">
+
+                    <p className="text-sm text-gray-600 mb-4 leading-relaxed line-clamp-3 flex-grow">
                       {getSubTitle(activity)}
                     </p>
 
-                    {/* Additional Content - Merged Paragraphs (when expanded) */}
-                    {isExpanded && hasMoreContent && (
-                      <div className="mt-4 border-t pt-4">
-                        <div className="space-y-3">
-                          <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">
-                            {mergedParagraphs}
-                          </p>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Read More / Show Less Button */}
                     {hasMoreContent && (
-                      <button 
+                      <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          toggleCardExpansion(index);
+                          handleToggleReadMore(activity, type.key);
                         }}
-                        className={`mt-4 bg-blue-600 hover:bg-blue-400 text-white py-2 px-4 rounded-lg text-sm font-medium transition-all duration-200 transform hover:scale-105 shadow hover:shadow-md flex items-center justify-center gap-2 cursor-pointer w-full`}
+                        className="mt-auto bg-blue-600 hover:bg-blue-500 text-white py-2 px-4 rounded-lg text-sm font-medium transition-all duration-200 transform hover:scale-105 shadow hover:shadow-md flex items-center justify-center gap-2 cursor-pointer w-full"
                       >
-                        {isExpanded 
-                          ? (currentLanguage === "en" ? "Show Less" : "បង្ហាញតិច") 
-                          : (currentLanguage === "en" ? "Read More" : "អានបន្ថែម")
-                        }
-                        <svg 
-                          className={`w-3 h-3 transition-transform duration-200 ${
-                            isExpanded ? 'rotate-180' : 'group-hover:translate-x-1'
-                          }`} 
-                          fill="none" 
-                          stroke="currentColor" 
+                        {isSelected
+                          ? (currentLanguage === "en" ? "Show Less" : "បង្ហាញតិច")
+                          : (currentLanguage === "en" ? "Read More" : "អានបន្ថែម")}
+                        <svg
+                          className={`w-3 h-3 transition-transform duration-300 ${
+                            isSelected ? 'rotate-180' : ''
+                          }`}
+                          fill="none"
+                          stroke="currentColor"
                           viewBox="0 0 24 24"
                         >
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -504,7 +477,118 @@ const formatDate = useCallback(
               );
             })}
           </div>
-<div className="mt-12 text-center">
+
+          {/* Animated Expand/Collapse Detail Card Below the 3 Cards */}
+          <div
+            ref={detailCardRef}
+            className={`grid transition-all duration-500 ease-out ${
+              isDetailOpen
+                ? 'grid-rows-[1fr] opacity-100 translate-y-0 scale-100 mt-8'
+                : 'grid-rows-[0fr] opacity-0 -translate-y-4 scale-[0.98] mt-0 pointer-events-none'
+            }`}
+          >
+            <div className="overflow-hidden">
+              {displayedCard && (
+                <div
+                  key={displayedCard.typeKey}
+                  className="bg-white rounded-2xl shadow-xl border border-blue-100 overflow-hidden animate-card-content"
+                >
+                  <div className="grid grid-cols-1 lg:grid-cols-3">
+                    {/* Left Image Column */}
+                    <div
+                      className="lg:col-span-1 relative cursor-pointer group overflow-hidden"
+                      onClick={() =>
+                        handleImageClick(
+                          getImageUrl(
+                            displayedCard.activity?.image_path ||
+                            (displayedCard.activity?.images?.length > 0
+                              ? displayedCard.activity.images[0]?.image_path
+                              : null)
+                          ),
+                          displayedCard.activity
+                        )
+                      }
+                    >
+                      <img
+                        src={getImageUrl(
+                          displayedCard.activity?.image_path ||
+                          (displayedCard.activity?.images?.length > 0
+                            ? displayedCard.activity.images[0]?.image_path
+                            : null)
+                        )}
+                        alt={getTitle(displayedCard.activity)}
+                        className="w-full h-full min-h-[260px] max-h-[420px] lg:max-h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        onError={(e) => {
+                          e.target.src = "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80";
+                        }}
+                      />
+                      <div className="absolute top-4 left-4">
+                        <span
+                          className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
+                            getTypeColor(displayedCard.typeKey).bg
+                          } ${getTypeColor(displayedCard.typeKey).text} ${
+                            getTypeColor(displayedCard.typeKey).border
+                          } border`}
+                        >
+                          {getTypeColor(displayedCard.typeKey).label[currentLanguage]}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Right Text Details Column */}
+                    <div className="p-6 sm:p-8 lg:col-span-2 flex flex-col justify-between">
+                      <div>
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center text-sm text-gray-500">
+                            <svg className="w-4 h-4 mr-1.5 text-purple-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            {formatDate(displayedCard.activity.created_at)}
+                          </div>
+
+                          <button
+                            onClick={handleCloseDetailCard}
+                            className="text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-full p-1.5 transition-all duration-200 hover:rotate-90"
+                            title={currentLanguage === "en" ? "Close" : "បិទ"}
+                          >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </button>
+                        </div>
+
+                        <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3">
+                          {getTitle(displayedCard.activity)}
+                        </h3>
+
+                        <p className="text-sm sm:text-base font-medium text-gray-700 mb-4 leading-relaxed">
+                          {getSubTitle(displayedCard.activity)}
+                        </p>
+
+                        <div className="border-t pt-4">
+                          <p className="text-sm sm:text-base text-gray-600 leading-relaxed whitespace-pre-line">
+                            {getMergedParagraphs(displayedCard.activity)}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="mt-6 flex justify-end">
+                        <button
+                          onClick={handleCloseDetailCard}
+                          className="bg-gray-100 hover:bg-gray-200 text-gray-800 py-2 px-5 rounded-lg text-sm font-medium transition-colors"
+                        >
+                          {currentLanguage === "en" ? "Show Less" : "បង្ហាញតិច"}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* View All Button */}
+          <div className="mt-12 text-center">
             <button
               onClick={() => {
                 window.location.href = "/activity";
@@ -513,18 +597,17 @@ const formatDate = useCallback(
             >
               {currentLanguage === "en" ? "View All Activities" : "មើលសកម្មភាពទាំងអស់"}
             </button>
-              </div>
-
+          </div>
         </div>
       </section>
 
       {/* Full Image Overlay */}
       {showFullImage && fullImage && (
-        <div 
-          className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
+        <div
+          className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 animate-card-content"
           onClick={closeFullImage}
         >
-          <button 
+          <button
             className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors duration-200 z-10"
             onClick={closeFullImage}
           >
@@ -532,8 +615,8 @@ const formatDate = useCallback(
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
-          
-          <div 
+
+          <div
             className="relative max-w-4xl max-h-full"
             onClick={(e) => e.stopPropagation()}
           >
@@ -542,8 +625,7 @@ const formatDate = useCallback(
               alt={fullImage.title}
               className="max-w-full max-h-full object-contain rounded-lg"
             />
-            
-            {/* Image Info */}
+
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg">
               <h3 className="text-white text-xl font-bold mb-2">
                 {fullImage.title}
@@ -554,10 +636,9 @@ const formatDate = useCallback(
             </div>
           </div>
 
-          {/* Close Instructions */}
           <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white/70 text-sm">
-            {currentLanguage === "en" 
-              ? "Click anywhere or press ESC to close" 
+            {currentLanguage === "en"
+              ? "Click anywhere or press ESC to close"
               : "ចុចទីណាក៏បាន ឬចុច ESC ដើម្បីបិទ"}
           </div>
         </div>
