@@ -137,6 +137,8 @@ import MRIPage from "./pages/services/MRI/mri.jsx";
 import MriSection1 from "./pages/services/MRI/MriSection1.jsx";
 
 
+
+
 function App() {
   return (
      <LanguageProvider>
@@ -278,6 +280,8 @@ function App() {
 
           <Route path="/mri" element={<MRIPage/>} />
           <Route path="/mri_section1" element={<MriSection1/>} />
+     
+      
          
 
         </Routes>

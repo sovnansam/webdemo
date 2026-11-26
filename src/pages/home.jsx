@@ -1,5 +1,7 @@
 // src/pages/Home.jsx
 import React, { useState, useEffect } from 'react';
+import { motion } from "framer-motion";
+import HeroSlideshow from "../components/hero";
 import { useNavigate } from "react-router-dom";
 import ActivityRCP from "../components/activity";
 import Announcement from "../components/announcement";

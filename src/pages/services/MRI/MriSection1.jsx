@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "../../../contexts/LanguageContext";
+import { motion } from "framer-motion";
 import ScrollToTopButton from "../../../contexts/scrollTop";
 
 const API_URL = "API/departments/mri/mri_section1.php";
@@ -38,8 +39,8 @@ const getYouTubeEmbedUrl = (url) => {
   return null;
 };
 
-const MRISection1 = () => {
 
+const MriSection1 = () => {
 
   const navigate = useNavigate();
   const { currentLanguage } = useLanguage();
@@ -52,7 +53,7 @@ const MRISection1 = () => {
 
   const fontClass = getFontClass(currentLanguage);
 
-
+  // --- SMART BACK NAVIGATION ---
   const handleBack = () => {
     if (window.history.length > 1) {
       navigate(-1);
@@ -61,12 +62,12 @@ const MRISection1 = () => {
     }
   };
 
-
+  // --- SCROLL TO TOP ON LOAD ---
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-
+  // Scroll visibility for the sticky back button and scroll-to-top button
   useEffect(() => {
     const toggleVisibility = () => {
       if (window.pageYOffset > 100) {
@@ -469,6 +470,4 @@ const MRISection1 = () => {
 };
 
 
-export default MRISection1;
-
-
+export default MriSection1;
