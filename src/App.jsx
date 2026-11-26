@@ -276,13 +276,8 @@ function App() {
           <Route path="/pediatric_section9" element={<PediatricSection9 />} />
           <Route path="/pediatric_section10" element={<PediatricSection10 />} />
 
-<<<<<<< HEAD
           <Route path="/mri" element={<MRIPage/>} />
           <Route path="/mri_section1" element={<MriSection1/>} />
-=======
-     
-      
->>>>>>> 4bffb4f7eb2cbf2e7b2a72496cb72e022755372d
          
 
         </Routes>
