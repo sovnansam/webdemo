@@ -133,17 +133,8 @@ import PediatricSection7 from "./pages/departments/pediatric/PediatricSection7.j
 import PediatricSection8 from "./pages/departments/pediatric/PediatricSection8.jsx";
 import PediatricSection9 from "./pages/departments/pediatric/PediatricSection9.jsx";
 import PediatricSection10 from "./pages/departments/pediatric/PediatricSection10.jsx";
-<<<<<<< HEAD
 import MRIPage from "./pages/services/MRI/mri.jsx";
-import MriSection1 from "./pages/services/MRI/mriSection1.jsx";
-=======
-
-
-
-
-
->>>>>>> 4bffb4f7eb2cbf2e7b2a72496cb72e022755372d
-
+import MriSection1 from "./pages/services/MRI/MriSection1.jsx";
 
 
 function App() {
