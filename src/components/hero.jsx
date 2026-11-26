@@ -11,9 +11,6 @@ import Footer from '../components/footer';
 import ScrollToTopButton from "../contexts/scrollTop.jsx";
 import HospitalSponsors from '../components/sponser/sponcer.jsx';
 
-<<<<<<< HEAD
-
-
 const modernShimmer = keyframes`
   0% { 
     transform: translateX(-100%) rotate(-12deg) scaleY(2);
@@ -250,12 +247,12 @@ const HeroSlideshow = ({ currentLanguage = 'en' }) => {
   const [slides, setSlides] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-=======
+
 const Home = () => {
   // Use a ref to track initial mount to prevent unnecessary updates
   const isInitialMount = useRef(true);
   const languageChangeTimeout = useRef(null);
->>>>>>> 4bffb4f7eb2cbf2e7b2a72496cb72e022755372d
+
   
   const [currentLanguage, setCurrentLanguage] = useState(() => {
     return localStorage.getItem('preferredLanguage') || 'km';
