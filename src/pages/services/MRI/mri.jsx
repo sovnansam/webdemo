@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import Footer from "../../../components/footer";
 import ScrollToTopButton from "../../../contexts/scrollTop";
 import { useLocation } from "react-router-dom";
-import MriHero from "./MriHero";
+import MriHero from "./mri_hero";
 import MriService from "./Mri_Service";
 import MriSection1 from "./MriSection1";
 
